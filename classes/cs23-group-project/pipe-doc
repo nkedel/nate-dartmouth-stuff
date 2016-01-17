@@ -1,0 +1,198 @@
+* pipe_Init []
+  Preconditions: Pipeline module may not have been previously initialized.
+  Arguments: None.
+  Action: Sets up initial pipes for TCL/Tk, Scheme, and UNIX as pipes 0, 1,
+          and 2. Verifies them.
+  Returns: Error on failure.
+  Called by: Buffer Manager (?)
+  Calls: pipe_Open
+  Testing: 
+
+
+* pipe_Shutdown []
+  Preconditions: Some pipes must be open.
+  Arguments: None.
+  Action: Closes all pipes except for the Tcl pipe whice does not
+          open/close. Deletes temporary files used by pipes system.
+  Called by: Buffer Manager (?)
+  Calls: pipe_Close
+  Testing:
+
+* pipe_Create [buffer, type]
+  Preconditions: pipe_Init must have been called successfully to open the
+                 standard pipes. buffer must be a valid, uncreated, buffer
+                 name 
+  Arguments: Must be provided a buffer, and a number 0, 1, or 2
+	     corresponding to the standard pipe (TCL, Scheme, or UNIX) to 
+             use.
+  Action: Creates a new interactive pipe in the buffer created.
+  Returns: Error on failure.
+  Called by: Buffer manager.
+  Derivable from: text_Create
+  Calls: edit_Create, pipe_setMark
+  Testing:
+
+// ???
+?* pipe_Destroy [buffer]
+?  Preconditions: buffer must be a valid interactive buffer
+?  Arguments: buffer
+?  Action: disassociates pipe from buffer, then calls edit_Destroy to close
+?          the buffer for reuse
+?  Returns: Error on failure.
+?  Called by: Buffer manager.
+?  Derivable from: text_Destroy
+?  Calls: edit_Destroy
+?  Testing:
+//
+
+* pipe_Copy [buffer]
+  Preconditions: buffer must be a valid buffer, and have selected text.
+  Arguments: buffer is the active buffer
+  Action: copies selected text from an interactive buffer to the user
+          clipboard.
+  Returns: error on failure
+  Called by: user interface (indirectly via managers?)
+  Derivable from: text_Copy (probably an exact copy?)
+  Calls: edit_Copy
+  Testing: 
+
+#     Copies selected text to user clipboard
+#     See also: text_Copy
+#
+* pipe_Paste [buffer]
+  Preconditions: buffer must be a valid buffer, the user clipboard must
+                 contain some text, the insertion point must be below the
+                 to be submitted mark (the latest text returned from the
+                 pipe.)
+  Arguments: buffer is the interactive buffer to paste to
+  Actions: copies the text from the selected text to the interactive
+             buffer, at the insertion point.
+  Called by: user interface (indirectly?)
+  Calls: edit_Copy
+  Testing:
+
+* pipe_submitSelected [buffer]
+  Preconditions: buffer must be a valid interactive buffer, and the buffer
+                 must have a valid text selection.
+  Arguments: buffer
+  Action: submits the selected text to the pipe associated with the buffer
+          via the system clipboard
+  Called by: user interface (indirectly?)
+  Calls: pipe_fromBuffer, edit_Copy
+  Testing:
+
+* pipe_Submit [buffer]
+  Preconditions: buffer must be a valid interactive buffer, and the buffer
+                 must have a valid "to be submitted mark"
+  Arguments: buffer
+  Action: passes all text after the "to be submitted mark" to the pipe
+          associated with buffer 
+  Called by: user interface (indirectly?)
+  Calls: edit_ExtractText, pipe_toTCL, pipe_Write, pipe_setMark
+  Testing:
+
+# Related Functions
+* text_toTCL [inbuffer, outbuffer]
+* text_toSCHEME [inbuffer, outbuffer]
+  Preconditions: inbuffer is a valid (text?) buffer, outbuffer is a valid
+                 (text?) buffer
+  Arguments: inbuffer and outbuffer -- two buffers
+  Action: pipes the complete text of buffer "inbuffer" to the standard TCL
+          or Scheme pipes, and overwrites outbuffer with the output from the
+          pipe 
+  Called by: user interface (indirectly?)
+  Calls: edit_ClearAll, pipe_fromBuffer, pipe_toBuffer
+  Testing:
+
+* text_toUNIX [inbuffer, outbuffer]
+  Preconditions: inbuffer is a valid (text?) buffer, outbuffer is a valid
+                 (text?) buffer Arguments: inbuffer and outbuffer -- two
+                 buffers
+  Action: creates a new UNIX pipe, pipes the complete text of buffer
+          "inbuffer" to it, and overwrites outbuffer with the output from
+          the pipe, and then closes the new unix pipe
+  Called by: user interface (indirectly?) 
+  Calls: edit_ClearAll, pipe_fromBuffer, pipe_toBuffer, pipe_Open, pipe_Close
+  Testing:
+
+# Internal Functions
+* pipe_toTCL [text]
+  Preconditions: text is a valid null terminated text string. Can be
+                 multi-line (include carriage returns)
+  Arguments: text (a valid text string)
+  Action: passes text to the TCL interpreter. Catches errors (if any).
+  Returns: output of the TCL interpreter, in a text block, and a report of 
+           caught errors (if any)
+  Called by: text_toTCL, pipe_Internal
+  Calls: nothing?
+  Testing:
+
+* pipe_Write(pipe number, text)
+  Preconditions: pipe number is a valid, open pipe; text is valid, null
+                 terminated text.
+  Arguments: pipe #, text string
+  Action: sends text to a selected pipe
+  Called by: pipe_Submit
+  Calls: none
+  Testing:
+
+* pipe_Which? (buffer)
+  Preconditions: buffer is a valid interactive buffer
+  Arguments: buffer
+  Action: returns the pipe number associated with a buffer
+  Called by: various pipe internal
+  Calls: none
+  Testing:
+
+#   pipe_EOF? (pipe #)
+  Preconditions: pipe # is a valid pipe #. Returns true if end of pipe has
+                 been reached on read.
+  Arguments: a valid pipe #
+  Action: checks if pipe output file is being written/is read to end
+  Called by: various pipe internal
+  Calls: none
+  Testing:
+
+* pipe_Open(pipe command)
+  Preconditions: command is a valid unix command or shell name
+  Arguments: text string containing the name of the command to run
+  Action: starts up command, opening temporary input and output files to run
+  Returns: pipe # of the new pipe
+  Called by: various
+  Calls: none
+  Testing:
+
+* pipe_Close(pipe #)
+  Preconditions: pipe # is a valid, open pipe.
+  Arguments: pipe #
+  Action: closes pipe, kills child program if necesary.
+  Called by: various
+  Calls: none
+  Testing:
+
+#   pipe_fromBuffer [pipe num, buffer]
+  Preconditions: pipe num is the number of a valid, open pipe, 
+                 buffer is a valid buffer (any type?)
+  Arguments: buffer, pipe #
+  Action: sends contents of buffer to pipe, via pipe input file.
+  Called by: various
+  Calls: edit_Save
+  Testing:
+
+#   pipe_toBuffer [pipe num, buffer]
+  Preconditions: pipe # is the name of a valid, open pipe, 
+                 buffer is a valid buffer (any type?)
+  Arguments: buffer, pipe #
+  Action: saves the output of a pipe to a buffer, from the pipe output file
+  Called by: various
+  Calls: edit_Load
+  Testing:
+
+#   pipe_setMark [buffer]
+  Preconditions: buffer must be a valid interactive pipe buffer.
+  Arguments: buffer
+  Action: moves the "to be submitted mark" and insertion point to the end of the text in
+          the buffer.
+  Called by: various.
+  Calls: nothing? (edit_setMark [mark type?] ???)
+  Testing:

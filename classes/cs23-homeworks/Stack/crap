@@ -1,0 +1,429 @@
+#! /bin/sh
+# This is a shell archive.  Remove anything before this line, then unpack
+# it by saving it into a file and typing "sh file".  To overwrite existing
+# files, type "sh file -c".  You can also feed this as standard input via
+# unshar, or by typing "sh <file", e.g..  If this archive is complete, you
+# will see the following message at the end:
+#		"End of shell archive."
+# Contents:  README Stack.cc tester.cc Stack.h double.tcl double-i.tcl
+# Wrapped by nate@tahoe on Sun Apr 14 19:38:37 1996
+PATH=/bin:/usr/bin:/usr/ucb ; export PATH
+if test -f 'README' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'README'\"
+else
+echo shar: Extracting \"'README'\" \(1576 characters\)
+sed "s/^X//" >'README' <<'END_OF_FILE'
+XREADME
+X(Nate Edel 4/14/96)
+X
+XFiles:
+Xdouble.tcl      TCL program to accept user input and see if the word entered
+X                has double adjacent letters.
+Xdouble-i.tcl    a slightly "friendlier" version of double.tcl, not quite to
+X                specification on its user interaction.
+XStack.h         Interface to classes IntStackA and IntStackB; version of the 
+X		original Stack.h modified to include private member values.
+XStack.cc        Impementation of classes IntStackA and IntStackB
+Xtester.cc       Simple, noninteractive test facility for IntStack classes.
+X
+XImplementation decision:
+X* The key decision I made was to try, whenever possible, to allow failures
+X(either overruns, etc. or failures on memory allocations, mainly) to be
+Xtransparent, and return a message to cerr (stderr) rather than to use
+Xassert; this was both easier for debugging, and somewhat more elegant
+X(although a still better solution would have been to allow the calling
+Xprocedure to check for error itself). In most methods that was possible, but
+Xin the constructor for the Array-based implementation it was not, since it
+Xwould be impossible to work around that.
+X
+X* The tester tests a small stack using visible, predictable numbers, and
+Xthen a large stack using a sequence of random numbers, for each
+Ximplementation. It then tests the underflow error checking for each of the
+Ximplementations, and the overflow checking for the smaller -- overflow for
+Xthe larger is virtually impossible to test efficiently, since it is limitted
+Xonly by the virtual memory space on the system it is running on. 
+END_OF_FILE
+if test 1576 -ne `wc -c <'README'`; then
+    echo shar: \"'README'\" unpacked with wrong size!
+fi
+# end of 'README'
+fi
+if test -f 'Stack.cc' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'Stack.cc'\"
+else
+echo shar: Extracting \"'Stack.cc'\" \(2323 characters\)
+sed "s/^X//" >'Stack.cc' <<'END_OF_FILE'
+X//
+X// Stack.cc --- Integer Stack Implementations
+X//
+X
+X#include <iostream.h>
+X#include  <assert.h>
+X#include "Stack.h"
+X
+X// Creates a new instance of the Array based stack with max size maxSZ
+X// maxSZ must be greater than 0, or create will fail.
+X// will fail (assert) if unable to allocate the array.
+XIntStackA::IntStackA(int maxSZ) {
+X   assert(maxSZ > 0);
+X	stackSize = 0;
+X   stackMax = maxSZ;
+X	stackArray = new int[maxSZ];
+X   assert(stackArray != NULL);
+X	};
+X
+X// Destructor.
+XIntStackA::~IntStackA() {
+X   delete [] stackArray;
+X	}
+X
+X// Pushes element x onto the stack, unless stack is full, in which case
+X// we output an error and do nothing.
+Xvoid IntStackA::Push(int x) {
+X   if (stackSize < stackMax) {
+X		stackArray[stackSize] = x;
+X      stackSize++;
+X   	}
+X   else cerr << "** Error: Push to Full Stack!" << endl;
+X	};
+X
+X// Pops top element off the stack and return it, unless stack is empty,
+X// in which case we output an error and return 0.
+Xint IntStackA::Pop() {
+X   int retVal = 0;
+X   if (stackSize) {
+X      stackSize--;
+X      retVal = stackArray[stackSize];
+X   	}
+X   else cerr << "** Error: Pop from Empty Stack!" << endl;
+X   return retVal;
+X	}
+X
+X
+X// Creates an empty instance of a list-based stack.
+XIntStackB::IntStackB() {
+X   stackTop = NULL;
+X	}
+X
+X// Destructor: deletes list of stackNodes
+XIntStackB::~IntStackB() {
+X   stackNode *doomedNode;
+X   while (stackTop != NULL) {
+X      doomedNode = stackTop;
+X      stackTop = stackTop -> prevNode;
+X      delete doomedNode;
+X   	}
+X	}
+X
+X// Push value x onto the stack by creating a new node
+X// and linking that to the stack top
+X// Will output an error and do nothing if a new node cannot be created.
+Xvoid IntStackB::Push(int x) {
+X   stackNode *newNode = new stackNode;
+X   if (newNode != NULL) {
+X      newNode->prevNode = stackTop;
+X      stackTop = newNode;
+X      stackTop->value = x;
+X   	}
+X   else cerr << "** Error: Node Create Failed; Couldn't Push." << endl;
+X	}
+X
+X// Pop the top value off the stack and return its value, unless
+X// the stack is empty, in which case outputs an error and does nothing.
+Xint IntStackB::Pop() {
+X   stackNode *myNode;
+X   int retVal = 0;
+X   if (stackTop != NULL) {
+X      myNode = stackTop;
+X      stackTop = myNode->prevNode;
+X      retVal = myNode->value;
+X      delete myNode;
+X   	}
+X   else cerr << "** Error: Pop from Empty Stack!" << endl;
+X   return retVal;
+X	}
+X
+END_OF_FILE
+if test 2323 -ne `wc -c <'Stack.cc'`; then
+    echo shar: \"'Stack.cc'\" unpacked with wrong size!
+fi
+# end of 'Stack.cc'
+fi
+if test -f 'tester.cc' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'tester.cc'\"
+else
+echo shar: Extracting \"'tester.cc'\" \(3277 characters\)
+sed "s/^X//" >'tester.cc' <<'END_OF_FILE'
+X#include <stdlib.h>
+X#include <iostream.h>
+X#include <assert.h>
+X#include "Stack.h"
+X
+X//
+X// Test an IntStack implementation with a # of known members.
+X// Works better with a smaller number of #'s.
+X//
+Xvoid TestA(IntStack *toTest, int howMany);
+X
+X//
+X// Test an IntStack implementation with a # of Random members.
+X// Works better with a larger # of #'s.
+X//
+Xvoid TestB(IntStack *toTest, int howMany);
+X
+Xint main(void) {
+XIntStackA *StackA;
+X  IntStackB *StackB;
+X  StackA = new IntStackA(10);
+X  StackB = new IntStackB;
+X  cout << "Test Small Array-based Stack" << endl;
+X  TestA(StackA, 10);
+X  cout << "Test Small List-based Stack" << endl;
+X  TestA(StackB, 10);
+X  delete StackA;
+X  delete StackB;
+X  StackA = new IntStackA(20000);
+X  StackB = new IntStackB;
+X  cout << "Test Large Array-based Stack" << endl;
+X  TestB(StackA, 20000);
+X  cout << "Test Large List-based Stack" << endl;
+X  TestB(StackB, 20000);
+X  cout << "Testing underflow on array based stack. (You should see an error message and a 0)" << endl;
+X  cout << StackA->Pop() << endl;
+X  cout << "Testing underflow on list based stack. (You should see an error message and a 0)" << endl;
+X  cout << StackB->Pop() << endl;
+X  delete StackA;
+X  delete StackB;
+X  StackA = new IntStackA(2);
+X  cout << "Testing overflow on list based stack. (You should see an error message)" << endl;
+X  StackA->Push(5);
+X  StackA->Push(10);
+X  StackA->Push(15);
+X  cout << "Checking remains after overflow (you should see 10, then 5)" << endl;
+X  cout << StackA->Pop() << endl;
+X  cout << StackA->Pop() << endl;
+X  delete StackA;
+X  cout << "Test complete." << endl;
+X  cout << "Note: if this test goes off the screen, please pipe to more using 'tester |& more'" << endl;
+X  cout << "or error messages, which are displayed to STDERR will appear in incorrect order." << endl;
+X  return(0);
+X  }
+X
+X//
+X// Test an IntStack implementation with a # of known members.
+X// Works better with a smaller number of #'s.
+X//
+Xvoid TestA(IntStack *toTest, int howMany){
+X  int i, j;
+X  cout << "Pushing " << howMany << " #'s onto the stack in order." << endl;
+X  for ( i = 0; i < howMany; i++ ) {
+X    toTest->Push(i);
+X    cout << i << ", ";
+X    }
+X  cout << "Done." << endl << endl;
+X  cout << "Popping elements off the stack..." << endl;
+X  cout << "Should be in reverse order." << endl;
+X  for ( i = (howMany-1); i >= 0; i--) {
+X    j = toTest->Pop();
+X    if (j!=i) cout << "(ERROR) ";
+X    cout << j << ", ";
+X    }
+X  cout << "Done." << endl << endl;
+X  }
+X
+X//
+X// Test an IntStack implementation with a # of Random members.
+X// Works better with a larger # of #'s.
+X//
+Xvoid TestB(IntStack *toTest, int howMany){
+X  int i, j, *testValues;
+X  testValues = new int[howMany];
+X  if (testValues == NULL) {
+X    cout << "** ERROR: Couldn't allocate memory for test values!" << endl;
+X    return;
+X    }
+X  cout << "Pushing " << howMany << " random #'s onto the stack." << endl;
+X  for ( i = 0; i < howMany; i++ ) {
+X    j = rand();
+X    testValues[i] = j;
+X    toTest->Push(j);
+X    }
+X  cout << "Done." << endl << endl;
+X  cout << "Popping elements off the stack..." << endl;
+X  cout << "Should be in reverse order." << endl;
+X  for ( i = (howMany-1); i >= 0; i--) {
+X    j = toTest->Pop();
+X    if (j!=testValues[i]) break;
+X    }
+X  if (i > 0) cout << "Failed." << endl << endl;
+X  else cout << "Success." << endl << endl;
+X  }
+X
+END_OF_FILE
+if test 3277 -ne `wc -c <'tester.cc'`; then
+    echo shar: \"'tester.cc'\" unpacked with wrong size!
+fi
+# end of 'tester.cc'
+fi
+if test -f 'Stack.h' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'Stack.h'\"
+else
+echo shar: Extracting \"'Stack.h'\" \(1323 characters\)
+sed "s/^X//" >'Stack.h' <<'END_OF_FILE'
+X//
+X// Stack.h --- Integer Stack interface and Implementations
+X//
+X// I have supplied the interfaces. You are supposed to supply the
+X// implementations for IntStackA and IntStackB.
+X//
+X// John M. Danskin, CS23,  4/8/96
+X//
+X
+X//
+X// Modifications:
+X//		Added private members for the classes, and a stackNode
+X//		structure for use by the list based implementation
+X//		-- Nathan K. Edel. 4/13/96
+X//
+X
+X#ifndef STACK_H
+X#define STACK_H
+X
+X//
+X// This is our node structure for the list based implementation
+X// (NKE (4/13)
+Xtypedef struct tStackNode {
+X   struct tStackNode *prevNode;
+X   int value;
+X	} stackNode;
+X
+X//
+X// This is the abstract class for IntStack, a stack of integers.
+X//
+Xclass IntStack {
+Xpublic:
+X  virtual ~IntStack() {}
+X  virtual void Push(int x)=0;
+X  virtual int Pop()=0;
+X};
+X
+X//
+X// This is the array based stack implementation.
+X// It uses an array with a maximum size.
+X//
+Xclass IntStackA : public IntStack {
+Xpublic:
+X  IntStackA(int maxSZ);
+X  ~IntStackA();
+X  virtual void Push(int x);
+X  virtual int Pop();
+Xprivate:
+X  int *stackArray;
+X  int stackSize, stackMax;
+X};
+X
+X//
+X// This is the list based stack implementation
+X//     it uses a list with no maximum size.
+X//
+Xclass IntStackB : public IntStack {
+Xpublic:
+X  IntStackB();
+X  ~IntStackB();
+X  virtual void Push(int x);
+X  virtual int Pop();
+Xprivate:
+X	stackNode *stackTop;
+X};
+X
+X#endif
+END_OF_FILE
+if test 1323 -ne `wc -c <'Stack.h'`; then
+    echo shar: \"'Stack.h'\" unpacked with wrong size!
+fi
+# end of 'Stack.h'
+fi
+if test -f 'double.tcl' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'double.tcl'\"
+else
+echo shar: Extracting \"'double.tcl'\" \(671 characters\)
+sed "s/^X//" >'double.tcl' <<'END_OF_FILE'
+X#!/usr/local/bin/tclsh
+X#
+X# Silly little game.
+X#
+X
+Xproc IsOkAnswer {Thing} {
+X  set ThingLength [ string length $Thing ]
+X	if [ expr $ThingLength == 0 ] then { 
+X	  return 0 
+X	  } 
+X  for {set ScanCounter 0} {$ScanCounter < $ThingLength} {incr ScanCounter} {
+X    if { [ string index $Thing $ScanCounter ] == [ string index $Thing [expr $ScanCounter + 1 ] ] } {
+X         return 1
+X         }
+X    }
+X	return 0
+X	}
+X
+Xset IsOkFlag 0
+Xputs "Enter a blank line to end."
+Xwhile {1} {
+X  puts -nonewline "? "
+X  gets stdin Item
+X  if { [ string length $Item ] == 0} break
+X  set IsOkFlag [ IsOkAnswer [ string toupper $Item ] ]
+X  if {$IsOkFlag == 1} { puts "yes." } else { puts "no."}
+X  }
+X
+X    
+END_OF_FILE
+if test 671 -ne `wc -c <'double.tcl'`; then
+    echo shar: \"'double.tcl'\" unpacked with wrong size!
+fi
+chmod +x 'double.tcl'
+# end of 'double.tcl'
+fi
+if test -f 'double-i.tcl' -a "${1}" != "-c" ; then 
+  echo shar: Will not clobber existing file \"'double-i.tcl'\"
+else
+echo shar: Extracting \"'double-i.tcl'\" \(786 characters\)
+sed "s/^X//" >'double-i.tcl' <<'END_OF_FILE'
+X#!/usr/local/bin/tclsh
+X#
+X# Silly little game.
+X#
+X
+Xproc IsOkAnswer {Thing} {
+X  set ThingLength [ string length $Thing ]
+X	if [ expr $ThingLength == 0 ] then { 
+X	  puts "Bummer dude, but you have to enter something!" 
+X	  return 0 
+X	  } 
+X  for {set ScanCounter 0} {$ScanCounter < $ThingLength} {incr ScanCounter} {
+X    if { [ string index $Thing $ScanCounter ] == [ string index $Thing [expr $ScanCounter + 1 ] ] } {
+X      puts "Okay!"
+X      return 1
+X      }
+X    }
+X  puts "No, but you can bring pizza."
+X	return 0
+X	}
+X
+Xset IsOkFlag 0
+Xputs "I'm going to a party." 
+Xwhile { $IsOkFlag == 0 } {
+X  puts -nonewline "What do you want to bring? "
+X  gets stdin Item
+X  set IsOkFlag [ IsOkAnswer [string toupper $Item ] ]
+X  }
+Xif { [ string toupper $Item ] == "PIZZA" } { puts "How utterly uncreative." }
+END_OF_FILE
+if test 786 -ne `wc -c <'double-i.tcl'`; then
+    echo shar: \"'double-i.tcl'\" unpacked with wrong size!
+fi
+chmod +x 'double-i.tcl'
+# end of 'double-i.tcl'
+fi
+echo shar: End of shell archive.
+exit 0

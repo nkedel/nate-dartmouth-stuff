@@ -1,0 +1,31 @@
+Design notes:
+
+The most difficult part of the design seems to have been maintaining
+efficiency, and despite my earlier estimate, the design proved only able to
+look ahead 2 turns beyond the move being considered. This would be at most 
+around 250k calls, and I asume is a combination of overestimating the
+machine's speed and my own coding quality.
+
+An attempt to vary the depth of search on the basis of a timer proved
+ineffective, as did an increase as the board filled.
+
+Selection when all possible moves return equal is handled by randomization,
+which proved to be harder for a human player to deal with than a predictable
+pattern (last or first open space, for example) although the a better
+heuristic might involve open spaces adjacent to either one's own pieces or
+one's opponents'.
+
+Code size got to be confusing after a while; dividing the code up into
+sections proved very helpful, as did making frequent backups.  Since the
+assignment specified a single fine "userid.cc" I recombined the files, which
+were nate_anl.cc, nate_utl.cc, nate_won.cc, and nate_ttt.cc after finishing
+work on the code. (the files handled move analysis, utility routines, win
+detection (and the won3D_nate_Cmd function) and the ttt3D_nate_Cmd fuction
+respectively.) ... this also allowed incremental compilation using make
+(very helpful, and time saving)
+
+The program works... it's not amazingly bright, but it's not as dumb as it
+was this morning, and I'm utterly terrible at this sort of game so I've been
+dependent on seeing how long it takes to beat itself, as well as the people
+who I could draft to try it.
+-- Nate Edel, 30 Apr 96

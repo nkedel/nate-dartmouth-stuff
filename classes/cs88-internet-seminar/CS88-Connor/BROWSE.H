@@ -1,0 +1,1 @@
+void browse(FILE*, int);

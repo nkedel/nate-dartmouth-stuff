@@ -1,0 +1,2437 @@
+
+
+Terminals which are not used:
+
+   SUB
+   CALL
+   FN_DEF
+   FN_DECL
+
+
+Conflict in state 111 between rule 62 and token L_OR resolved as reduce.
+Conflict in state 111 between rule 62 and token L_AND resolved as shift.
+Conflict in state 111 between rule 62 and token NEQ resolved as shift.
+Conflict in state 111 between rule 62 and token CEQ resolved as shift.
+Conflict in state 111 between rule 62 and token LTE resolved as shift.
+Conflict in state 111 between rule 62 and token GTE resolved as shift.
+Conflict in state 111 between rule 62 and token '<' resolved as shift.
+Conflict in state 111 between rule 62 and token '>' resolved as shift.
+Conflict in state 111 between rule 62 and token '+' resolved as shift.
+Conflict in state 111 between rule 62 and token '-' resolved as shift.
+Conflict in state 111 between rule 62 and token '*' resolved as shift.
+Conflict in state 111 between rule 62 and token '/' resolved as shift.
+Conflict in state 111 between rule 62 and token '%' resolved as shift.
+Conflict in state 112 between rule 63 and token L_OR resolved as reduce.
+Conflict in state 112 between rule 63 and token L_AND resolved as reduce.
+Conflict in state 112 between rule 63 and token NEQ resolved as shift.
+Conflict in state 112 between rule 63 and token CEQ resolved as shift.
+Conflict in state 112 between rule 63 and token LTE resolved as shift.
+Conflict in state 112 between rule 63 and token GTE resolved as shift.
+Conflict in state 112 between rule 63 and token '<' resolved as shift.
+Conflict in state 112 between rule 63 and token '>' resolved as shift.
+Conflict in state 112 between rule 63 and token '+' resolved as shift.
+Conflict in state 112 between rule 63 and token '-' resolved as shift.
+Conflict in state 112 between rule 63 and token '*' resolved as shift.
+Conflict in state 112 between rule 63 and token '/' resolved as shift.
+Conflict in state 112 between rule 63 and token '%' resolved as shift.
+Conflict in state 113 between rule 61 and token L_OR resolved as reduce.
+Conflict in state 113 between rule 61 and token L_AND resolved as reduce.
+Conflict in state 113 between rule 61 and token NEQ resolved as reduce.
+Conflict in state 113 between rule 61 and token CEQ resolved as reduce.
+Conflict in state 113 between rule 61 and token LTE resolved as shift.
+Conflict in state 113 between rule 61 and token GTE resolved as shift.
+Conflict in state 113 between rule 61 and token '<' resolved as shift.
+Conflict in state 113 between rule 61 and token '>' resolved as shift.
+Conflict in state 113 between rule 61 and token '+' resolved as shift.
+Conflict in state 113 between rule 61 and token '-' resolved as shift.
+Conflict in state 113 between rule 61 and token '*' resolved as shift.
+Conflict in state 113 between rule 61 and token '/' resolved as shift.
+Conflict in state 113 between rule 61 and token '%' resolved as shift.
+Conflict in state 114 between rule 60 and token L_OR resolved as reduce.
+Conflict in state 114 between rule 60 and token L_AND resolved as reduce.
+Conflict in state 114 between rule 60 and token NEQ resolved as reduce.
+Conflict in state 114 between rule 60 and token CEQ resolved as reduce.
+Conflict in state 114 between rule 60 and token LTE resolved as shift.
+Conflict in state 114 between rule 60 and token GTE resolved as shift.
+Conflict in state 114 between rule 60 and token '<' resolved as shift.
+Conflict in state 114 between rule 60 and token '>' resolved as shift.
+Conflict in state 114 between rule 60 and token '+' resolved as shift.
+Conflict in state 114 between rule 60 and token '-' resolved as shift.
+Conflict in state 114 between rule 60 and token '*' resolved as shift.
+Conflict in state 114 between rule 60 and token '/' resolved as shift.
+Conflict in state 114 between rule 60 and token '%' resolved as shift.
+Conflict in state 115 between rule 57 and token L_OR resolved as reduce.
+Conflict in state 115 between rule 57 and token L_AND resolved as reduce.
+Conflict in state 115 between rule 57 and token NEQ resolved as reduce.
+Conflict in state 115 between rule 57 and token CEQ resolved as reduce.
+Conflict in state 115 between rule 57 and token LTE resolved as reduce.
+Conflict in state 115 between rule 57 and token GTE resolved as reduce.
+Conflict in state 115 between rule 57 and token '<' resolved as reduce.
+Conflict in state 115 between rule 57 and token '>' resolved as reduce.
+Conflict in state 115 between rule 57 and token '+' resolved as shift.
+Conflict in state 115 between rule 57 and token '-' resolved as shift.
+Conflict in state 115 between rule 57 and token '*' resolved as shift.
+Conflict in state 115 between rule 57 and token '/' resolved as shift.
+Conflict in state 115 between rule 57 and token '%' resolved as shift.
+Conflict in state 116 between rule 56 and token L_OR resolved as reduce.
+Conflict in state 116 between rule 56 and token L_AND resolved as reduce.
+Conflict in state 116 between rule 56 and token NEQ resolved as reduce.
+Conflict in state 116 between rule 56 and token CEQ resolved as reduce.
+Conflict in state 116 between rule 56 and token LTE resolved as reduce.
+Conflict in state 116 between rule 56 and token GTE resolved as reduce.
+Conflict in state 116 between rule 56 and token '<' resolved as reduce.
+Conflict in state 116 between rule 56 and token '>' resolved as reduce.
+Conflict in state 116 between rule 56 and token '+' resolved as shift.
+Conflict in state 116 between rule 56 and token '-' resolved as shift.
+Conflict in state 116 between rule 56 and token '*' resolved as shift.
+Conflict in state 116 between rule 56 and token '/' resolved as shift.
+Conflict in state 116 between rule 56 and token '%' resolved as shift.
+Conflict in state 117 between rule 58 and token L_OR resolved as reduce.
+Conflict in state 117 between rule 58 and token L_AND resolved as reduce.
+Conflict in state 117 between rule 58 and token NEQ resolved as reduce.
+Conflict in state 117 between rule 58 and token CEQ resolved as reduce.
+Conflict in state 117 between rule 58 and token LTE resolved as reduce.
+Conflict in state 117 between rule 58 and token GTE resolved as reduce.
+Conflict in state 117 between rule 58 and token '<' resolved as reduce.
+Conflict in state 117 between rule 58 and token '>' resolved as reduce.
+Conflict in state 117 between rule 58 and token '+' resolved as shift.
+Conflict in state 117 between rule 58 and token '-' resolved as shift.
+Conflict in state 117 between rule 58 and token '*' resolved as shift.
+Conflict in state 117 between rule 58 and token '/' resolved as shift.
+Conflict in state 117 between rule 58 and token '%' resolved as shift.
+Conflict in state 118 between rule 59 and token L_OR resolved as reduce.
+Conflict in state 118 between rule 59 and token L_AND resolved as reduce.
+Conflict in state 118 between rule 59 and token NEQ resolved as reduce.
+Conflict in state 118 between rule 59 and token CEQ resolved as reduce.
+Conflict in state 118 between rule 59 and token LTE resolved as reduce.
+Conflict in state 118 between rule 59 and token GTE resolved as reduce.
+Conflict in state 118 between rule 59 and token '<' resolved as reduce.
+Conflict in state 118 between rule 59 and token '>' resolved as reduce.
+Conflict in state 118 between rule 59 and token '+' resolved as shift.
+Conflict in state 118 between rule 59 and token '-' resolved as shift.
+Conflict in state 118 between rule 59 and token '*' resolved as shift.
+Conflict in state 118 between rule 59 and token '/' resolved as shift.
+Conflict in state 118 between rule 59 and token '%' resolved as shift.
+Conflict in state 119 between rule 51 and token L_OR resolved as reduce.
+Conflict in state 119 between rule 51 and token L_AND resolved as reduce.
+Conflict in state 119 between rule 51 and token NEQ resolved as reduce.
+Conflict in state 119 between rule 51 and token CEQ resolved as reduce.
+Conflict in state 119 between rule 51 and token LTE resolved as reduce.
+Conflict in state 119 between rule 51 and token GTE resolved as reduce.
+Conflict in state 119 between rule 51 and token '<' resolved as reduce.
+Conflict in state 119 between rule 51 and token '>' resolved as reduce.
+Conflict in state 119 between rule 51 and token '+' resolved as reduce.
+Conflict in state 119 between rule 51 and token '-' resolved as reduce.
+Conflict in state 119 between rule 51 and token '*' resolved as shift.
+Conflict in state 119 between rule 51 and token '/' resolved as shift.
+Conflict in state 119 between rule 51 and token '%' resolved as shift.
+Conflict in state 120 between rule 52 and token L_OR resolved as reduce.
+Conflict in state 120 between rule 52 and token L_AND resolved as reduce.
+Conflict in state 120 between rule 52 and token NEQ resolved as reduce.
+Conflict in state 120 between rule 52 and token CEQ resolved as reduce.
+Conflict in state 120 between rule 52 and token LTE resolved as reduce.
+Conflict in state 120 between rule 52 and token GTE resolved as reduce.
+Conflict in state 120 between rule 52 and token '<' resolved as reduce.
+Conflict in state 120 between rule 52 and token '>' resolved as reduce.
+Conflict in state 120 between rule 52 and token '+' resolved as reduce.
+Conflict in state 120 between rule 52 and token '-' resolved as reduce.
+Conflict in state 120 between rule 52 and token '*' resolved as shift.
+Conflict in state 120 between rule 52 and token '/' resolved as shift.
+Conflict in state 120 between rule 52 and token '%' resolved as shift.
+Conflict in state 121 between rule 53 and token L_OR resolved as reduce.
+Conflict in state 121 between rule 53 and token L_AND resolved as reduce.
+Conflict in state 121 between rule 53 and token NEQ resolved as reduce.
+Conflict in state 121 between rule 53 and token CEQ resolved as reduce.
+Conflict in state 121 between rule 53 and token LTE resolved as reduce.
+Conflict in state 121 between rule 53 and token GTE resolved as reduce.
+Conflict in state 121 between rule 53 and token '<' resolved as reduce.
+Conflict in state 121 between rule 53 and token '>' resolved as reduce.
+Conflict in state 121 between rule 53 and token '+' resolved as reduce.
+Conflict in state 121 between rule 53 and token '-' resolved as reduce.
+Conflict in state 121 between rule 53 and token '*' resolved as reduce.
+Conflict in state 121 between rule 53 and token '/' resolved as reduce.
+Conflict in state 121 between rule 53 and token '%' resolved as reduce.
+Conflict in state 122 between rule 54 and token L_OR resolved as reduce.
+Conflict in state 122 between rule 54 and token L_AND resolved as reduce.
+Conflict in state 122 between rule 54 and token NEQ resolved as reduce.
+Conflict in state 122 between rule 54 and token CEQ resolved as reduce.
+Conflict in state 122 between rule 54 and token LTE resolved as reduce.
+Conflict in state 122 between rule 54 and token GTE resolved as reduce.
+Conflict in state 122 between rule 54 and token '<' resolved as reduce.
+Conflict in state 122 between rule 54 and token '>' resolved as reduce.
+Conflict in state 122 between rule 54 and token '+' resolved as reduce.
+Conflict in state 122 between rule 54 and token '-' resolved as reduce.
+Conflict in state 122 between rule 54 and token '*' resolved as reduce.
+Conflict in state 122 between rule 54 and token '/' resolved as reduce.
+Conflict in state 122 between rule 54 and token '%' resolved as reduce.
+Conflict in state 123 between rule 55 and token L_OR resolved as reduce.
+Conflict in state 123 between rule 55 and token L_AND resolved as reduce.
+Conflict in state 123 between rule 55 and token NEQ resolved as reduce.
+Conflict in state 123 between rule 55 and token CEQ resolved as reduce.
+Conflict in state 123 between rule 55 and token LTE resolved as reduce.
+Conflict in state 123 between rule 55 and token GTE resolved as reduce.
+Conflict in state 123 between rule 55 and token '<' resolved as reduce.
+Conflict in state 123 between rule 55 and token '>' resolved as reduce.
+Conflict in state 123 between rule 55 and token '+' resolved as reduce.
+Conflict in state 123 between rule 55 and token '-' resolved as reduce.
+Conflict in state 123 between rule 55 and token '*' resolved as reduce.
+Conflict in state 123 between rule 55 and token '/' resolved as reduce.
+Conflict in state 123 between rule 55 and token '%' resolved as reduce.
+State 132 contains 1 shift/reduce conflict.
+
+Grammar
+rule 1    program -> decl_list
+rule 2    decl_list -> decl_list decl
+rule 3    decl_list -> decl
+rule 4    decl -> var_decl
+rule 5    decl -> fun_defn
+rule 6    decl -> fun_decl
+rule 7    var_decl -> type_spec id_list ';'
+rule 8    type_spec -> INT
+rule 9    type_spec -> VOID
+rule 10   type_spec -> DOUBLE
+rule 11   type_spec -> CHAR
+rule 12   id_list -> id_list ',' id_decl
+rule 13   id_list -> id_decl
+rule 14   id_decl -> ID
+rule 15   id_decl -> ID '[' NUM ']'
+rule 16   fun_decl -> type_spec ID '(' params ')' ';'
+rule 17   fun_defn -> type_spec ID '(' params ')' comp_stmt
+rule 18   params -> param_list
+rule 19   params -> VOID
+rule 20   param_list -> param_list ',' param
+rule 21   param_list -> param
+rule 22   param -> type_spec ID
+rule 23   param -> type_spec ID '[' ']'
+rule 24   comp_stmt -> '{' local_decl stmt_list '}'
+rule 25   local_decl ->		/* empty */
+rule 26   local_decl -> local_decl var_decl
+rule 27   stmt_list ->		/* empty */
+rule 28   stmt_list -> stmt_list statement
+rule 29   statement -> expr_stmt
+rule 30   statement -> comp_stmt
+rule 31   statement -> if_stmt
+rule 32   statement -> for_stmt
+rule 33   statement -> do_stmt
+rule 34   statement -> while_stmt
+rule 35   statement -> return_stmt
+rule 36   expr_stmt -> expr ';'
+rule 37   expr_stmt -> ';'
+rule 38   if_stmt -> IF '(' expr ')' statement
+rule 39   if_stmt -> IF '(' expr ')' statement ELSE statement
+rule 40   for_stmt -> FOR '(' for_expr ';' for_expr ';' for_expr ')' statement
+rule 41   for_expr ->		/* empty */
+rule 42   for_expr -> expr
+rule 43   do_stmt -> DO statement WHILE '(' expr ')' ';'
+rule 44   while_stmt -> WHILE '(' expr ')' statement
+rule 45   return_stmt -> RETURN ';'
+rule 46   return_stmt -> RETURN expr ';'
+rule 47   var -> ID
+rule 48   var -> ID '[' expr ']'
+rule 49   expr -> var '=' expr
+rule 50   expr -> exp
+rule 51   exp -> exp '+' exp
+rule 52   exp -> exp '-' exp
+rule 53   exp -> exp '*' exp
+rule 54   exp -> exp '/' exp
+rule 55   exp -> exp '%' exp
+rule 56   exp -> exp GTE exp
+rule 57   exp -> exp LTE exp
+rule 58   exp -> exp '<' exp
+rule 59   exp -> exp '>' exp
+rule 60   exp -> exp CEQ exp
+rule 61   exp -> exp NEQ exp
+rule 62   exp -> exp L_OR exp
+rule 63   exp -> exp L_AND exp
+rule 64   exp -> '-' expval
+rule 65   exp -> '!' expval
+rule 66   exp -> INCR var
+rule 67   exp -> DECR var
+rule 68   exp -> expval
+rule 69   expval -> '(' expr ')'
+rule 70   expval -> var
+rule 71   expval -> call
+rule 72   expval -> NUM
+rule 73   expval -> FNUM
+rule 74   call -> ID '(' args ')'
+rule 75   args ->		/* empty */
+rule 76   args -> arg_list
+rule 77   arg_list -> arg_list ',' expr
+rule 78   arg_list -> expr
+
+Terminals, with rules where they appear
+
+$ (-1)
+'!' (33) 65
+'%' (37) 55
+'(' (40) 16 17 38 39 40 43 44 69 74
+')' (41) 16 17 38 39 40 43 44 69 74
+'*' (42) 53
+'+' (43) 51
+',' (44) 12 20 77
+'-' (45) 52 64
+'/' (47) 54
+';' (59) 7 16 36 37 40 43 45 46
+'<' (60) 58
+'=' (61) 49
+'>' (62) 59
+'[' (91) 15 23 48
+']' (93) 15 23 48
+'{' (123) 24
+'}' (125) 24
+error (256)
+INT (257) 8
+VOID (258) 9 19
+DOUBLE (259) 10
+CHAR (260) 11
+ID (261) 14 15 16 17 22 23 47 48 74
+NUM (262) 15 72
+FNUM (263) 73
+IF (264) 38 39
+ELSE (265) 39
+FOR (266) 40
+DO (267) 43
+WHILE (268) 43 44
+RETURN (269) 45 46
+L_OR (270) 62
+L_AND (271) 63
+NEQ (272) 61
+CEQ (273) 60
+LTE (274) 57
+GTE (275) 56
+UMINUS (276)
+DECR (277) 67
+INCR (278) 66
+SUB (279)
+CALL (280)
+FN_DEF (281)
+FN_DECL (282)
+
+Nonterminals, with rules where they appear
+
+program (46)
+    on left: 1
+decl_list (47)
+    on left: 2 3, on right: 1 2
+decl (48)
+    on left: 4 5 6, on right: 2 3
+var_decl (49)
+    on left: 7, on right: 4 26
+type_spec (50)
+    on left: 8 9 10 11, on right: 7 16 17 22 23
+id_list (51)
+    on left: 12 13, on right: 7 12
+id_decl (52)
+    on left: 14 15, on right: 12 13
+fun_decl (53)
+    on left: 16, on right: 6
+fun_defn (54)
+    on left: 17, on right: 5
+params (55)
+    on left: 18 19, on right: 16 17
+param_list (56)
+    on left: 20 21, on right: 18 20
+param (57)
+    on left: 22 23, on right: 20 21
+comp_stmt (58)
+    on left: 24, on right: 17 30
+local_decl (59)
+    on left: 25 26, on right: 24 26
+stmt_list (60)
+    on left: 27 28, on right: 24 28
+statement (61)
+    on left: 29 30 31 32 33 34 35, on right: 28 38 39 40 43 44
+expr_stmt (62)
+    on left: 36 37, on right: 29
+if_stmt (63)
+    on left: 38 39, on right: 31
+for_stmt (64)
+    on left: 40, on right: 32
+for_expr (65)
+    on left: 41 42, on right: 40
+do_stmt (66)
+    on left: 43, on right: 33
+while_stmt (67)
+    on left: 44, on right: 34
+return_stmt (68)
+    on left: 45 46, on right: 35
+var (69)
+    on left: 47 48, on right: 49 66 67 70
+expr (70)
+    on left: 49 50, on right: 36 38 39 42 43 44 46 48 49 69 77 78
+exp (71)
+    on left: 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68
+   , on right: 50 51 52 53 54 55 56 57 58 59 60 61 62 63
+expval (72)
+    on left: 69 70 71 72 73, on right: 64 65 68
+call (73)
+    on left: 74, on right: 71
+args (74)
+    on left: 75 76, on right: 74
+arg_list (75)
+    on left: 77 78, on right: 76 77
+
+
+state 0
+
+    INT 	shift, and go to state 1
+    VOID	shift, and go to state 2
+    DOUBLE	shift, and go to state 3
+    CHAR	shift, and go to state 4
+
+    program	go to state 144
+    decl_list	go to state 5
+    decl	go to state 6
+    var_decl	go to state 7
+    type_spec	go to state 8
+    fun_decl	go to state 9
+    fun_defn	go to state 10
+
+
+
+state 1
+
+    type_spec  ->  INT .   (rule 8)
+
+    $default	reduce using rule 8 (type_spec)
+
+
+
+state 2
+
+    type_spec  ->  VOID .   (rule 9)
+
+    $default	reduce using rule 9 (type_spec)
+
+
+
+state 3
+
+    type_spec  ->  DOUBLE .   (rule 10)
+
+    $default	reduce using rule 10 (type_spec)
+
+
+
+state 4
+
+    type_spec  ->  CHAR .   (rule 11)
+
+    $default	reduce using rule 11 (type_spec)
+
+
+
+state 5
+
+    program  ->  decl_list .   (rule 1)
+    decl_list  ->  decl_list . decl   (rule 2)
+
+    INT 	shift, and go to state 1
+    VOID	shift, and go to state 2
+    DOUBLE	shift, and go to state 3
+    CHAR	shift, and go to state 4
+
+    $default	reduce using rule 1 (program)
+
+    decl	go to state 11
+    var_decl	go to state 7
+    type_spec	go to state 8
+    fun_decl	go to state 9
+    fun_defn	go to state 10
+
+
+
+state 6
+
+    decl_list  ->  decl .   (rule 3)
+
+    $default	reduce using rule 3 (decl_list)
+
+
+
+state 7
+
+    decl  ->  var_decl .   (rule 4)
+
+    $default	reduce using rule 4 (decl)
+
+
+
+state 8
+
+    var_decl  ->  type_spec . id_list ';'   (rule 7)
+    fun_decl  ->  type_spec . ID '(' params ')' ';'   (rule 16)
+    fun_defn  ->  type_spec . ID '(' params ')' comp_stmt   (rule 17)
+
+    ID  	shift, and go to state 12
+
+    id_list	go to state 13
+    id_decl	go to state 14
+
+
+
+state 9
+
+    decl  ->  fun_decl .   (rule 6)
+
+    $default	reduce using rule 6 (decl)
+
+
+
+state 10
+
+    decl  ->  fun_defn .   (rule 5)
+
+    $default	reduce using rule 5 (decl)
+
+
+
+state 11
+
+    decl_list  ->  decl_list decl .   (rule 2)
+
+    $default	reduce using rule 2 (decl_list)
+
+
+
+state 12
+
+    id_decl  ->  ID .   (rule 14)
+    id_decl  ->  ID . '[' NUM ']'   (rule 15)
+    fun_decl  ->  type_spec ID . '(' params ')' ';'   (rule 16)
+    fun_defn  ->  type_spec ID . '(' params ')' comp_stmt   (rule 17)
+
+    '[' 	shift, and go to state 15
+    '(' 	shift, and go to state 16
+
+    $default	reduce using rule 14 (id_decl)
+
+
+
+state 13
+
+    var_decl  ->  type_spec id_list . ';'   (rule 7)
+    id_list  ->  id_list . ',' id_decl   (rule 12)
+
+    ';' 	shift, and go to state 17
+    ',' 	shift, and go to state 18
+
+
+
+state 14
+
+    id_list  ->  id_decl .   (rule 13)
+
+    $default	reduce using rule 13 (id_list)
+
+
+
+state 15
+
+    id_decl  ->  ID '[' . NUM ']'   (rule 15)
+
+    NUM 	shift, and go to state 19
+
+
+
+state 16
+
+    fun_decl  ->  type_spec ID '(' . params ')' ';'   (rule 16)
+    fun_defn  ->  type_spec ID '(' . params ')' comp_stmt   (rule 17)
+
+    INT 	shift, and go to state 1
+    VOID	shift, and go to state 20
+    DOUBLE	shift, and go to state 3
+    CHAR	shift, and go to state 4
+
+    type_spec	go to state 21
+    params	go to state 22
+    param_list	go to state 23
+    param	go to state 24
+
+
+
+state 17
+
+    var_decl  ->  type_spec id_list ';' .   (rule 7)
+
+    $default	reduce using rule 7 (var_decl)
+
+
+
+state 18
+
+    id_list  ->  id_list ',' . id_decl   (rule 12)
+
+    ID  	shift, and go to state 25
+
+    id_decl	go to state 26
+
+
+
+state 19
+
+    id_decl  ->  ID '[' NUM . ']'   (rule 15)
+
+    ']' 	shift, and go to state 27
+
+
+
+state 20
+
+    type_spec  ->  VOID .   (rule 9)
+    params  ->  VOID .   (rule 19)
+
+    ')' 	reduce using rule 19 (params)
+    $default	reduce using rule 9 (type_spec)
+
+
+
+state 21
+
+    param  ->  type_spec . ID   (rule 22)
+    param  ->  type_spec . ID '[' ']'   (rule 23)
+
+    ID  	shift, and go to state 28
+
+
+
+state 22
+
+    fun_decl  ->  type_spec ID '(' params . ')' ';'   (rule 16)
+    fun_defn  ->  type_spec ID '(' params . ')' comp_stmt   (rule 17)
+
+    ')' 	shift, and go to state 29
+
+
+
+state 23
+
+    params  ->  param_list .   (rule 18)
+    param_list  ->  param_list . ',' param   (rule 20)
+
+    ',' 	shift, and go to state 30
+
+    $default	reduce using rule 18 (params)
+
+
+
+state 24
+
+    param_list  ->  param .   (rule 21)
+
+    $default	reduce using rule 21 (param_list)
+
+
+
+state 25
+
+    id_decl  ->  ID .   (rule 14)
+    id_decl  ->  ID . '[' NUM ']'   (rule 15)
+
+    '[' 	shift, and go to state 15
+
+    $default	reduce using rule 14 (id_decl)
+
+
+
+state 26
+
+    id_list  ->  id_list ',' id_decl .   (rule 12)
+
+    $default	reduce using rule 12 (id_list)
+
+
+
+state 27
+
+    id_decl  ->  ID '[' NUM ']' .   (rule 15)
+
+    $default	reduce using rule 15 (id_decl)
+
+
+
+state 28
+
+    param  ->  type_spec ID .   (rule 22)
+    param  ->  type_spec ID . '[' ']'   (rule 23)
+
+    '[' 	shift, and go to state 31
+
+    $default	reduce using rule 22 (param)
+
+
+
+state 29
+
+    fun_decl  ->  type_spec ID '(' params ')' . ';'   (rule 16)
+    fun_defn  ->  type_spec ID '(' params ')' . comp_stmt   (rule 17)
+
+    ';' 	shift, and go to state 32
+    '{' 	shift, and go to state 33
+
+    comp_stmt	go to state 34
+
+
+
+state 30
+
+    param_list  ->  param_list ',' . param   (rule 20)
+
+    INT 	shift, and go to state 1
+    VOID	shift, and go to state 2
+    DOUBLE	shift, and go to state 3
+    CHAR	shift, and go to state 4
+
+    type_spec	go to state 21
+    param	go to state 35
+
+
+
+state 31
+
+    param  ->  type_spec ID '[' . ']'   (rule 23)
+
+    ']' 	shift, and go to state 36
+
+
+
+state 32
+
+    fun_decl  ->  type_spec ID '(' params ')' ';' .   (rule 16)
+
+    $default	reduce using rule 16 (fun_decl)
+
+
+
+state 33
+
+    comp_stmt  ->  '{' . local_decl stmt_list '}'   (rule 24)
+
+    $default	reduce using rule 25 (local_decl)
+
+    local_decl	go to state 37
+
+
+
+state 34
+
+    fun_defn  ->  type_spec ID '(' params ')' comp_stmt .   (rule 17)
+
+    $default	reduce using rule 17 (fun_defn)
+
+
+
+state 35
+
+    param_list  ->  param_list ',' param .   (rule 20)
+
+    $default	reduce using rule 20 (param_list)
+
+
+
+state 36
+
+    param  ->  type_spec ID '[' ']' .   (rule 23)
+
+    $default	reduce using rule 23 (param)
+
+
+
+state 37
+
+    comp_stmt  ->  '{' local_decl . stmt_list '}'   (rule 24)
+    local_decl  ->  local_decl . var_decl   (rule 26)
+
+    INT 	shift, and go to state 1
+    VOID	shift, and go to state 2
+    DOUBLE	shift, and go to state 3
+    CHAR	shift, and go to state 4
+
+    $default	reduce using rule 27 (stmt_list)
+
+    var_decl	go to state 38
+    type_spec	go to state 39
+    stmt_list	go to state 40
+
+
+
+state 38
+
+    local_decl  ->  local_decl var_decl .   (rule 26)
+
+    $default	reduce using rule 26 (local_decl)
+
+
+
+state 39
+
+    var_decl  ->  type_spec . id_list ';'   (rule 7)
+
+    ID  	shift, and go to state 25
+
+    id_list	go to state 13
+    id_decl	go to state 14
+
+
+
+state 40
+
+    comp_stmt  ->  '{' local_decl stmt_list . '}'   (rule 24)
+    stmt_list  ->  stmt_list . statement   (rule 28)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    IF  	shift, and go to state 44
+    FOR 	shift, and go to state 45
+    DO  	shift, and go to state 46
+    WHILE	shift, and go to state 47
+    RETURN	shift, and go to state 48
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    ';' 	shift, and go to state 53
+    '(' 	shift, and go to state 54
+    '{' 	shift, and go to state 33
+    '}' 	shift, and go to state 55
+
+    comp_stmt	go to state 56
+    statement	go to state 57
+    expr_stmt	go to state 58
+    if_stmt	go to state 59
+    for_stmt	go to state 60
+    do_stmt	go to state 61
+    while_stmt	go to state 62
+    return_stmt	go to state 63
+    var 	go to state 64
+    expr	go to state 65
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 41
+
+    var  ->  ID .   (rule 47)
+    var  ->  ID . '[' expr ']'   (rule 48)
+    call  ->  ID . '(' args ')'   (rule 74)
+
+    '[' 	shift, and go to state 69
+    '(' 	shift, and go to state 70
+
+    $default	reduce using rule 47 (var)
+
+
+
+state 42
+
+    expval  ->  NUM .   (rule 72)
+
+    $default	reduce using rule 72 (expval)
+
+
+
+state 43
+
+    expval  ->  FNUM .   (rule 73)
+
+    $default	reduce using rule 73 (expval)
+
+
+
+state 44
+
+    if_stmt  ->  IF . '(' expr ')' statement   (rule 38)
+    if_stmt  ->  IF . '(' expr ')' statement ELSE statement   (rule 39)
+
+    '(' 	shift, and go to state 71
+
+
+
+state 45
+
+    for_stmt  ->  FOR . '(' for_expr ';' for_expr ';' for_expr ')' statement   (rule 40)
+
+    '(' 	shift, and go to state 72
+
+
+
+state 46
+
+    do_stmt  ->  DO . statement WHILE '(' expr ')' ';'   (rule 43)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    IF  	shift, and go to state 44
+    FOR 	shift, and go to state 45
+    DO  	shift, and go to state 46
+    WHILE	shift, and go to state 47
+    RETURN	shift, and go to state 48
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    ';' 	shift, and go to state 53
+    '(' 	shift, and go to state 54
+    '{' 	shift, and go to state 33
+
+    comp_stmt	go to state 56
+    statement	go to state 73
+    expr_stmt	go to state 58
+    if_stmt	go to state 59
+    for_stmt	go to state 60
+    do_stmt	go to state 61
+    while_stmt	go to state 62
+    return_stmt	go to state 63
+    var 	go to state 64
+    expr	go to state 65
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 47
+
+    while_stmt  ->  WHILE . '(' expr ')' statement   (rule 44)
+
+    '(' 	shift, and go to state 74
+
+
+
+state 48
+
+    return_stmt  ->  RETURN . ';'   (rule 45)
+    return_stmt  ->  RETURN . expr ';'   (rule 46)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    ';' 	shift, and go to state 75
+    '(' 	shift, and go to state 54
+
+    var 	go to state 64
+    expr	go to state 76
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 49
+
+    exp  ->  '-' . expval   (rule 64)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    expval	go to state 78
+    call	go to state 68
+
+
+
+state 50
+
+    exp  ->  '!' . expval   (rule 65)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    expval	go to state 79
+    call	go to state 68
+
+
+
+state 51
+
+    exp  ->  DECR . var   (rule 67)
+
+    ID  	shift, and go to state 80
+
+    var 	go to state 81
+
+
+
+state 52
+
+    exp  ->  INCR . var   (rule 66)
+
+    ID  	shift, and go to state 80
+
+    var 	go to state 82
+
+
+
+state 53
+
+    expr_stmt  ->  ';' .   (rule 37)
+
+    $default	reduce using rule 37 (expr_stmt)
+
+
+
+state 54
+
+    expval  ->  '(' . expr ')'   (rule 69)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 64
+    expr	go to state 83
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 55
+
+    comp_stmt  ->  '{' local_decl stmt_list '}' .   (rule 24)
+
+    $default	reduce using rule 24 (comp_stmt)
+
+
+
+state 56
+
+    statement  ->  comp_stmt .   (rule 30)
+
+    $default	reduce using rule 30 (statement)
+
+
+
+state 57
+
+    stmt_list  ->  stmt_list statement .   (rule 28)
+
+    $default	reduce using rule 28 (stmt_list)
+
+
+
+state 58
+
+    statement  ->  expr_stmt .   (rule 29)
+
+    $default	reduce using rule 29 (statement)
+
+
+
+state 59
+
+    statement  ->  if_stmt .   (rule 31)
+
+    $default	reduce using rule 31 (statement)
+
+
+
+state 60
+
+    statement  ->  for_stmt .   (rule 32)
+
+    $default	reduce using rule 32 (statement)
+
+
+
+state 61
+
+    statement  ->  do_stmt .   (rule 33)
+
+    $default	reduce using rule 33 (statement)
+
+
+
+state 62
+
+    statement  ->  while_stmt .   (rule 34)
+
+    $default	reduce using rule 34 (statement)
+
+
+
+state 63
+
+    statement  ->  return_stmt .   (rule 35)
+
+    $default	reduce using rule 35 (statement)
+
+
+
+state 64
+
+    expr  ->  var . '=' expr   (rule 49)
+    expval  ->  var .   (rule 70)
+
+    '=' 	shift, and go to state 84
+
+    $default	reduce using rule 70 (expval)
+
+
+
+state 65
+
+    expr_stmt  ->  expr . ';'   (rule 36)
+
+    ';' 	shift, and go to state 85
+
+
+
+state 66
+
+    expr  ->  exp .   (rule 50)
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    L_OR	shift, and go to state 86
+    L_AND	shift, and go to state 87
+    NEQ 	shift, and go to state 88
+    CEQ 	shift, and go to state 89
+    LTE 	shift, and go to state 90
+    GTE 	shift, and go to state 91
+    '<' 	shift, and go to state 92
+    '>' 	shift, and go to state 93
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 50 (expr)
+
+
+
+state 67
+
+    exp  ->  expval .   (rule 68)
+
+    $default	reduce using rule 68 (exp)
+
+
+
+state 68
+
+    expval  ->  call .   (rule 71)
+
+    $default	reduce using rule 71 (expval)
+
+
+
+state 69
+
+    var  ->  ID '[' . expr ']'   (rule 48)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 64
+    expr	go to state 99
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 70
+
+    call  ->  ID '(' . args ')'   (rule 74)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    $default	reduce using rule 75 (args)
+
+    var 	go to state 64
+    expr	go to state 100
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+    args	go to state 101
+    arg_list	go to state 102
+
+
+
+state 71
+
+    if_stmt  ->  IF '(' . expr ')' statement   (rule 38)
+    if_stmt  ->  IF '(' . expr ')' statement ELSE statement   (rule 39)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 64
+    expr	go to state 103
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 72
+
+    for_stmt  ->  FOR '(' . for_expr ';' for_expr ';' for_expr ')' statement   (rule 40)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    $default	reduce using rule 41 (for_expr)
+
+    for_expr	go to state 104
+    var 	go to state 64
+    expr	go to state 105
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 73
+
+    do_stmt  ->  DO statement . WHILE '(' expr ')' ';'   (rule 43)
+
+    WHILE	shift, and go to state 106
+
+
+
+state 74
+
+    while_stmt  ->  WHILE '(' . expr ')' statement   (rule 44)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 64
+    expr	go to state 107
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 75
+
+    return_stmt  ->  RETURN ';' .   (rule 45)
+
+    $default	reduce using rule 45 (return_stmt)
+
+
+
+state 76
+
+    return_stmt  ->  RETURN expr . ';'   (rule 46)
+
+    ';' 	shift, and go to state 108
+
+
+
+state 77
+
+    expval  ->  var .   (rule 70)
+
+    $default	reduce using rule 70 (expval)
+
+
+
+state 78
+
+    exp  ->  '-' expval .   (rule 64)
+
+    $default	reduce using rule 64 (exp)
+
+
+
+state 79
+
+    exp  ->  '!' expval .   (rule 65)
+
+    $default	reduce using rule 65 (exp)
+
+
+
+state 80
+
+    var  ->  ID .   (rule 47)
+    var  ->  ID . '[' expr ']'   (rule 48)
+
+    '[' 	shift, and go to state 69
+
+    $default	reduce using rule 47 (var)
+
+
+
+state 81
+
+    exp  ->  DECR var .   (rule 67)
+
+    $default	reduce using rule 67 (exp)
+
+
+
+state 82
+
+    exp  ->  INCR var .   (rule 66)
+
+    $default	reduce using rule 66 (exp)
+
+
+
+state 83
+
+    expval  ->  '(' expr . ')'   (rule 69)
+
+    ')' 	shift, and go to state 109
+
+
+
+state 84
+
+    expr  ->  var '=' . expr   (rule 49)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 64
+    expr	go to state 110
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 85
+
+    expr_stmt  ->  expr ';' .   (rule 36)
+
+    $default	reduce using rule 36 (expr_stmt)
+
+
+
+state 86
+
+    exp  ->  exp L_OR . exp   (rule 62)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 111
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 87
+
+    exp  ->  exp L_AND . exp   (rule 63)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 112
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 88
+
+    exp  ->  exp NEQ . exp   (rule 61)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 113
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 89
+
+    exp  ->  exp CEQ . exp   (rule 60)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 114
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 90
+
+    exp  ->  exp LTE . exp   (rule 57)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 115
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 91
+
+    exp  ->  exp GTE . exp   (rule 56)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 116
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 92
+
+    exp  ->  exp '<' . exp   (rule 58)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 117
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 93
+
+    exp  ->  exp '>' . exp   (rule 59)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 118
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 94
+
+    exp  ->  exp '+' . exp   (rule 51)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 119
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 95
+
+    exp  ->  exp '-' . exp   (rule 52)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 120
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 96
+
+    exp  ->  exp '*' . exp   (rule 53)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 121
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 97
+
+    exp  ->  exp '/' . exp   (rule 54)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 122
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 98
+
+    exp  ->  exp '%' . exp   (rule 55)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 77
+    exp 	go to state 123
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 99
+
+    var  ->  ID '[' expr . ']'   (rule 48)
+
+    ']' 	shift, and go to state 124
+
+
+
+state 100
+
+    arg_list  ->  expr .   (rule 78)
+
+    $default	reduce using rule 78 (arg_list)
+
+
+
+state 101
+
+    call  ->  ID '(' args . ')'   (rule 74)
+
+    ')' 	shift, and go to state 125
+
+
+
+state 102
+
+    args  ->  arg_list .   (rule 76)
+    arg_list  ->  arg_list . ',' expr   (rule 77)
+
+    ',' 	shift, and go to state 126
+
+    $default	reduce using rule 76 (args)
+
+
+
+state 103
+
+    if_stmt  ->  IF '(' expr . ')' statement   (rule 38)
+    if_stmt  ->  IF '(' expr . ')' statement ELSE statement   (rule 39)
+
+    ')' 	shift, and go to state 127
+
+
+
+state 104
+
+    for_stmt  ->  FOR '(' for_expr . ';' for_expr ';' for_expr ')' statement   (rule 40)
+
+    ';' 	shift, and go to state 128
+
+
+
+state 105
+
+    for_expr  ->  expr .   (rule 42)
+
+    $default	reduce using rule 42 (for_expr)
+
+
+
+state 106
+
+    do_stmt  ->  DO statement WHILE . '(' expr ')' ';'   (rule 43)
+
+    '(' 	shift, and go to state 129
+
+
+
+state 107
+
+    while_stmt  ->  WHILE '(' expr . ')' statement   (rule 44)
+
+    ')' 	shift, and go to state 130
+
+
+
+state 108
+
+    return_stmt  ->  RETURN expr ';' .   (rule 46)
+
+    $default	reduce using rule 46 (return_stmt)
+
+
+
+state 109
+
+    expval  ->  '(' expr ')' .   (rule 69)
+
+    $default	reduce using rule 69 (expval)
+
+
+
+state 110
+
+    expr  ->  var '=' expr .   (rule 49)
+
+    $default	reduce using rule 49 (expr)
+
+
+
+state 111
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp L_OR exp .   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    L_AND	shift, and go to state 87
+    NEQ 	shift, and go to state 88
+    CEQ 	shift, and go to state 89
+    LTE 	shift, and go to state 90
+    GTE 	shift, and go to state 91
+    '<' 	shift, and go to state 92
+    '>' 	shift, and go to state 93
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 62 (exp)
+
+
+
+state 112
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+    exp  ->  exp L_AND exp .   (rule 63)
+
+    NEQ 	shift, and go to state 88
+    CEQ 	shift, and go to state 89
+    LTE 	shift, and go to state 90
+    GTE 	shift, and go to state 91
+    '<' 	shift, and go to state 92
+    '>' 	shift, and go to state 93
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 63 (exp)
+
+
+
+state 113
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp NEQ exp .   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    LTE 	shift, and go to state 90
+    GTE 	shift, and go to state 91
+    '<' 	shift, and go to state 92
+    '>' 	shift, and go to state 93
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 61 (exp)
+
+
+
+state 114
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp CEQ exp .   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    LTE 	shift, and go to state 90
+    GTE 	shift, and go to state 91
+    '<' 	shift, and go to state 92
+    '>' 	shift, and go to state 93
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 60 (exp)
+
+
+
+state 115
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp LTE exp .   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 57 (exp)
+
+
+
+state 116
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp GTE exp .   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 56 (exp)
+
+
+
+state 117
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp '<' exp .   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 58 (exp)
+
+
+
+state 118
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp '>' exp .   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    '+' 	shift, and go to state 94
+    '-' 	shift, and go to state 95
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 59 (exp)
+
+
+
+state 119
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp '+' exp .   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 51 (exp)
+
+
+
+state 120
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp '-' exp .   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+    '*' 	shift, and go to state 96
+    '/' 	shift, and go to state 97
+    '%' 	shift, and go to state 98
+
+    $default	reduce using rule 52 (exp)
+
+
+
+state 121
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp '*' exp .   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+
+    $default	reduce using rule 53 (exp)
+
+
+
+state 122
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp '/' exp .   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+
+    $default	reduce using rule 54 (exp)
+
+
+
+state 123
+
+    exp  ->  exp . '+' exp   (rule 51)
+    exp  ->  exp . '-' exp   (rule 52)
+    exp  ->  exp . '*' exp   (rule 53)
+    exp  ->  exp . '/' exp   (rule 54)
+    exp  ->  exp . '%' exp   (rule 55)
+    exp  ->  exp '%' exp .   (rule 55)
+    exp  ->  exp . GTE exp   (rule 56)
+    exp  ->  exp . LTE exp   (rule 57)
+    exp  ->  exp . '<' exp   (rule 58)
+    exp  ->  exp . '>' exp   (rule 59)
+    exp  ->  exp . CEQ exp   (rule 60)
+    exp  ->  exp . NEQ exp   (rule 61)
+    exp  ->  exp . L_OR exp   (rule 62)
+    exp  ->  exp . L_AND exp   (rule 63)
+
+
+    $default	reduce using rule 55 (exp)
+
+
+
+state 124
+
+    var  ->  ID '[' expr ']' .   (rule 48)
+
+    $default	reduce using rule 48 (var)
+
+
+
+state 125
+
+    call  ->  ID '(' args ')' .   (rule 74)
+
+    $default	reduce using rule 74 (call)
+
+
+
+state 126
+
+    arg_list  ->  arg_list ',' . expr   (rule 77)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 64
+    expr	go to state 131
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 127
+
+    if_stmt  ->  IF '(' expr ')' . statement   (rule 38)
+    if_stmt  ->  IF '(' expr ')' . statement ELSE statement   (rule 39)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    IF  	shift, and go to state 44
+    FOR 	shift, and go to state 45
+    DO  	shift, and go to state 46
+    WHILE	shift, and go to state 47
+    RETURN	shift, and go to state 48
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    ';' 	shift, and go to state 53
+    '(' 	shift, and go to state 54
+    '{' 	shift, and go to state 33
+
+    comp_stmt	go to state 56
+    statement	go to state 132
+    expr_stmt	go to state 58
+    if_stmt	go to state 59
+    for_stmt	go to state 60
+    do_stmt	go to state 61
+    while_stmt	go to state 62
+    return_stmt	go to state 63
+    var 	go to state 64
+    expr	go to state 65
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 128
+
+    for_stmt  ->  FOR '(' for_expr ';' . for_expr ';' for_expr ')' statement   (rule 40)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    $default	reduce using rule 41 (for_expr)
+
+    for_expr	go to state 133
+    var 	go to state 64
+    expr	go to state 105
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 129
+
+    do_stmt  ->  DO statement WHILE '(' . expr ')' ';'   (rule 43)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    var 	go to state 64
+    expr	go to state 134
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 130
+
+    while_stmt  ->  WHILE '(' expr ')' . statement   (rule 44)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    IF  	shift, and go to state 44
+    FOR 	shift, and go to state 45
+    DO  	shift, and go to state 46
+    WHILE	shift, and go to state 47
+    RETURN	shift, and go to state 48
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    ';' 	shift, and go to state 53
+    '(' 	shift, and go to state 54
+    '{' 	shift, and go to state 33
+
+    comp_stmt	go to state 56
+    statement	go to state 135
+    expr_stmt	go to state 58
+    if_stmt	go to state 59
+    for_stmt	go to state 60
+    do_stmt	go to state 61
+    while_stmt	go to state 62
+    return_stmt	go to state 63
+    var 	go to state 64
+    expr	go to state 65
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 131
+
+    arg_list  ->  arg_list ',' expr .   (rule 77)
+
+    $default	reduce using rule 77 (arg_list)
+
+
+
+state 132
+
+    if_stmt  ->  IF '(' expr ')' statement .   (rule 38)
+    if_stmt  ->  IF '(' expr ')' statement . ELSE statement   (rule 39)
+
+    ELSE	shift, and go to state 136
+
+    ELSE	[reduce using rule 38 (if_stmt)]
+    $default	reduce using rule 38 (if_stmt)
+
+
+
+state 133
+
+    for_stmt  ->  FOR '(' for_expr ';' for_expr . ';' for_expr ')' statement   (rule 40)
+
+    ';' 	shift, and go to state 137
+
+
+
+state 134
+
+    do_stmt  ->  DO statement WHILE '(' expr . ')' ';'   (rule 43)
+
+    ')' 	shift, and go to state 138
+
+
+
+state 135
+
+    while_stmt  ->  WHILE '(' expr ')' statement .   (rule 44)
+
+    $default	reduce using rule 44 (while_stmt)
+
+
+
+state 136
+
+    if_stmt  ->  IF '(' expr ')' statement ELSE . statement   (rule 39)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    IF  	shift, and go to state 44
+    FOR 	shift, and go to state 45
+    DO  	shift, and go to state 46
+    WHILE	shift, and go to state 47
+    RETURN	shift, and go to state 48
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    ';' 	shift, and go to state 53
+    '(' 	shift, and go to state 54
+    '{' 	shift, and go to state 33
+
+    comp_stmt	go to state 56
+    statement	go to state 139
+    expr_stmt	go to state 58
+    if_stmt	go to state 59
+    for_stmt	go to state 60
+    do_stmt	go to state 61
+    while_stmt	go to state 62
+    return_stmt	go to state 63
+    var 	go to state 64
+    expr	go to state 65
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 137
+
+    for_stmt  ->  FOR '(' for_expr ';' for_expr ';' . for_expr ')' statement   (rule 40)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    '(' 	shift, and go to state 54
+
+    $default	reduce using rule 41 (for_expr)
+
+    for_expr	go to state 140
+    var 	go to state 64
+    expr	go to state 105
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 138
+
+    do_stmt  ->  DO statement WHILE '(' expr ')' . ';'   (rule 43)
+
+    ';' 	shift, and go to state 141
+
+
+
+state 139
+
+    if_stmt  ->  IF '(' expr ')' statement ELSE statement .   (rule 39)
+
+    $default	reduce using rule 39 (if_stmt)
+
+
+
+state 140
+
+    for_stmt  ->  FOR '(' for_expr ';' for_expr ';' for_expr . ')' statement   (rule 40)
+
+    ')' 	shift, and go to state 142
+
+
+
+state 141
+
+    do_stmt  ->  DO statement WHILE '(' expr ')' ';' .   (rule 43)
+
+    $default	reduce using rule 43 (do_stmt)
+
+
+
+state 142
+
+    for_stmt  ->  FOR '(' for_expr ';' for_expr ';' for_expr ')' . statement   (rule 40)
+
+    ID  	shift, and go to state 41
+    NUM 	shift, and go to state 42
+    FNUM	shift, and go to state 43
+    IF  	shift, and go to state 44
+    FOR 	shift, and go to state 45
+    DO  	shift, and go to state 46
+    WHILE	shift, and go to state 47
+    RETURN	shift, and go to state 48
+    '-' 	shift, and go to state 49
+    '!' 	shift, and go to state 50
+    DECR	shift, and go to state 51
+    INCR	shift, and go to state 52
+    ';' 	shift, and go to state 53
+    '(' 	shift, and go to state 54
+    '{' 	shift, and go to state 33
+
+    comp_stmt	go to state 56
+    statement	go to state 143
+    expr_stmt	go to state 58
+    if_stmt	go to state 59
+    for_stmt	go to state 60
+    do_stmt	go to state 61
+    while_stmt	go to state 62
+    return_stmt	go to state 63
+    var 	go to state 64
+    expr	go to state 65
+    exp 	go to state 66
+    expval	go to state 67
+    call	go to state 68
+
+
+
+state 143
+
+    for_stmt  ->  FOR '(' for_expr ';' for_expr ';' for_expr ')' statement .   (rule 40)
+
+    $default	reduce using rule 40 (for_stmt)
+
+
+
+state 144
+
+    $   	go to state 145
+
+
+
+state 145
+
+    $   	go to state 146
+
+
+
+state 146
+
+    $default	accept

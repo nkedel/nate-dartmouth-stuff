@@ -1,0 +1,38 @@
+File Manipulation
+
+Load: To load a file you should choose load from the Files Menu , or 
+use the load button on the toolbar
+
+Save: To Save you may use the Save or the Save As menu options
+ under the Files Menu, or the Save button on the toolbar.  If you use Save
+As -- you will be queried as to the name under which you want to save you 
+file.
+
+Window Manipulation:
+New Window:To create a new window choose the New option from the 
+Files Menu, or click the New button on the toolbar.  The new window will
+also have an Untitled Buffer in it
+
+
+Move:To move a window you may click on any part of it’s frame
+ except the bottom bar.
+
+Resizse:To resize a window you may enter the new width and height in
+ the width and height fields at the bottom right of each window or just
+drag the bottom right corner of the window our to the desired position.
+
+Close
+Undo
+Redo
+Window To Top
+Buffer to Window
+Copy
+Cut 
+Paste
+Send Text
+Parse
+Get Help
+Windowshade
+
+Parse
+Quit

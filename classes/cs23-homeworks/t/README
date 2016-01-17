@@ -1,0 +1,37 @@
+*
+* 3d TicTacToe -- A sort of Dumb Video Game
+* by Nate Edel
+
+FILE:
+-----
+Makefile       the Makefile automates assembly of the separate parts of
+               the program.
+README         Readme -- this file, some documentation
+DESIGN         Design notes as requested in the homework.
+nate.h         defines internal and external interfaces for the game
+ttt3D.cc       A driver creating a wish like shell with the new commands
+               "ttt3D" and "won3D" using ttt3D_nate and won3D_nate
+nate.cc        a single file integrating ttt3D_nate and won3D_nate and their
+               supporting functions
+nate_test.tcl  test program/driver for new tcl/tk commands (ttt3D and won3D)
+nate.tcl       User interface for 3d TicTacToe game
+wins.tcl       Generated list of 135 possible win conditions.
+
+Implementation Notes:
+---------------------
+nate.cc was originally implemented as 4 separate files; the use of the
+Makefile (the orignal version of which was provided by Fred Henle) is a
+leftover of this, in order to speed recompiles.
+
+inline was used liberally, in the (unproven) hope of improving performance
+on frequently called non-recursive functions. Same for use of -O2 compiler
+flag.
+
+wins are determined using offset, although within the move selection
+routines, a limitted version of the win-detection routine is called which
+checks only for wins through a given point, with noticable speed
+improvement.
+
+two DEFINES are available at compile time, DEBUG, which enables a lot of
+debugging information, and PROFILE, which enables a timer routine to keep
+track of the length of thinking time per move.

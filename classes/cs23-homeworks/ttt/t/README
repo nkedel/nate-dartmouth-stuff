@@ -1,0 +1,31 @@
+Nathan Edel 
+
+File Listing
+------------
+ttt.cc         derived from "myAppInit.cc" as provided in the class
+               contains c++ implementations of the new Tk commands 
+               "ttt" and "won" as specified in the homework.
+
+ttt.tcl        heavily derivative of John Danskin's "calc.tcl" provided in
+               the class examples.
+
+ttt_test.tcl   simple best-case tester for ttt.cc, tests the "ttt" and
+               "won" command implementations
+
+testspd.cc     simple unscientific benchmark program. (not submittied for
+               credit)
+
+Design         Some notes on the potential design of a ttt3d implementation
+               for homework 4
+
+README         This file.
+
+Implementation notes
+--------------------
+a) compiling  DEBUG defined will enable a few extra checks, as well as
+   messages to STDERR for errors
+b) findBest / analyzeX / analyzeY use a single passed by reference copy
+   of the board to save copying time and memory.
+c) all boards are upper case internally, and the implementations of ttt
+   and won will convert incorrect case.
+

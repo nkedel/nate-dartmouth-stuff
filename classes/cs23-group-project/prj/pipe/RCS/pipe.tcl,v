@@ -1,0 +1,1944 @@
+head	2.6;
+access;
+symbols;
+locks
+	nate:2.6; strict;
+comment	@# @;
+
+
+2.6
+date	96.05.29.03.37.53;	author nate;	state Exp;
+branches;
+next	2.5;
+
+2.5
+date	96.05.25.02.50.41;	author nate;	state Exp;
+branches;
+next	2.4;
+
+2.4
+date	96.05.25.02.19.13;	author nate;	state Exp;
+branches;
+next	2.3;
+
+2.3
+date	96.05.24.23.47.19;	author nate;	state Exp;
+branches;
+next	2.2;
+
+2.2
+date	96.05.24.05.27.18;	author nate;	state Exp;
+branches;
+next	2.1;
+
+2.1
+date	96.05.18.18.35.39;	author nate;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	96.05.18.18.33.42;	author nate;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	96.05.18.17.48.39;	author nate;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	96.05.17.11.10.03;	author nate;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	96.05.17.10.07.36;	author nate;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	96.05.17.09.06.34;	author nate;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	96.05.17.08.26.13;	author nate;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	96.05.17.02.16.38;	author nate;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	96.05.14.23.57.59;	author nate;	state Exp;
+branches;
+next	;
+
+
+desc
+@tcl portion of the pipeline interface subsystem
+@
+
+
+2.6
+log
+@Yo.
+@
+text
+@# pipe.tcl
+# internal module, include with "source pipe.tcl"
+#
+# $Header: /a/tahoe.cs.dartmouth.edu/usr/tahoe1/davidk/KillerS/Integration/RCS/pipe.tcl,v 3.1 1996/05/26 22:24:27 davidk Exp nate $
+# by Nate Edel
+#
+
+set numPipes 1
+set pipeArray(0) ""
+set toEval ""
+
+# A pipe record is a Tcl list with 5 elements:
+# 1st Element (0) : the "type" of the pipe, either the command to be run,
+#             "tcl" "scheme" or "csh". Only one "tcl" or "scheme" pipe can
+#             exist in the current implementation
+# 2nd Element (1) : the file stream returned by open for the pipe. Not used
+#             for the tcl pipe. Changes if a pipe is reOpened.
+# 3rd Element (2) : the number of the buffer associated with the pipe. Set 
+#                   by pipe_Open and never changes.
+# 4th Element (3) : full path of the command. The same as (0) unless one of 
+#                   the 3 standard commands, in which case the defined path
+#                   (hardcoded for this version)
+# 5th Element (4) : Open/Closed. 1 if Open, 0 if closed. Changable on pipe
+#                   close (as noticed by pipe_Read) or by pipe_Close, and 
+#                   on pipe Open or reOpen.
+#
+
+#
+# pipe_dumpData {pipe record #}
+# Diagnostic function (callable by the user in the TCL window) 
+# Dumps the contents of a specified pipe record to standard output
+#
+proc pipe_dumpData { pipeRecord } {
+    global pipeArray
+    if [ pipe_valid $pipeRecord ] { 
+      puts $pipeArray($pipeRecord)
+    }
+}
+
+#
+# pipe_nodeCreate {pipe record #}
+# Creates a blank pipe record in the pipe array, if needed.
+#
+proc pipe_nodeCreate { pipeRecord } {
+    global pipeArray
+    if [catch { set nothing $pipeArray} ] {
+      set pipeArray($pipeRecord) [ list {nothing} {-1} {-1} {nothing} {0} ]
+    }
+}
+
+#
+# pipe_setData
+# sets a specified field in the pipe record
+#
+proc pipe_setData { pipeRecord pipeField pData } {
+    global pipeArray
+    set pipeArray($pipeRecord) [ lreplace $pipeArray($pipeRecord) $pipeField $pipeField $pData ]
+}
+
+#
+# pipe_getData
+# gets a field from the indicated pipe record and returns it to the user
+#
+proc pipe_getData { pipeRecord pipeField } {
+    global pipeArray
+    return [ lindex $pipeArray($pipeRecord) $pipeField ]
+}
+
+#
+# pipe_isOpen
+# returns 1 if the pipe is a valid, open pipe, and 0 otherwise
+#
+proc pipe_isOpen { pipeNum } {
+    global pipeArray
+    return [ lindex $pipeArray($pipeNum) 4 ]
+}
+
+#
+# pipe_valid
+# returns 1 if the pipe record is valid and initialized, 0 otherwise 
+#
+proc pipe_valid { pipeNum } { 
+    global numPipes pipeArray
+    if { pipeNum => numPipes } { return 0 }
+    if [catch {set nothing $pipeArray($pipeNum) }] {return 0}
+    if {[string length [pipe_getData $pipeNum 2]] == 0} {
+      return 0
+      }
+    return 1
+}
+
+#
+# pipe_Init
+# Create our default 3 pipes (TCL, Scheme, and Unix [csh]) and 
+#   corresponding buffers
+#
+# * Must be only called once (or returns error)
+# * Calls pipe_Open for scheme and csh, creates tcl pipe "by hand" by 
+#   calling pipe_Create directly
+#
+proc pipe_Init { TCLBuffer SchemeBuffer cshBuffer } {
+    global numPipes BufferArray
+    if {$numPipes != 1} { error "pipe_Init being called twice" }
+    
+    pipe_nodeCreate 0
+    
+    set BufferArray($TCLBuffer,name) "*TCL"
+    if [ catch { pipe_Create $TCLBuffer } cerr ] { 
+	error "Couldn't create TCL buffer. ($cerr)"
+    }
+    
+    pipe_setData 0 0 "tcl"
+    pipe_setData 0 2 $TCLBuffer
+    pipe_setData 0 4 1
+    edit_setPipe $TCLBuffer 0
+    
+    set pipeNum [ pipe_Open  scheme $SchemeBuffer ]
+    if { $pipeNum != 1 } { 
+	error "pipe_init called twice?" 
+    }
+    set pipeNum [ pipe_Open csh $cshBuffer]
+    if { $pipeNum != 2 } { 
+	error "pipe_init called twice?" 
+    }
+}
+
+#
+# pipe_Destroy
+# Permanently removes a pipe, and its corresponding buffer.
+#
+# * Calls pipe_Close to close the pipe if still open.
+# * Calls edit_close to close the corresponding buffer. 
+#
+proc pipe_Destroy { buffer } {
+    set myPipe [edit_getPipe $buffer]
+    if { $myPipe == -1} { 
+	    error "pipe_Destroy called on non-initialized or non-pipe buffer"
+    }
+    if { $myPipe == 0 } {
+	    error "pipe_Destroy called on TCL pipe"
+    }
+    if {[pipe_isOpen $myPipe] == 1} { 
+	    if [ catch { pipe_Close $myPipe } err ] {
+	      error "Couldn't run pipe_Close on $myPipe ($err)" 
+        }
+      }
+    edit_close $buffer
+    pipe_setData $myPipe 2 ""
+}
+
+#
+# pipe_Create
+# Uses edit_Create to create a buffer for a new pipe, and handles special
+#   bindings for pine windows (control-Return and alt-Return)
+#
+# * Sets bindings to call pipe_Submit and pipe_submitSelected
+#
+proc pipe_Create { buffer } {
+    if [catch { edit_create $buffer pipe } crerr] 
+      { error "$crerr in pipe_Create" }
+    set bpath .d.c.buffer$buffer
+    $bpath mark set p-o-e 1.0
+    $bpath mark gravity p-o-e left
+    bind $bpath <Control-Return> "pipe_Submit $buffer"
+    bind $bpath <Alt-Return> "pipe_submitSelected $buffer"
+}
+
+#
+# pipe_Open 
+# Create a new pipe in a buffer, and returns the new pipe's #
+#
+# * Contains a few derivations from Danskin's "ReadWritePipe"
+# * Calls pipe_Create to create the buffer corresponing to the pipe
+# * Standard paths for the csh and Scheme pipes are defined here for
+#   the Dec Alphas.
+#
+proc pipe_Open { pipeType bufferName } {
+    global numPipes BufferArray
+    
+    pipe_nodeCreate $numPipes
+    
+    set BufferArray($bufferName,name) "*$pipeType"
+    
+    # we're limitted to a singel TCL pipe for simplicity's sake
+    if { [string compare $pipeType "tcl"] == 0 } {
+	    error "User tried to create additional TCL pipes"
+    }
+    
+    pipe_setData $numPipes 0 $pipeType
+    
+    if [ catch { pipe_Create $bufferName } err ] {
+	    error "Couldn't create buffer for new pipe. ($err)"
+    }
+    
+    pipe_setData $numPipes 2 $bufferName
+    edit_setPipe $bufferName $numPipes
+    
+    set toCreate $pipeType 
+    if { [string compare $toCreate "scheme"] == 0 } {
+	    set toCreate "/usr/local/bin/scheme"
+    } 
+    
+    if { [string compare $toCreate "csh"] == 0 } {
+	    set toCreate "/usr/ucb/csh -i"
+    }
+    
+    set fileHandle 0
+    # Derived from Danskin's example
+    if [catch {open "|$toCreate" r+} fileHandle] {
+  	  error "Couldn't Create Pipe for $toCreate in pipe_Open. ($fileHandle)"
+    } else {
+	    pipe_setData $numPipes 1 $fileHandle
+    }
+    
+    pipe_setData $numPipes 3 $toCreate
+    pipe_setData $numPipes 4 1
+    
+    fileevent $fileHandle readable "pipe_Read $numPipes"
+    set pnum $numPipes
+    incr numPipes
+    return $pnum
+}
+
+
+
+#
+# pipe_reOpen
+# reOpens closed standard pipe
+#
+# * pipe must not have been destroyed, but rather should have closed due
+#   to a fileevent or pipe_Close call
+#
+proc pipe_reOpen { pipeNum } {
+    if { [pipe_valid $pipeNum] == 0 } {
+      error "Called reOpen on an invalid pipe!"
+      }
+    
+    if [ pipe_getData $pipeNum 4 ] {
+	    error "Called reOpen on an open pipe!"
+    }
+
+    if { $pipeNum > 2 } {
+      error "Called reOpen on a user-created pipe!"
+      }
+    
+    # taken from Danskin's example
+    set toCreate [pipe_getData $pipeNum 3]
+    if [catch {open "|$toCreate" r+} fileHandle] {
+    	error "Couldn't Create Pipe for $toCreate in pipe_Open: $fileHandle"
+    } else {
+	    pipe_setData $pipeNum 1 $fileHandle
+    	pipe_setData $pipeNum 4 1
+    }
+    fileevent $fileHandle readable "pipe_Read $pipeNum"
+    bind $bpath <Control-Return> "pipe_Submit $buffer"
+    bind $bpath <Alt-Return> "pipe_submitSelected $buffer"
+}
+
+#
+# pipe_Read
+# Called by fileevents to handle reads or shutdowns on pipes.
+#
+# * Contains a few minor derivations from Danskin's "ReadWritePipe"
+# * If a pipe shuts down, and it's a standard pipe, reOpen it.
+#   Otherwise, make sure it's closed, and remove the bindinds.
+# * If there's something to be read, read it and append it to the text
+#   in the corresponding buffer...
+# 
+proc pipe_Read { pipenum } {
+    global numPipes
+    if {[pipe_valid $pipenum] == 0} {
+      error "Trying to read invalid pipe (#$pipenum)"
+      }
+    
+    if {[pipe_isOpen $pipenum] == 0 } {
+      error "Trying to read a closed pipe! (#$pipenum)"
+      }
+    
+    if {$pipenum == 0} { error "Trying to read the TCL pipe directly!" }
+    
+    set fileHandle [pipe_getData $pipenum 1]  
+    
+    #taken from danskin's example, pretty much
+    if [eof $fileHandle ] { 
+	    if [ catch { pipe_Close $pipenum } err ] { 
+	      error "Couldn't close empty pipe! ($err)" 
+	    }
+	    return
+    }
+    set readText [read $fileHandle 1]
+    set bufNum [pipe_getData $pipenum 2]
+    set bpath .d.c.buffer$bufNum
+    $bpath insert end $readText
+    $bpath mark set p-o-e "end - 1 c"
+    $bpath mark set insert "end - 1 c"
+    $bpath see insert
+}
+
+#
+# pipe_Close
+# Close a pipe, and unbind the two command keystrokes.
+#
+# * Kills the child process, if any.
+# * Closes the pipe pseudo-file.
+# * Unbinds the command keystrokes,
+# * Marks the pipe as closed.
+#
+proc pipe_Close { pipeNum } {
+    if {$pipeNum == 0} {return}
+    set fileHandle [pipe_getData $pipeNum 1]
+    set ppid [pid $fileHandle]
+    catch {exec "kill" $ppid}
+    if [catch { close $fileHandle } err ] {
+         catch { edit_Append [pipe_getData $pipeNum 2] "Pipe Returned: $err" }
+         }
+    set bpath [pipe_getData $pipeNum 2]
+    bind $bpath <Control-Return> {}
+    bind $bpath <Alt-Return> {}
+    pipe_setData $pipeNum 4 0
+}
+
+
+#
+# pipe_Shutdown
+# Shuts down the pipe subsystem
+#
+# * Calls pipe_Destroy on all pipes' corresponding buffers.
+# * Should only be called once, on shutdown.
+# * The TCL pipe, and its corresponding buffer, are never destroyed.
+#
+proc pipe_Shutdown { } {
+    global numPipes
+    if {$numPipes == 1} { error "No pipes are open to shut down!" }
+    
+    for { set i 1 } { $i < $numPipes } { incr i } {
+	    if {[pipe_getData $i 2] != ""} {
+	      pipe_Destroy [pipe_getData $i 2]
+	      }
+      }
+    set numPipes 1
+}
+
+#
+# pipe_submitSelected
+# Submit the selected text from a buffer to its associated pipe
+#
+# * Does nothing if operated upon a closed pipe
+#
+proc pipe_submitSelected { bufNum } {
+    if { [edit_isBuffer $bufNum] == 0 } {
+	    error "pipe_submitSelected called on an invalid buffer #$bufNum"
+    }
+    set pipeNumber [edit_getPipe $bufNum]
+    if { [pipe_valid $pipeNumber ] == 0 } {
+      error "pipe_submitSelected called upon an invalid pipe: #$bufNum"
+      }
+      
+    if { [pipe_isOpen $pipeNumber ] == 0 } {
+      return
+      }
+      
+    if [ catch { edit_extractSelection $bufNum } submission ] {
+	    error "Couldn't extract text from buffer."
+    }
+    
+    if { [string length $submission] > 1 } {
+    	pipe_Write $pipeNumber $submission
+    }
+}
+
+#
+# pipe_Submit
+# Submit the selected text from a buffer to its associated pipe
+#
+# * Should do nothing if operated upon a closed pipe.
+#
+proc pipe_Submit { bufNum } {
+    if { [ edit_isBuffer $bufNum ] == 0 } {
+	    error "pipe_Submit called on an invalid buffer"
+    }
+    
+    set pipeNumber [edit_getPipe $bufNum]
+    if { [pipe_valid $pipeNumber ] == 0 } {
+      error "pipe_Submit called upon an invalid pipe: #$bufNum"
+      }
+      
+    if { [pipe_isOpen $pipeNumber ] == 0 } {
+      return
+      }
+    
+    if [ catch { .d.c.buffer$bufNum get p-o-e end } submission ] {
+    	error "Couldn't extract text from buffer. ($submission)"
+    }
+    pipe_Write $pipeNumber $submission
+    .d.c.buffer$bufNum mark set p-o-e insert
+}
+
+#
+# pipe_Write
+# Sends text to the program on a pipe. 
+#
+# * reOpens one of the standard pipes, if closed, and returns error if
+#   called on a closed pipe other than one of the standard pipes.
+# * Tcl pipe only: Appends the return value or error from the tcl code
+#                  being run/submitted...
+# * Calls flush to make sure data is actually submitted to a program  
+#
+proc pipe_Write { pipeNum toWrite } {
+    if {[string length $toWrite] <= 0} { error "Invalid text string." }
+    
+    if {[pipe_valid $pipeNum] == 0} { error "Invalid pipe." }
+    
+    if {$pipeNum == 0} {
+    	set TCLString [ pipe_toTCL $toWrite ] 
+	    edit_Append [pipe_getData 0 2] $TCLString
+	    return
+    }
+    
+    if {[pipe_isOpen $pipeNum] == 0} {
+	    if {$pipeNum < 3} {
+	      if [catch {pipe_reOpen $pipeNum}] {
+		      error "Couldn't reopen closed standard pipe!"  
+	        }
+	      } else { 
+	        error "Tried to write to closed user-created pipe!" 
+	      }
+    }
+    
+    if [catch {puts -nonewline [pipe_getData $pipeNum 1] $toWrite}] {
+	    error "Error writing to pipe #$pipeNum"
+    }
+    
+    if [catch {flush [pipe_getData $pipeNum 1]}] {
+	    error "Error writing to pipe #$pipeNum"
+    }
+}
+
+#
+# pipe_toTCL
+# Sends a command or script to the Tcl interpreter, executes it at the top
+#   level and returns the response or error message(s).
+#
+proc pipe_toTCL { forEval } {
+    global toEval outEval
+    if {[string length $forEval] < 1} return ""
+    set toEval $forEval
+    uplevel #0 { catch "$toEval" outEval }
+    return $outEval
+}
+
+#
+# text_StoTCL
+# Sends the selected text from a buffer to the Tcl interpreter. 
+#
+# * Since the Tcl pipe can't close, should always work.
+# * Refuses (silently) to submit a blank/empty selection.
+#
+proc text_StoTCL { inBuffer } {
+    global numPipes
+    if {[edit_isBuffer $inBuffer] == 0} {
+	    error "text_StoTCL called on invalid buffer"
+    }
+    
+    if {$numPipes < 3} {
+	    error "text_StoTCL called without initialized pipes"
+    }
+    
+    set selected [ edit_extractSelection $inBuffer ]
+    if {[ string length $selected ] < 2 } return
+  
+    if [catch {pipe_Write 0 $selected } cerr ] {
+	    error "Couldn't send buffer $inBuffer to TCL ($cerr)"
+    }
+}
+
+#
+# text_StoSCHEME
+# Sends the selected text from a buffer to the Scheme pipe.
+#
+# * The Scheme pipe should reOpen automatically.
+# * Refuses (silently) to submit a blank/empty selection.
+#
+proc text_StoSCHEME { inBuffer } {
+    global numPipes
+    
+    if {[edit_isBuffer $inBuffer] == 0} {
+	    error "text_StoSCHEME called on invalid buffer"
+    }
+    
+    if {$numPipes < 3} {
+	    error "text_StoSCHEME called withoug initialized pipes"
+    }
+    
+    if {[pipe_isOpen 1] == 0} {
+	    if [catch {pipe_reOpen 1}] { 
+	      error "Couldn't reopen Scheme pipe."
+	    }
+    }
+      
+    set selected [ edit_extractSelection $inBuffer ]
+    if {[ string length $selected ] < 2 } return
+    if [catch {pipe_Write 1 $selected } cerr ] {
+	    error "Couldn't send buffer $inBuffer to Scheme ($cerr)"
+    }
+}
+
+#
+# text_StoUNIX
+# Sends the selected text from a buffer to a new Unix pipe, which is
+#   created in a buffer provided by the buffer manager.
+#
+# * Refuses (silently) to submit a blank/empty selection, but finishes
+#   creating the new buffer anyway.
+#
+proc text_StoUNIX { inBuffer outBuffer } {
+    global numPipes
+    if {[edit_isBuffer $inBuffer] == 0} {
+	    error "text_StoUNIX called on invalid buffer"
+    }
+    
+    if {$numPipes < 3} {
+	    error "text_StoUNIXcalled on unititialized pipes"
+    }
+    ~
+    if {[edit_isBuffer $outBuffer] == 1} {
+    	error "Buffer $outBuffer already exists in toUnix"
+    }
+
+    if [catch {pipe_Open "csh" $outBuffer} pnum] {
+	    error "Couldn't create pipe for new unix window."
+    }
+
+    if [catch {pipe_Open "csh" $outBuffer} pnum] {
+	    error "Couldn't create pipe for new unix window."
+    }
+
+    set selected [ edit_extractSelection $inBuffer ]
+    if {[ string length $selected ] < 2 } return
+    if [catch {pipe_Write $pnum $selected } cerr ] {    
+	    error "Couldn't sent buffer $inBuffer to UNIX ($cerr)"
+    }
+}
+
+#
+# text_BtoTCL
+# Sends the complete text of a buffer to the Tcl interpreter. 
+#
+# * Since the Tcl pipe can't close, should always work.
+# * Refuses (silently) to submit a blank/empty buffer.
+#
+proc text_BtoTCL { inBuffer } {
+    global numPipes
+    if {[edit_isBuffer $inBuffer] == 0} {
+	error "text_toTCL called on invalid buffer"
+    }
+    if {$numPipes < 3} {
+	error "text_toTCL called on unititialized pipes"
+    }
+    if [catch {pipe_fromBuffer 0 $inBuffer } cerr ] {
+	error "couldn't send buffer $inBuffer to TCL ($cerr)"
+    }
+}
+
+#
+# text_BtoSCHEME
+# Sends the complete text of a buffer to the Scheme pipe.
+#
+# * The Scheme pipe should reOpen automatically.
+# * Refuses (silently) to submit a blank/empty selection.
+#
+proc text_BtoSCHEME { inBuffer } {
+  global numPipes
+  if {[edit_isBuffer $inBuffer] == 0} {
+	    error "text_toSCHEME called on invalid buffer"
+  }
+  
+  if {$numPipes < 3} {
+	  error "text_toSCHEME called on unititialized pipes"
+  }
+  
+  if {[pipe_isOpen 1] != 1} {
+	  if [catch {pipe_reOpen 1}] { 
+      error "Couldn't reopen Scheme pipe."
+	  }
+  }  
+  
+  if [catch { pipe_fromBuffer 1 $inBuffer } cerr ] {
+    error "Couldn't sent buffer $inBuffer to Scheme ($cerr)"
+  }
+}
+
+#
+# text_BtoUNIX
+# Sends the complete text of a buffer to a new Unix pipe, which is
+#   created in a buffer provided by the buffer manager.
+#
+# * Refuses (silently) to submit a blank/empty selection, but finishes
+#   creating the new buffer anyway.
+#
+proc text_BtoUNIX { inBuffer outBuffer } {
+    global numPipes
+    if {[edit_isBuffer $inBuffer] == 0} {
+    	error "text_BtoUNIX called on invalid buffer"
+    }
+    if {$numPipes < 3} {
+	    error "text_BtoUNIX called on unititialized pipes"
+    }
+    
+    if {[edit_isBuffer $outBuffer] == 1} {
+	    error "Buffer $outBuffer already exists in toUnix"
+    }
+
+    if [catch {pipe_Open "csh" $outBuffer} pnum] {
+	    error "Couldn't create buffer for new unix window. ($pnum)"
+    }
+    
+    if [catch {pipe_fromBuffer $pnum $inBuffer } cerr ] {
+	    error "Couldn't sent buffer $inBuffer to UNIX ($cerr)"
+    }
+}
+
+#
+# pipe_fromBuffer
+# Sends the complete contents of a buffer down a pipe.
+#
+# * Sends the contents of the buffer as a single string...
+# * Won't do anything if buffer is empty. (just returns doing nothing)
+#
+proc pipe_fromBuffer { pipeNumber bufferNumber } {
+    if {[edit_isBuffer $bufferNumber] == 0} {
+	    error "pipe_fromBuffer called with invalid buffer #$bufferNumber"
+    }
+    
+    if {[pipe_valid $pipeNumber] == 0} { 
+      error "pipe_fromBuffer to bad pipe: #$pipeNumber" 
+      }
+      
+    set extractedText [ .d.c.buffer$bufferNumber get 1.0 end ]
+    
+    if {[string length $extractedText] < 1} {
+      return
+    }
+      
+    pipe_Write $pipeNumber $extractedText
+}
+@
+
+
+2.5
+log
+@crap.
+@
+text
+@d4 1
+a4 1
+# $Header: /a/tahoe/usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 2.4 1996/05/25 02:19:13 nate Exp nate $
+a10 1
+set outEval ""
+d12 32
+d45 5
+a49 3
+  global pipeArray
+  set pipeArray($pipeRecord) [ list {nothing} {-1} {-1} {nothing} {0} ]
+  }
+d51 4
+d56 8
+a63 4
+  global pipeArray
+  set pipeArray($pipeRecord) [ lreplace $pipeArray($pipeRecord) $pipeField $pipeField $pData ]
+  }
+  
+d65 3
+a67 3
+  global pipeArray
+  return [ lindex $pipeArray($pipeRecord) $pipeField ]
+  }
+d69 8
+a76 4
+proc pipe_Open? { pipeNum } {
+  global pipeArray
+  return [ lindex pipeArray($pipeNum) 4 ]
+  }
+d78 4
+d83 8
+a90 2
+  return 1
+  }
+d93 7
+a99 1
+# Create Our default 3 pipes
+d102 24
+a125 4
+  global numPipes BufferArray
+  if {$numPipes != 1} { error "pipe_Init being called twice" }
+  
+  pipe_nodeCreate 0
+d127 23
+a149 29
+  set BufferArray($TCLBuffer,name) "TCL Pipe"
+#  if [ catch { 
+pipe_Create $TCLBuffer
+#  } cerr ] { 
+#    error "Couldn't create TCL buffer. ($cerr)"
+#    }
+
+  pipe_setData 0 0 "tcl"
+  pipe_setData 0 2 $TCLBuffer
+  pipe_setData 0 4 1
+  edit_setPipe $TCLBuffer 0
+    
+  set pipeNum [ pipe_Open  scheme $SchemeBuffer ]
+  if { $pipeNum != 1 } { error "pipe_init called twice?" }
+  set pipeNum [ pipe_Open csh $cshBuffer]
+  if { $pipeNum != 2 } { error "pipe_init called twice?" }
+  }
+
+proc pipe_Destroy { buffer } {\
+  set myPipe [edit_getPipe $buffer]
+  if { $myPipe == -1} { 
+    error "pipe_Destroy called on non-initialized or non-pipe buffer"
+    }
+  if {[pipe_Open? $myPipe] == 1} { 
+     catch { pipe_Close $myPipe }
+     }
+  edit_close $buffer
+  pipe_setData $myPipe 2 ""
+  }
+d151 7
+d159 17
+a175 14
+#  if [catch { 
+edit_create $buffer pipe
+# } crerr] { error "$crerr in pipe_Create" }
+  set bpath .d.c.buffer$buffer
+  $bpath mark set p-o-e 1.0
+  $bpath mark gravity p-o-e left
+  bind $bpath <Control-Return> "pipe_Submit $buffer"
+  }
+  
+# 
+# Create a new pipe in a buffer
+# returns a pipe #
+#
+# Contains a few minor derivations from Danskin's "ReadWritePipe"
+d178 9
+a186 9
+  global numPipes BufferArray
+
+  pipe_nodeCreate $numPipes
+
+  set BufferArray($bufferName,name) $pipeType
+
+# we're limitted to a singel TCL pipe for simplicity's sake
+  if { [string compare $pipeType "tcl"] == 0 } {
+    error "User tried to create additional TCL pipes"
+d188 5
+a192 5
+
+  pipe_setData $numPipes 0 $pipeType
+  
+  if [ catch { pipe_Create $bufferName } ] {
+    error "Couldn't create buffer for new pipe."
+d195 6
+a200 6
+  pipe_setData $numPipes 2 $bufferName
+  edit_setPipe $bufferName $numPipes
+  
+  set toCreate $pipeType 
+  if { [string compare $toCreate "scheme"] == 0 } {
+    set toCreate "/usr/local/bin/scheme"
+d202 3
+a204 3
+  
+  if { [string compare $toCreate "csh"] == 0 } {
+    set toCreate "/usr/ucb/csh -i"
+d206 5
+a210 5
+  
+  set fileHandle 0
+  # taken from Danskin's example
+  if [catch {open "|$toCreate" r+} fileHandle] {
+    error "Couldn't Create Pipe for $toCreate in pipe_Open"
+d212 13
+a224 12
+      pipe_setData $numPipes 1 $fileHandle
+      }
+      
+  pipe_setData $numPipes 3 $toCreate
+  pipe_setData $numPipes 4 1
+  
+  fileevent $fileHandle readable "pipe_Read $numPipes"
+  set pnum $numPipes
+  incr numPipes
+  return $pnum
+  }
+  
+a225 1
+  
+d227 1
+d230 3
+d234 6
+a239 2
+  if [ pipe_getData $pipeNum 4 ] {
+    error "Called reOpen on an open pipe!"
+d241 4
+d246 4
+a249 4
+  # taken from Danskin's example
+  set toCreate [pipe_getData $pipeNum 3]
+  if [catch {open "|$toCreate" r+} fileHandle] {
+    error "Couldn't Create Pipe for $toCreate in pipe_Open: $fileHandle"
+d251 8
+a258 6
+      pipe_setData $pipeNum 1 $fileHandle
+      pipe_setData $pipeNum 4 1
+      }
+  fileevent $fileHandle readable "pipe_Read $pipeNum"
+  }
+  
+d261 1
+d263 6
+a268 2
+# Contains a few minor derivations from Danskin's "ReadWritePipe"
+#
+d270 28
+a297 26
+  global numPipes
+  if {$pipenum == 0} { error "Trying to read the TCL pipe directly!" }
+
+  set fileHandle [pipe_getData $pipenum 1]  
+
+  #taken from danskin's example, pretty much
+  if [eof $fileHandle ] { 
+    if [ catch { pipe_Close $pipenum } err ] { error "Couldn't close empty pipe!: $err" }
+#    if { $pipenum < 3 } { 
+#      if [catch {
+#     pipe_reOpen $pipenum
+# } err] {
+#        error "Couldn't reOpen standard pipe! ($err)"
+#        }
+      }
+    return
+
+    }
+  set readText [read $fileHandle 1]
+  set bufNum [pipe_getData $pipenum 2]
+  set bpath .d.c.buffer$bufNum
+  $bpath insert end $readText
+  $bpath mark set p-o-e "end - 1 c"
+  $bpath mark set insert "end - 1 c"
+  $bpath see insert
+  }
+d301 6
+d309 13
+a321 7
+  if {$pipeNum == 0} {return}
+  set fileHandle [pipe_getData $pipeNum 1]
+  if [catch { close $fileHandle } err ] {
+    edit_Append [pipe_getData $pipenum 2] "Pipe Returned: $error"
+    }
+  pipe_setData $pipeNum 4 0
+  }
+a322 1
+  
+d325 5
+d332 11
+a342 11
+  global numPipes
+  
+  if {$numPipes == 1} { error "No pipes are open to shut down!" }
+  
+  for { set i 1 } { $i < $numPipes } { incr i } {
+    pipe_Destroy $i
+    }
+  
+  set numPipes 1
+  }
+  
+d344 1
+d347 2
+d350 2
+a351 3
+  global pipes
+  if { [edit_isBuffer $bufNum] == 0 } {
+    error "pipe_submitSelected called on an invalid buffer. ($submission)"
+d353 11
+a363 2
+  if [ catch { edit_extractSelected $bufNum } submission ] {
+    error "Couldn't extract text from buffer."
+d365 3
+a367 2
+  if [ [string length $submission] == 0 ] {
+    pipe_Write [ edit_getPipe $bufNum ] $submission
+d369 2
+a370 2
+  }
+  
+d372 1
+d375 2
+d378 2
+a379 3
+  global pipeArray
+  if { [ edit_isBuffer $bufNum ] == 0 } {
+    error "pipe_Submit called on an invalid buffer"
+d381 12
+a392 2
+  if [ catch { .d.c.buffer$bufNum get p-o-e end } submission ] {
+    error "couldn't extract text from buffer. ($submission)"
+d394 13
+a406 4
+  pipe_Write [edit_getPipe $bufNum] $submission
+  .d.c.buffer$bufNum mark set p-o-e insert
+  }
+
+a407 2
+#
+#  
+d409 8
+a416 14
+  if {[string length $toWrite] <= 0} { error "Invalid text string." }
+  if {[pipe_valid $pipeNum] == 0} { error "Invalid pipe." }
+  if {$pipeNum == 0} {
+    set TCLString [ pipe_toTCL $toWrite ] 
+    edit_Append [pipe_getData 0 2] $TCLString
+    return
+    }
+  if {[pipe_Open? $pipeNum] == 0} {
+    if {$pipeNum < 3} {
+      if [catch {pipe_reOpen $pipeNum}] {
+        error "Couldn't reopen closed standard pipe!"  
+        }
+      break
+      } else { error "Tried to write to closed pipe!" }
+d418 9
+a426 2
+  if [catch {puts -nonewline [pipe_getData $pipeNum 1] $toWrite}] {
+    error "Error writing to pipe #$pipeNum"
+d428 3
+a430 2
+  if [catch {flush [pipe_getData $pipeNum 1]}] {
+    error "Error writing to pipe #$pipeNum"
+d432 5
+a436 1
+  }
+d438 5
+d444 6
+a449 6
+  global toEval outEval
+  if {[string length $forEval] < 1} return ""
+  set toEval $forEval
+  uplevel #0 { catch "$toEval" outEval }
+  return $outEval
+  }
+d451 7
+d459 3
+a461 3
+  global numPipes
+  if {[edit_isBuffer $inBuffer] == 0} {
+    error "text_toTCL called on invalid buffer"
+d463 3
+a465 2
+  if {$numPipes < 3} {
+    error "text_toTCL called without initialized pipes"
+d467 6
+a472 4
+  set selected [ edit_extractSelected $inBuffer ]
+  if {[ string length $selected ] < 2 } return
+  if [catch {pipe_write 0 $selected } cerr ] {
+    error "couldn't send buffer $inBuffer to TCL ($cerr)"
+d474 1
+a474 1
+  }
+d476 7
+d484 8
+a491 3
+  global numPipes
+  if {[edit_isBuffer $inBuffer] == 0} {
+    error "text_toSCHEME called on invalid buffer"
+d493 5
+a497 2
+  if {$numPipes < 3} {
+    error "text_toSCHEME called withoug initialized pipes"
+d499 5
+a503 9
+  if {[pipe_Open? 1] == 0} {
+    if [catch {pipe_reOpen 1}] { 
+      error "Couldn't reopen Scheme pipe."
+      }
+    }  
+  set selected [ edit_extractSelected $inBuffer ]
+  if {[ string length $selected ] < 2 } return
+  if [catch {pipe_write 1 $selected } cerr ] {
+    error "couldn't send buffer $inBuffer to Scheme ($cerr)"
+d505 1
+a505 1
+  }
+d507 8
+d516 3
+a518 3
+  global numPipes
+  if {[edit_isBuffer $inBuffer] == 0} {
+    error "text_toUNIX called on invalid buffer"
+d520 3
+a522 2
+  if {$numPipes < 3} {
+    error "text_toUNIXcalled on unititialized pipes"
+d524 3
+a526 3
+    
+  if {[edit_isBuffer $outBuffer] != 1} {
+    error "buffer $outBuffer already exists in toUnix"
+d529 2
+a530 2
+  if [catch {pipe_Create $outBuffer}] {
+    error "couldn't create buffer for new unix window."
+d533 2
+a534 2
+  if [catch {pipe_Open $outBuffer "csh"} pnum] {
+    error "couldn't create pipe for new unix window."
+d537 4
+a540 4
+  set selected [ edit_extractSelected $inBuffer ]
+  if {[ string length $selected ] < 2 } return
+  if [catch {pipe_write $pnum $selected } cerr ] {    
+    error "couldn't sent buffer $inBuffer to UNIX ($cerr)"
+d542 1
+a542 1
+  }
+d544 7
+d552 3
+a554 3
+  global numPipes
+  if {!edit_isBuffer $inBuffer} {
+    error "text_toTCL called on invalid buffer"
+d556 2
+a557 2
+  if {$numPipes < 3} {
+    error "text_toTCL called on unititialized pipes"
+d559 2
+a560 2
+  if [catch {pipe_fromBuffer 0 $inBuffer } cerr ] {
+    error "couldn't send buffer $inBuffer to TCL ($cerr)"
+d562 1
+a562 1
+  }
+d564 7
+d574 3
+a576 2
+    error "text_toSCHEME called on invalid buffer"
+    }
+d578 5
+a582 4
+    error "text_toSCHEME called on unititialized pipes"
+    }
+  if {[pipe_Open? 1] != 1} {
+    if [catch {pipe_reOpen 1}] { 
+d584 5
+a588 5
+      }
+    }  
+  if [catch {pipe_fromBuffer 1 $inBuffer } cerr ] {
+    error "couldn't sent buffer $inBuffer to Scheme ($cerr)"
+    }
+d590 1
+d592 8
+d601 3
+a603 3
+  global numPipes
+  if {[edit_isBuffer $inBuffer] == 0} {
+    error "text_toUNIX called on invalid buffer"
+d605 2
+a606 2
+  if {$numPipes < 3} {
+    error "text_toUNIXcalled on unititialized pipes"
+d609 2
+a610 6
+  if {[edit_isBuffer $outBuffer] == 1} {
+    error "buffer $outBuffer already exists in toUnix"
+    }
+
+  if [catch {pipe_Create $outBuffer}] {
+    error "couldn't create buffer for new unix window."
+d613 2
+a614 2
+  if [catch {pipe_Open $outBuffer "csh"} pnum] {
+    error "couldn't create buffer for new unix window."
+d617 2
+a618 2
+  if [catch {pipe_fromBuffer $pnum $inBuffer } cerr ] {
+    error "couldn't sent buffer $inBuffer to UNIX ($cerr)"
+d620 1
+a620 1
+  }
+d622 7
+d630 12
+a641 2
+  if {[edit_isBuffer $inBuffer] == 0} {
+    error "pipe_fromBuffer called with invalid buffer #"
+d643 3
+a645 5
+# if {[pipe_valid $pipeNumber] == 0} { error "pipe_fromBuffer to bad pipe#$pipeNumber" }
+  set extractedText [ .d.c.buffer$bufferNumber get start end ]
+  if {[string length $extractedText] < 1} return
+  pipe_Write $pipeNumber
+  }
+@
+
+
+2.4
+log
+@Tcl works. Again. I hope.
+@
+text
+@d4 1
+a4 1
+# $Header: /a/tahoe/usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 2.3 1996/05/24 23:47:19 nate Exp nate $
+d41 1
+a41 1
+  global numPipes
+d45 7
+a51 4
+  
+  if [ catch { pipe_Create $TCLBuffer  } cerr ] { 
+    error "Couldn't create TCL buffer. ($cerr)"
+    }
+d77 3
+a79 1
+  if [catch { edit_create $buffer pipe } crerr] { error "$crerr in pipe_Create" }
+d93 1
+a93 1
+  global numPipes 
+d96 2
+@
+
+
+2.3
+log
+@*** empty log message ***
+@
+text
+@d4 1
+a4 1
+# $Header: /a/tahoe/usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 2.2 1996/05/24 05:27:18 nate Exp nate $
+d10 2
+d61 12
+d88 1
+a88 1
+  global numPipes
+d109 1
+a109 1
+    }
+d167 1
+a167 1
+    if { $pipenum < 3 } { 
+d169 1
+a169 1
+      pipe_reOpen $pipenum
+d190 1
+d205 1
+a205 1
+  if [$numPipes == 1] { error "No pipes are open to shut down!" }
+d208 1
+a208 1
+    pipe_Close $i
+d210 2
+a248 1
+  puts "pipe_Write on #$pipeNum: $toWrite"
+d272 5
+a276 3
+proc pipe_toTCL { toEval } {
+  if {[string length $toEval] < 1} return ""
+  catch { uplevel #0 { eval "$toEval" } } outEval
+a279 57
+proc text_toTCL { inBuffer } {
+  global numPipes
+  if {!edit_isBuffer $inBuffer} {
+    error "text_toTCL called on invalid buffer"
+    }
+  if {$numPipes < 3} {
+    error "text_toTCL called on unititialized pipes"
+    }
+  if [catch {pipe_fromBuffer 0 $inBuffer } cerr ] {
+    error "couldn't sent buffer $inBuffer to TCL ($cerr)"
+    }
+  }
+
+proc text_toSCHEME { inBuffer } {
+  global numPipes
+  if {!edit_isBuffer $inBuffer} {
+    error "text_toSCHEME called on invalid buffer"
+    }
+  if {$numPipes < 3} {
+    error "text_toSCHEME called on unititialized pipes"
+    }
+  if {!pipe_Open? 1} {
+    if [catch {pipe_reOpen 1}] { 
+      error "Couldn't reopen Scheme pipe."
+      }
+    }  
+  if [catch {pipe_fromBuffer 1 $inBuffer } cerr ] {
+    error "couldn't sent buffer $inBuffer to Scheme ($cerr)"
+    }
+  }
+
+proc text_toUNIX { inBuffer outBuffer } {
+  global numPipes
+  if {!edit_isBuffer $inBuffer} {
+    error "text_toUNIX called on invalid buffer"
+    }
+  if {$numPipes < 3} {
+    error "text_toUNIXcalled on unititialized pipes"
+    }
+    
+  if {edit_isBuffer $outBuffer} {
+    error "buffer $outBuffer already exists in toUnix"
+    }
+
+  if [catch {pipe_Create $outBuffer}] {
+    error "couldn't create buffer for new unix window."
+    }
+
+  if [catch {pipe_Open $outBuffer "csh"} pnum] {
+    error "couldn't create buffer for new unix window."
+    }
+    
+  if [catch {pipe_fromBuffer $pnum $inBuffer } cerr ] {
+    error "couldn't sent buffer $inBuffer to UNIX ($cerr)"
+    }
+  }
+  
+d295 1
+a295 1
+proc text_toSCHEME { inBuffer } {
+@
+
+
+2.2
+log
+@Separated out the edit functions.
+@
+text
+@d4 1
+a4 1
+# $Header: /usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 2.1 1996/05/18 18:35:39 nate Exp nate $
+d8 6
+a13 3
+proc pipe_nodeCreate { prec } {
+  global pipes
+  set pipes($prec) [ list {nothing} {-1} {-1} {nothing} {0} ]
+d16 3
+a18 3
+proc pipe_setData { prec pfld pdat } {
+  global pipes
+  set pipes($prec) [ lreplace $pipes($prec) $pfld $pfld $pdat ]
+d21 3
+a23 3
+proc pipe_getData { prec pfld } {
+  global pipes
+  return [ lindex $pipes($prec) $pfld ]
+d27 6
+a32 2
+  global pipes
+  return [ lindex pipes($prec) 4 ]
+d39 2
+a40 3
+  global pipes npipes
+# also the buffer array
+  if {$npipes != 1} { error "pipe_Init being called twice" }
+d44 2
+a45 2
+  if [ catch { pipe_Create $TCLBuffer  } ] { 
+    error "Couldn't create TCL buffer."
+d60 2
+a61 3
+  global buffers
+  if [catch { edit_Create $buffer IN } crerr] { error "$crerr in pipe_Create" }
+  set bpath $buffers($buffer)
+d74 1
+a74 1
+  global npipes pipes
+d76 1
+a76 1
+  pipe_nodeCreate $npipes
+d83 1
+a83 1
+  pipe_setData $npipes 0 $pipeType
+d88 3
+a90 2
+  pipe_setData $npipes 2 $bufferName
+  edit_setPipe $bufferName $npipes
+d106 1
+a106 1
+      pipe_setData $npipes 1 $fileHandle
+d109 2
+a110 2
+  pipe_setData $npipes 3 $toCreate
+  pipe_setData $npipes 4 1
+d112 3
+a114 3
+  fileevent $fileHandle readable "pipe_Read $npipes"
+  set pnum $npipes
+  incr npipes
+d118 2
+d145 1
+a145 2
+  global npipes pipes buffers
+  
+d165 1
+a165 1
+  set bpath $buffers($bufNum)
+d173 1
+a173 1
+#
+a175 3
+#  if {!eof [pipe_getData $pipeNum 1]} {
+#    [catch pipe_Read $pipeNum]
+#    }
+a178 1
+#   error "Couldn't close pipe #$pipeNum: $err"
+d188 1
+a188 1
+  global npipes pipes
+d190 1
+a190 1
+  if [$npipes == 1] { error "No pipes are open to shut down!" }
+d192 1
+a192 1
+  for { set i 1 } { $i < $npipes } { incr i } {
+a197 5
+# pipe_Copy -- can wait
+# pipe_Paste
+#
+
+#
+d202 3
+a204 3
+#  if { [edit_isBuffer? $bufName] == 0 } {
+#    error "pipe_submitSelected called on an invalid buffer"
+#    }
+d217 6
+a222 6
+  global pipes buffers
+#  if { [ edit_isBuffer? $bufName ] == 0 } {
+#    error "pipe_Submit called on an invalid buffer"
+#    }
+  if [ catch { edit_Extract $bufNum p-o-e end } submission ] {
+    error "couldn't extract text from buffer: $submission"
+d225 1
+a225 2
+  set bpath $buffers($bufNum)
+  $bpath mark set p-o-e insert
+d234 1
+a234 1
+#  if {!pipe_Valid? $pipeNum} { error "Invalid pipe." }
+d240 8
+a247 8
+#  if {!pipe_Open? $pipeNum} {
+#    if {$pipeNum < 3} {
+#      if [catch {pipe_reOpen $pipeNum}] {
+#        error "Couldn't reopen closed standard pipe!"  
+#        }
+#      break
+#      } else { error "Tried to write to closed pipe!" }
+#    }
+a253 1
+  
+d258 1
+a258 1
+  catch [ $toEval ] outEval
+d263 1
+a263 1
+  global npipes
+d267 1
+a267 1
+  if {$npipes < 3} {
+d276 2
+a277 2
+  global npipes
+  if {!edit_isBuffer? $inBuffer} {
+d280 1
+a280 1
+  if {$npipes < 3} {
+d294 2
+a295 2
+  global npipes
+  if {!edit_isBuffer? $inBuffer} {
+d298 1
+a298 1
+  if {$npipes < 3} {
+d302 1
+a302 1
+  if {edit_isBuffer? $outBuffer} {
+d317 130
+@
+
+
+2.1
+log
+@For 3pm deadline. (Same as 1.8)
+@
+text
+@d4 1
+a4 1
+# $Header: /a/tahoe.cs.dartmouth.edu/usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 1.8 1996/05/18 18:33:42 nate Exp nate $
+a6 19
+# First limpable version to hand in.
+#
+
+set pipes(0) ""
+set npipes 1
+set buffers(0) ""
+set btypes(0) ""
+set bpipes(0) ""
+
+
+proc edit_setPipe { brec pipeno } {
+  global bpipes
+  set bpipes($brec) $pipeno
+  }
+
+proc edit_getPipe { brec } {
+  global bpipes
+  return $bpipes($brec)
+  } 
+a27 24
+proc edit_Create { bname btype } {
+  global buffers
+  global btypes
+  set buffers($bname) .buf$bname
+  text .buf$bname -state normal -width 80 -height 10
+  set btypes($bname) $btype
+  pack .buf$bname
+  }
+
+
+proc edit_Extract { bufNum st en } {
+  global buffers
+  set bpath $buffers($bufNum)
+  set rvalue [ $bpath get $st $en ]
+  puts $rvalue
+  return $rvalue 
+  }
+
+proc edit_Append { bufNum atext } {
+  global buffers
+  set bpath $buffers($bufNum)
+  $bpath insert end $atext
+  }
+
+a321 2
+
+pipe_Init 2 3 4
+@
+
+
+1.8
+log
+@Semi-functional
+@
+text
+@d4 1
+a4 1
+# $Header: /a/tahoe/usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 1.7 1996/05/18 17:48:39 nate Exp nate $
+d6 3
+@
+
+
+1.7
+log
+@updated.
+@
+text
+@d4 1
+a4 1
+# $Header: /root/prj/RCS/pipe.tcl,v 1.7 1996/05/18 00:48:18 root Exp root $
+d48 1
+a48 1
+  text .buf$bname -state normal
+d85 1
+d128 1
+a128 1
+    set toCreate "/bin/ls -alR /root"
+d132 1
+a132 1
+    set toCreate "/bin/csh -i"
+d156 1
+a156 1
+  if { pipe_getData $pipeNum 4 } {
+a159 1
+  set fileHandle  
+d161 1
+d163 1
+a163 1
+    error "Couldn't Create Pipe for $toCreate in pipe_Open"
+d165 2
+a166 2
+      pipe_setData $npipes 1 $fileHandle
+      pipe_setData $npipes 4 1
+d168 1
+d186 5
+a190 3
+#    if { $pipenum < 3 } { 
+#      if [catch {pipe_reOpen $pipeNum }] {
+#        error "Couldn't reOpen standard pipe!"
+d192 1
+a192 1
+#      }
+d194 1
+a204 1
+
+d302 1
+a302 1
+  catch [ eval $toEval ] outEval
+@
+
+
+1.6
+log
+@ls
+Ok.
+@
+text
+@d4 1
+a4 1
+# $Header: /a/tahoe.cs.dartmouth.edu/usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 1.5 1996/05/17 10:07:36 nate Exp nate $
+d9 14
+d25 2
+a26 1
+  lreplace pipes($prec) 0 end nothing -1 -1 nothing 0
+d31 1
+a31 1
+  lreplace pipes($prec) $pfld $pdld $pdat
+d35 2
+a36 1
+  return [ lindex pipes($prec) $pfld ]
+d40 1
+d44 24
+a81 8
+  if [ catch { pipe_Create $SchemeBuffer  } ] { 
+    error "Couldn't create Scheme buffer."
+    }
+
+  if [ catch { pipe_Create $cshBuffer  } ] { 
+    error "Couldn't create UNIX buffer."
+    }
+
+d86 4
+a89 6
+  if [[ catch { pipe_Open [ "scheme" $SchemeBuffer ] }] != 1 ] {
+    error "pipe_Open failed to create default Scheme Buffer" 
+    } 
+  if [[ catch { pipe_Open [ "csh" $cshBuffer ] }] != 2 ] {
+    error "pipe_Open failed to create default csh (Unix) buffer"
+    }
+d93 6
+a98 1
+  if [catch {edit_Create $buffer "IN"} crerr] { error $crerr }
+d110 1
+a110 1
+  pipe_createNode $npipes
+d127 1
+a127 1
+    set toCreate "/usr/local/bin/scheme"
+d131 1
+a131 1
+    set toCreate "/usr/ucb/csh"
+d134 1
+a134 1
+  set fileHandle  
+d145 1
+a145 1
+  set fileevent $fileHandle readable "pipe_Read $npipes"
+d175 1
+a175 3
+  global npipes pipes
+  
+  if [$pipenum == 0] { error "Trying to read the TCL pipe directly!" }
+d177 4
+d182 7
+a188 6
+  if [eof [pipe_getData $pipenum 1] ] { 
+    if [ catch { pipe_Close $pipenum } ] { error "Could close empty pipe!" }
+    if [ $pipenum < 3 ] { 
+      if [catch {pipe_reOpen $pipeNum }] {
+        error "Couldn't reOpen standard pipe!"
+        }
+d191 23
+a213 2
+  set readText [read [pipe_getData $pipenum 1] 1]
+  edit_Append [pipe_getData $pipenum 2] $readText 
+d215 1
+d240 3
+a242 3
+  if { !edit_isBuffer? $bufName } {
+    error "pipe_submitSelected called on an invalid buffer"
+    }
+d255 6
+a260 12
+  global pipes
+  if { !edit_isBuffer? $bufName} {
+    error "pipe_Submit called on an invalid buffer"
+    }
+  if [ catch { pipe_findMark $bufNum } cStart ] {
+    error "findMark returned error ($cStart)" 
+    }
+  if [ catch { edit_findEnd $bufNum } cEnd ] {
+    error "findEnd returned error ($cEnd)"
+    }
+  if [ catch { edit_Extract $bufNum $cStart $cEnd } $submission ] {
+    error "couldn't extract text from buffer."
+d263 2
+a264 14
+  edit_setMark $bufNum $cEnd
+  }
+
+#
+#
+#
+proc pipe_Close { pipeNum } {
+  if [!eof [pipe_getData $pipeNum 1]] {
+    [catch pipe_Read $pipeNum]
+    }
+  if [catch { close [pipe_getData $pipeNum 1] } ] {
+    error "Couldn't close pipe #$pipeNum"
+    }
+  pipe_setData $pipeNum 4 0
+d271 1
+d273 1
+a273 1
+  if {!pipe_Valid? $pipeNum} { error "Invalid pipe." }
+d279 10
+a288 7
+  if [!pipe_Open? $pipeNum} {
+    if [$pipeNum < 3] {
+      if [catch {pipe_reOpen $pipeNum}] {
+        error "Couldn't reopen closed standard pipe!"  
+        }
+      break
+      } else { error "Tried to write to closed pipe!" }
+d290 1
+a290 1
+  if [catch {puts [pipe_getData $pipeNum 1] $toWrite}] {
+d293 1
+@
+
+
+1.5
+log
+@More.
+@
+text
+@d4 1
+a4 1
+# $Header: /a/tahoe.cs.dartmouth.edu/usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 1.4 1996/05/17 09:06:34 nate Exp nate $
+d33 1
+a33 1
+  if {npipes != 1} { error "pipe_Init being called twice" }
+d35 3
+a37 1
+  if [ catch { pipe_Create $TCLBuffer } ] { 
+d40 9
+d60 4
+d74 2
+d87 1
+a87 1
+
+d105 1
+d107 1
+d110 1
+d112 19
+a132 1
+
+a166 1
+  
+d210 17
+a226 1
+  
+d248 64
+a311 1
+pipe_init
+@
+
+
+1.4
+log
+@Backup, a few new functions.
+@
+text
+@d4 1
+a4 1
+# $Header: /a/tahoe.cs.dartmouth.edu/usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 1.3 1996/05/17 08:26:13 nate Exp nate $
+d7 1
+d9 17
+a25 1
+set pipes(0,0) "tcl"
+d38 1
+d40 2
+a41 1
+  
+a47 1
+    
+d62 1
+a62 1
+  }
+d64 1
+a64 1
+  set pipes($npipes,0) $pipeType
+d69 1
+a69 1
+  set pipes($npipes,2) $bufferName
+d73 1
+a73 1
+  if { [string compare $toCreate "scheme"] == 0 {
+d77 1
+a77 1
+  if { [string compare $toCreate "csh"] == 0 {
+d86 1
+a86 1
+      set pipes($npipes,1) $fileHandle
+d108 4
+a111 1
+    if [ $pipenum < 3 ] { pipe_reOpen $pipeNum }
+d142 1
+a142 1
+  if { !isBuffer? $bufName } {
+d158 1
+a158 1
+  if { !ifBuffer? $bufName} {
+d194 2
+@
+
+
+1.3
+log
+@more functions. not done. so deal.
+@
+text
+@d4 1
+a4 1
+# $Header: /usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 1.2 1996/05/17 02:16:38 nate Exp nate $
+a15 1
+
+d17 6
+d44 6
+d51 2
+d70 1
+a70 3
+  set pipes($npipes,0) $pipeType
+  set pipes($npipes,2) $bufferName
+  set pipes($npipes,3) $toCreate
+d88 1
+a88 1
+  if [eof $pipes($pipenum,1) ] { 
+d90 1
+d93 2
+a94 2
+  set readText [read $pipes($pipenum,1) 1]
+  edit_Append $pipes($pipenum,2) $readText 
+d119 1
+a119 1
+pipe_submitSelected { bufNum } {
+d135 1
+a135 1
+pipe_Submit { bufNum } {
+d153 20
+@
+
+
+1.2
+log
+@Added pipe_Init and pipe_Open functions
+@
+text
+@d4 1
+a4 1
+# $Header: /usr/tahoe1/nate/prj/pipe/RCS/pipe.tcl,v 1.1 1996/05/14 23:57:59 nate Exp nate $
+d31 2
+d34 1
+d62 1
+d69 72
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d4 1
+a4 1
+# $Header$
+d6 21
+a26 18
+#
+# Public Functions (accessible by user interface)
+#   pipe_Init 
+#     Initializes pipes for the standard TCL, Scheme, and UNIX interpreters
+#     Called by system startup.
+#
+#   pipe_Close
+#     Closes standard pipes.
+#     Called by system close-down.
+#
+#   pipe_Create [buffer, type]
+#     Creates a new interactive pipe in a buffer off type "type"
+#     NOTE: I'm not sure how to make this work without limiting the
+#           user to one buffer per pipe. We can allow the user to open
+#           more pipes, or we can limit them to one buffer. Neither's
+#           much harder for me than the other.
+#     Called by: buffer manager
+#     See also:  text_Create, edit_Create
+d28 2
+a29 30
+#   pipe_Copy [buffer]
+#     Copies selected text to user clipboard
+#     See also: text_Copy
+#
+#   pipe_Paste [buffer]
+#     pastes text from user clipboard to insertion point.
+#
+#   pipe_Submit [buffer]
+#
+# Related Functions
+#   text_toTCL [inbuffer, outbuffer]
+#   text_toSCHEME [inbuffer, outbuffer]
+#     submits inbuffer to standard TCL/SCHEME interpreter and appends
+#     the output (if any) of the command to outbuffer
+#
+#   text_toUNIX [inbuffer, outbuffer]
+#     submits inbuffer to a new/clean unix shell and appends the output
+#     (if any) of the command to outbuffer
+#
+# Internal Functions
+#   pipe_Write(pipe number, text)
+#     Outputs ascii text from variable to pipe.
+#
+#   pipe_Read(pipe number)
+#     Inputs a line from pipe #, returns ascii string 
+#
+#   pipe_Empty?(pipe number)
+#     Returns TRUE if pipe has no output, FALSE otherwise
+#
+#   pipe_EOF? (pipe #)
+d31 31
+a61 3
+#   pipe_Open(pipe type)
+#     where pipe type is a unix command. returns a pipe #
+#     (the internal TCL pipe is automatically #0)
+d63 1
+a63 1
+#   pipe_Close(pipe)
+a64 2
+#   pipe_fromBuffer (buffer)
+#   pipe_toBuffer (buffer)
+@

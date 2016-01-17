@@ -1,0 +1,30 @@
+
+States
+  Waiting
+  Playing
+
+1) Wait for connections and accept them
+2) First player that submits a player "owns" the game and can 
+   start it with ready
+
+Commands:
+GETPLAYER
+   - Server returns information about all currently submitted players
+PLAYER <NAME> <CHARFILE> <PASSWORD>
+   - Submit player information
+   - Name is the name of the chacter (string)
+   - Charfile is the identifying file name or record number (to be decided)
+     containing the character's stats.
+   - Password is the password associated with loading this file / record to 
+     prevent unauthorized use.
+READY
+   - Can only be used by the owner of the game, starts the game.
+   - All connected connected people who have not yet submitted characters are
+     disconnected
+   - Switches server from waiting to playing state
+QUIT
+   - Person disconnects
+   - If the owner disconnects, then the next person to connect becomes the
+     owner.
+SAY <text>
+   - broadcasts text to all connected people

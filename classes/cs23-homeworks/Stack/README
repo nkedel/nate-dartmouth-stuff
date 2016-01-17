@@ -1,0 +1,29 @@
+README
+(Nate Edel 4/14/96)
+
+Files:
+double.tcl      TCL program to accept user input and see if the word entered
+                has double adjacent letters.
+double-i.tcl    a slightly "friendlier" version of double.tcl, not quite to
+                specification on its user interaction.
+Stack.h         Interface to classes IntStackA and IntStackB; version of the 
+		original Stack.h modified to include private member values.
+Stack.cc        Impementation of classes IntStackA and IntStackB
+tester.cc       Simple, noninteractive test facility for IntStack classes.
+
+Implementation decision:
+* The key decision I made was to try, whenever possible, to allow failures
+(either overruns, etc. or failures on memory allocations, mainly) to be
+transparent, and return a message to cerr (stderr) rather than to use
+assert; this was both easier for debugging, and somewhat more elegant
+(although a still better solution would have been to allow the calling
+procedure to check for error itself). In most methods that was possible, but
+in the constructor for the Array-based implementation it was not, since it
+would be impossible to work around that.
+
+* The tester tests a small stack using visible, predictable numbers, and
+then a large stack using a sequence of random numbers, for each
+implementation. It then tests the underflow error checking for each of the
+implementations, and the overflow checking for the smaller -- overflow for
+the larger is virtually impossible to test efficiently, since it is limitted
+only by the virtual memory space on the system it is running on. 

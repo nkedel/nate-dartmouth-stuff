@@ -1,0 +1,47 @@
+Nathan Edel
+
+Design
+------
+The issue at hand is not one of memory, but rather of time; memory is a
+non-issue -- the requirements, even for a semi-exhaustive search, are
+reasonable, representing 64 (at most) levels of a tree, where only a few
+values need to be stored for each level of the tree.  This can be achieved
+by storing (locally) the move made at each level, as I've done in the
+current version, and passing a pointer to a single "working copy" of the 
+board.  The memory requirements at each level would be quite reasonable; the
+stack frame, and a few pointers or integers.
+
+On the other hand, the time to exhaustively search even a substantial
+fraction of a 64 level tree is entirely prohibitive (the number of paths 
+won't fit accross an 80 column screen -- somewhere over 100 digits).  The
+simplest solution is to put a bound on the depth, though with a 64 branch
+tree the depth will have to be fairly shallow. 
+
+The depth will ideally be a user option, based on the user's skill and
+tolerance for waiting, as well as the relative speed of the machine they are
+using.
+
+A possible default might be a four-level search. A totally unscientific
+benchmark showed that a 20-million execution loop of minimal complexity took
+roughly 6 seconds (see enclosed testspd.cc*) on one of the lab alphas; a
+five-level search has an absolute maximum of about 100 million searches,
+which considering the higher complexity of the search, as compared to the
+minimal benchmark, would probably result in a fairly long time per move. A
+four level, OTOH, would be about 1/64 that time, which should allow a
+reasonable per move time limit; and but still enough levels to eliminate
+really bad possible moves and find especially obvious ones.
+
+This would be most easily done my adding a "search levels" parameter to the
+ttt command in the Tk interface, or failing that, have it easily accessible
+as a constant.  W/r/t the program itself, both findBest() and the two
+analyze() functions would need to accept it as a parameter, unless it was a
+global constant.
+
+Other changes would primarily consist of optimizing and generalizing the
+winner routine so as to search the possible win conditions without using
+hard coded combinations of if statements (loop would probably be necesary,
+though changing the internal data representation and using some mathematical
+test might also be effective.)
+
+--
+* When compiled with -O2 optimizations.

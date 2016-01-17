@@ -1,0 +1,558 @@
+head	1.8;
+access;
+symbols;
+locks
+	nate:1.8; strict;
+comment	@# @;
+
+
+1.8
+date	96.05.24.23.47.19;	author nate;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	96.05.24.04.45.30;	author davidk;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	96.05.23.20.22.04;	author davidk;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	96.05.23.17.43.13;	author davidk;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	96.05.23.16.00.10;	author davidk;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	96.05.23.08.25.30;	author davidk;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	96.05.22.17.45.11;	author davidk;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	96.05.18.19.26.10;	author davidk;	state Exp;
+branches;
+next	;
+
+
+desc
+@The Edit functions
+David Kung
+@
+
+
+1.8
+log
+@*** empty log message ***
+@
+text
+@#!/usr/local/bin/wish
+
+# editfcn.tcl
+
+# The base editor function subsystem implementation
+# for the Killer Editor
+# Killer Software, 1996
+
+# Modification History
+#      Created by David Kung on April 18, 1996
+
+# ---- edit_Create ----
+# Creates a new buffer (text widget) of type RO or RW
+# Information about this created buffer is stored in the
+# Buffer Manager which is the ONLY unit that can create buffers
+
+proc edit_create {bufferIndex type} {
+    global BufferArray
+
+    text .d.c.buffer$bufferIndex -width 64 -height 20
+    set BufferArray($bufferIndex,type) $type
+}
+
+# ---- edit_Load ----
+# Load a file into the buffer
+
+proc edit_load {buffernum fn} {
+    # Get the text from the file
+    if [catch {set f [open $fn r]}] {
+	error "Error opening file"
+    } else {
+	set f [open $fn r]
+	set x [read $f]
+	# insert the new text into the buffer
+	.d.c.buffer$buffernum insert insert $x
+	# close the file
+	close $f
+    }
+}
+
+# ---- edit_Save ----
+# Saves the buffer contents to a file
+
+proc edit_save {buffernum filename} {
+    # opens the file
+    if {[file writable filename] || ![file exists filename]} {
+	if [catch {set f [open $filename w]}] {
+	    error "Error opening savefile"
+	} else {
+	    # get text to save
+	    set x [.d.c.buffer$buffernum get 1.0 end]
+	    
+	    # Save it
+	    puts $f $x
+	    
+	    # close the file
+	    close $f
+	}
+    }
+}
+
+# ---- edit_Copy ----
+# Copies from one buffer to another
+# does not differentiate clipboard from regular buffer
+# BE SURE TO CHECK if cutting or copying NOTHING that this is NOT called!!!
+# or else you get the whole buffer!!!!
+
+proc edit_copy {frombuffernum tobuffernum} {
+    if {[.d.c.buffer$frombuffernum tag ranges sel] == ""} {
+	set f [.d.c.buffer$frombuffernum get 1.0 end]
+    } else {
+	set range [.d.c.buffer$frombuffernum tag ranges sel]
+	set f [.d.c.buffer$frombuffernum get [lindex $range 0] [lindex $range 1]]
+    }
+    .d.c.buffer$tobuffernum insert insert $f
+}
+
+# ---- edit_clearBuffer ----
+# Clears the current buffer
+
+proc edit_clearBuffer {buffernum} {
+    .d.c.buffer$buffernum delete 1.0 end
+}
+
+# ---- edit_Close ----
+# Destroys a buffer
+
+proc edit_close {buffernum} {
+    destroy .d.c.buffer$buffernum
+}
+
+# ---- edit_clearSelection ----
+# clears selected text of a buffer
+
+proc edit_clearSelection {buffernum} {
+    set range [.d.c.buffer$buffernum tag ranges sel]
+    if {$range != ""} {
+	.d.c.buffer$buffernum delete [lindex $range 0] [lindex $range 1]
+    }
+}
+
+# ---- edit_findSelection ----
+# finds location of the selection
+
+proc edit_findSelection {buffernum} {
+    return [.d.c.buffer$buffernum tag ranges sel]
+}
+
+# ---- edit_getIP ----
+# finds the location of the insertion point
+
+proc edit_getIP {buffernum} {
+    return [.d.c.buffer$buffernum index insert]
+}
+
+# ---- edit_setIP ----
+# sets the insertion point at a location
+
+proc edit_setIP {buffernum location} {
+    .d.c.buffer$buffernum mark set insert $location
+}
+
+# ---- edit_getline ----
+# gets the line at a certain point
+# linenumber is just a number like 3 NOT 3.0 or 4.0 or anything like that
+
+proc edit_getline {buffernum linenumber} {
+    return [.d.c.buffer$buffernum get $linenumber.0 $linenumber.end]
+}
+
+# ---- edit_putline ----
+# places a string at a point replacing that line
+# linenumber is JUST A NUMBER like in edit_getline
+
+proc edit_putline {buffernum linenumber newlineString} {
+    .d.c.buffer$buffernum delete $linenumber.0 $linenumber.end
+    .d.c.buffer$buffernum insert $linenumber.0 $newlineString
+}
+
+# ---- edit_movetoTop ----
+# moves the insertion point to the top of the buffer
+
+proc edit_movetoTop {buffernum} {
+    .d.c.buffer$buffernum mark set insert 1.0
+}
+
+# ---- edit_movetoBottom ----
+# moves the insertion point to the bottom of the buffer
+
+proc edit_movetoBottom {buffernum} {
+    .d.c.buffer$buffernum mark set insert end
+}
+
+# ---- edit_bufferType ----
+# returns type of the buffer by accessing buffer manager
+
+proc edit_bufferType {buffernum} {
+    global BufferArray
+    return $BufferArray($buffernum,type)
+}
+
+# ---- edit_getPipe ----
+# returns the pipe associated with buffer number
+
+proc edit_getPipe {buffernum} {
+    global BufferArray
+    # error checking
+    if {[edit_bufferType $buffernum] == "pipe"} {
+	return $BufferArray($buffernum,pipenum)
+    } else {
+	error "Not PIPE buffer type!!!!"
+    }
+} 
+
+# ---- edit_setPipe ----
+# sets a pipe number to be associated with the buffer number
+# buffernum gets pipeno because pipeno is the pipe buffer num
+
+proc edit_setPipe {buffernum pipeno} {
+    global BufferArray
+    if {[edit_bufferType $buffernum] == "pipe"} {
+	set BufferArray($buffernum,pipenum) $pipeno
+    } else {
+	error "Not PIPE buffer type!!!!"
+    }
+}
+
+# ---- edit_extractSelection ----
+# returns the selected text
+
+proc edit_extractSelection {buffernum} {
+    set range [.d.c.buffer$buffernum tag ranges sel]
+    if {$range != ""} {
+	return [.d.c.buffer$buffernum get [lindex $range 0] [lindex $range 1]]
+    }
+}
+
+# ---- edit_Extract ----
+# returns text from coordinate to coordinate
+# startCoord and endCoord are in 1.0 2.8 etc format
+
+proc edit_Extract {buffernum startCoord endCoord} {
+    return [.d.c.buffer$buffernum get $startCoord $endCoord]
+}
+
+# ---- edit_fileend ----
+# returns coordinates of the end of the file
+
+proc edit_fileEnd {buffernum} {
+    return .d.c.buffer$buffernum end
+}
+
+# ---- edit_isBuffer? ----
+# does the buffer exist at the specified location?
+# returns false if not and true if yes
+
+proc edit_isBuffer {buffernum} {
+    global BufferArray
+    global NumBuffers
+    if {$buffernum > $NumBuffers} {
+	return 0
+    } elseif {$BufferArray($buffernum,type) == "\0"} {
+	return 0
+    }
+    return 1
+}
+
+# ---- edit_Append ----
+# appends text at end of file
+
+proc edit_Append {buffernum appendtext} {
+    .d.c.buffer$buffernum insert end $appendtext
+}
+
+# ---- edit_selectAll ----
+# selects all the text
+
+proc edit_selectAll {buffernum} {
+    .d.c.buffer$buffernum tag delete sel
+    .d.c.buffer$buffernum tag add sel 1.0 end
+}
+
+proc edit_first_of {coord} {
+    return [lindex [split $coord .] 0]
+}
+
+proc edit_second_of {coord} {
+    return [lindex [split $coord .] 1]
+}
+@
+
+
+1.7
+log
+@The final edit functions!!!!
+I hope.
+David Kung 5/24/96
+@
+text
+@d18 4
+a21 4
+    text .d.c.buffer$bufferIndex
+    if {$type == "RO"} {
+	.d.c.buffer$bufferIndex config -state disabled
+    }
+d159 1
+a159 1
+    return [BufferArray($buffernum, type)]
+d168 2
+a169 2
+    if {edit_bufferType == "Pipe"} {
+	return [BufferArray($buffernum, pipenum]
+d181 2
+a182 2
+    if {edit_bufferType == "Pipe"} {
+	set BufferArray($buffernum, pipenum) $pipeno
+d217 1
+a217 1
+proc edit_isBuffer? {buffernum} {
+a218 1
+    global ArrayNum
+d220 1
+a220 1
+    if {buffernum > NumBuffers} {
+d222 1
+a222 5
+    }
+    if {buffernum > ArrayNum} {
+	return 0
+    }
+    if {BufferArray($buffernum, type) == "\0"} {
+d249 1
+a249 1
+}@
+
+
+1.6
+log
+@Edit functions should all work now.
+Have not check yet though...
+DK
+@
+text
+@d17 1
+a17 1
+proc edit_Create {bufferIndex type} {
+d27 1
+a27 1
+proc edit_Load {buffernum fn} {
+d44 1
+a44 1
+proc edit_Save {buffernum filename} {
+d68 1
+a68 1
+proc edit_Copy {frombuffernum tobuffernum} {
+d88 1
+a88 1
+proc edit_Close {buffernum} {
+d97 1
+a97 1
+    if {$range!=""} {
+d106 1
+a106 1
+    return .d.c.buffer$buffernum tag ranges sel
+d113 1
+a113 1
+    return .d.c.buffer$buffernum index insert
+d120 1
+a120 1
+    .d.c.buffer$buffernum mark set insert location
+d125 1
+d133 1
+d137 1
+a137 1
+    .d.c.buffer$buffernum insert $linenumber.0 "newlineString\n"
+d159 1
+a159 1
+    return BufferArray($buffernum, type)
+d165 8
+a172 3
+proc edit_getPipe { brec } {
+    global bpipes
+    return $bpipes($brec)
+d177 1
+d179 7
+a185 3
+proc edit_setPipe { brec pipeno } {
+    global bpipes
+    set bpipes($brec) $pipeno
+d192 4
+a195 1
+    return .d.c.buffer$buffernum get sel.begin sel.end
+d200 1
+d203 1
+a203 1
+    return .d.c.buffer$buffernum get $startCoord $endCoord
+@
+
+
+1.5
+log
+@*** empty log message ***
+@
+text
+@d106 1
+a106 1
+    return .d.c.buffer$buffernum sel.0
+@
+
+
+1.4
+log
+@*** empty log message ***
+@
+text
+@d220 2
+a221 4
+proc edit_Append {bufNum atext} {
+    global buffers
+    set bpath $buffers($bufNum)
+    $bpath insert end $atext
+d229 1
+a229 2
+    .d.c.buffer$buffernum tag add sel.0 1.0
+    .d.c.buffer$buffernum tag add sel.end end
+@
+
+
+1.3
+log
+@New edit functions
+@
+text
+@d230 3
+a232 2
+    .d.c.buffer$buffernum mark sel.begin 1.0
+    .d.c.buffer$buffernum mark sel.end end
+@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@d14 2
+d17 1
+a17 1
+proc edit_Create {bufferIndex, type} {
+d19 1
+a19 1
+    if {type == "RO"} {
+d27 1
+a27 1
+proc edit_Load {buffernum, filename} {
+d29 10
+a38 8
+    set f [open $fn r]
+    set x [read $f]
+    
+    # insert the new text into the buffer
+    .d.c.buffer$buffernum insert $x
+    
+    # close the file
+    close $f
+d44 1
+a44 1
+proc edit_Save {buffernum, filename} {
+d46 14
+a59 10
+    set f [open $filename w]
+
+    # get text to save
+    set x [.d.c.buffer$buffernum get 1.0 end]
+
+    # Save it
+    puts $f $x
+
+    # close the file
+    close $f
+d65 2
+d68 8
+a75 3
+proc edit_Copy {tobuffernum, frombuffernum} {
+    set f [.d.c.buffer$buffernum get sel.begin sel.end]
+    .d.c.buffer$buffernum insert $f
+d81 1
+a81 1
+proc edit_ClearBuffer {buffernum} {
+d96 4
+a99 1
+    .d.c.buffer$buffernum delete sel.begin sel.end
+d106 1
+a106 1
+    return .d.c.buffer$buffernum sel.begin
+d119 1
+a119 1
+proc edit_setIP {buffernum, location} {
+d126 1
+a126 1
+proc edit_getline {buffernum, linenumber} {
+d133 1
+a133 1
+proc edit_putline {buffernum, linenumber, newlineString} {
+d220 1
+a220 1
+proc edit_Append { bufNum atext } {
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d21 1
+d43 1
+d46 1
+d49 1
+d88 1
+a88 2
+    set location [.d.c.buffer$buffernum sel.begin]
+    return location
+d95 1
+a95 1
+    set location [.d.c.buffer$buffernum insert]
+d109 1
+a109 1
+    set line [.d.c.buffer$buffernum get $linenumber.0 $linenumber.end]
+d117 1
+a117 1
+    .d.c.buffer$buffernum insert $linenumber.0 newlineString
+d168 2
+a169 2
+proc edit_Extract {buffernum, startCoord, endCoord} {
+    return .d.c.buffer$buffernum get startCoord endCoord
+d214 8
+@

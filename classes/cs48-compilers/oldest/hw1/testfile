@@ -1,0 +1,23 @@
+Octal to hex: 0 1 2 3 - 0123 = 0x53 /* Octal to hex */
+
+Bad Octal to hex 0 1 9 - 019 = 0x13 /* Interpret bad octal as decimal */
+
+Decimal to hex 1 2 3 - 123 = 0x7b   /* decimal to hex */
+
+Hex to Hex - 0 x 7 g - 0x7g = 0x7g  /* ignores the g, treats 0x7 as the # */
+
+/* /* Nested Comments */ are bad */ /* you should see "are bad" * / here */
+
+/****** lotsa ******* stars ****/   /* don't // confuse // the lexer */
+
+im_an_array[]                       /* output as is */
+im_another_array[  ]                /* whitespace doesn't confuse me */
+
+im_array_with_comment[/* !! */] = im_array_with_comment[]
+                                    /* thanks to really ugly code, neither
+                                       do comment -- and you'll also notice
+                                       that multiline comments don't leave
+                                       extra linefeeds! */    
+array123[123]                       /* hex conversions work in arrays */
+nestedarray[inside[] * deep[ reallydeep[ 0123 ]]
+				    /* as does this. */

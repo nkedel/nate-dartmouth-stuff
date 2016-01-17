@@ -1,0 +1,32 @@
+This will definitely build on Linux; I did the test build on Killington... it
+may require a "make depend" to get it to build on a machine with slightly different
+libs.  No guarantees that it will build on an Alpha, although it did a long time
+ago earlier in testing.
+
+The code-generation phase is essentially 100% non-functional.
+
+Makefile: The Makefile
+README:   This File
+astNode.cc: abstract syntax tree class, derived from your TreeNode class
+astNode.h:  " header file
+c48:        linux executable
+c48-main.cc: main/driver source file
+code.cc:     code generator. Broken.
+error.c:     "C" error stub for Bison.
+idTab.c:     ID Table in C for Flex.
+idTab.h:     " header file
+label.cc:    Label functions for code generator -- probably the only part of
+             CG phase that works!
+label.h:     " header file
+lexer.h:     Supplementary headers for the lexer.
+lexer.l:     lexer, in flex/C
+parse.y:     parser, in bison/C++
+semant.cc:   semantic analyzer/type check routines
+symTab.cc:   symbol table; derivced from your class example
+symTab.h:    " header file
+test-simple.c48:  a very simple c48 program which does not compile
+test-simple.tm48: broken code produced from the above.
+test.c48:    a (moderately) simple c48 program which does not compile
+test.tm48:   broken code produced from the above.
+
+Nathan Edel

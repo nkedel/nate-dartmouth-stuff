@@ -1,0 +1,408 @@
+// Nate Edel and Peter Horowitz  Homework 1 CS78
+// chatserver.cc
+//
+//  The server takes a portnumber as a command line argument.
+//  the default port number is 3210.
+//  Utilizes the list class from "list.h"
+//  Supports the client commands: /help, /who, /name and one secret command
+//  /FLANDERS which preforms a remote shutdown of the server. 
+//  
+//  All code which is borrowed or influenced is from Internetworking with TCP/IP
+//  Volume III by Comer and Stevens from Prentice Hall 1993 
+
+//  Compile with -DDEBUG or #define DEBUG to enable diagnostic messages
+// Nate Edel & Peter Horowitz
+
+  
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/time.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <pwd.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <assert.h>
+#include <ctype.h>
+
+
+// function used for displaying diagnostic messages if DEBUG is enabled
+inline void alive(const char* msg) {
+#ifdef DEBUG
+ printf("%s\n",msg); 
+#endif
+ }
+
+#include "sockaddr.h"
+#include "list.h"
+
+const int buffersize = 512;
+// Since there is only one list ever created, made it global for efficiency
+list  clients;  
+
+// prints out a message explaining the command line option
+void helpmessage(char **argv);
+
+// function which displays a text error message based on a specific error code
+void parserr(int err);
+
+// function which accepts an incoming connection and adds it to the list of clients
+void acceptClient(int sourceSocket);
+
+// function which writes to all active connections in the list of clients
+void rebroadcast(const char *text, int length, fd_set &fdW);
+
+// receive input from clients with input pending, and determine if its a command 
+// and if not format it and retunr to rebroadcast
+int parseInput(int sourceSocket, char *text);
+
+// processes commands from client
+void parseCommand(int sourceSocket, char *text);
+
+// close a connection
+int closeClient(int sourceSocket);
+
+// performs initial set-up tasks
+int openServer(int portNum);
+
+// program main loop
+void chatServer(int serverSocket);
+
+
+int main(int argc, char **argv) {
+  int masterSocket; 
+  int serverPort = 3210;
+
+  // check to see if command line options are valid
+  if (argc >= 2) serverPort = atoi(argv[1]);
+  if (serverPort == 0) helpmessage(argv);
+
+#ifdef DEBUG  
+  printf("Opening socket on port %d\n",serverPort);
+#endif
+  masterSocket = openServer(serverPort);
+  
+#ifdef DEBUG
+  printf("Starting server on socket %d...\n", masterSocket);
+#endif
+  chatServer(masterSocket);
+  
+#ifdef DEBUG
+  alive("Closing server...");
+#endif
+  close(masterSocket);
+  exit(0);
+  }
+
+// loosely based on code in Comer & Stevens, pp.386-387
+void chatServer(int serverSocket) {
+  int nfds;
+  char textbuffer[buffersize];
+  fd_set fdR, fdW, fdErr; // file descriptor flags for select call
+  struct timeval tvalue;
+  while (1) { 
+    nfds = getdtablesize(); // get max number of file descriptors  
+// blank the master list of file descriptors
+    FD_ZERO(&fdR);
+    FD_ZERO(&fdW);
+    FD_ZERO(&fdErr);
+// add the server socket to the lists of file descriptors
+    FD_SET(serverSocket, &fdR);
+    FD_SET(serverSocket, &fdW);
+    FD_SET(serverSocket, &fdErr);
+    
+    if (clients.entries() > 0) {
+      clients.rewind(); // begin scanning from head of list
+      bool flag = TRUE;
+      do {
+        // add the socket for this client to the list of file descriptor flags
+        FD_SET(clients.getSocket(), &fdR);
+        FD_SET(clients.getSocket(), &fdW);
+        FD_SET(clients.getSocket(), &fdErr);
+        // iterate through list
+        if (clients.last()) flag=FALSE;
+        else clients.next();
+        } while (flag);
+      }  
+    // set max wait time for select statement
+    tvalue.tv_sec = (time_t) 10;
+    tvalue.tv_usec = 0;
+  
+// code trivially modified from Comer & Stevens, telnet.c, pp. 386-387 
+    if (select(nfds, &fdR, &fdW, &fdErr, &tvalue) < 0) {
+        if (errno == EINTR) continue; // ignore signal error
+        printf("ERROR IN SELECT: ");
+        parserr(errno);
+        exit(errno);
+        }
+// end borrowed code
+    // if there is a new connection accept it
+    if (FD_ISSET(serverSocket, &fdR)) acceptClient(serverSocket);
+    
+    if (clients.entries() > 0) {
+      int ts, tlen;        // temporary socket #, & text block length
+      clients.rewind();
+      bool flag = TRUE;
+      do {
+        ts = clients.getSocket();
+        // if the flag for socket ts is set in the list of file descriptors
+        // read from that socket
+        if (FD_ISSET(ts, &fdR))  
+          if (tlen = parseInput(ts, textbuffer)) {
+            clients.setBookmark(); // retain position in list so we can resume iterating
+            rebroadcast(textbuffer, tlen, fdW); 
+            clients.getBookmark();
+            }
+        if (clients.last()) flag = FALSE; 
+        else clients.next();
+        } while (flag);
+      }
+    }    
+  }
+
+void rebroadcast(const char *text, int length, fd_set &fdW) {
+  int ts, i;        // temporary socket #
+  clients.rewind();
+  while (clients.last() == FALSE) {
+    ts = clients.getSocket();
+    if (FD_ISSET(ts, &fdW)) {
+      i = write(ts, text, length);
+      if (i < 0) parserr(errno);
+      if (i < length) printf("Dropped %d bytes sending on socked %d",(length-i),ts);
+      clients.next();
+      }
+    }
+
+  ts = clients.getSocket();
+  if (FD_ISSET(ts, &fdW)) {
+    i = write(ts, text, length);
+    if (i < 0) parserr(errno);
+    if (i < length) printf("Dropped %d bytes sending on socked %d",(length-i),ts);
+    } 
+  }
+
+void parseCommand(int sourceSocket, char *text) {
+  char *tCommand, *tText, *tTemp;
+  tCommand=text;
+#ifdef DEBUG
+// check to see if this function has been called in error
+  if (*tCommand != '/') { 
+    alive ("This isn't a command!");
+    return;
+    }
+#endif
+
+  tCommand++;        // increment tCommand past the '/' indicating a command
+  tText = tCommand;  // assign the operand pointer at the same place, initially 
+  while(*tText != ' ' && *tText != 0) tText++; // scan the operand pointer to 
+                                               // the end of the command...
+  if (*tText == ' ') {                         // and if it's terminated by a space
+    *tText=0;                                  // snip the first string, and
+    tText++;                                   // set the operand pointer to the second
+    }
+  else *tText=0;                               // otherwise set it to a blank string 
+  
+  if (strlen(tCommand)>15) {
+    char toSend[40];
+    sprintf(toSend, "'%s' is too long to be a valid command.", tCommand);
+    write(sourceSocket, toSend, (long) strlen(toSend));
+
+#ifdef DEBUG
+    alive("That command is too long!");
+#endif
+    return;
+    }
+
+// convert the command string to all uppercase letters
+  tTemp=tCommand;
+  while(*tTemp != 0) { 
+    *tTemp = toupper(*tTemp);
+    tTemp++;
+    }
+
+
+// snip the operand string at an EOL and remove CR or LF
+  tTemp=tText;
+  while(*tTemp != 0) {
+    if (*tTemp == 10 || *tTemp == 13) {
+      *tTemp=0;
+      break;
+      }
+    tTemp++;
+    }
+  
+  if (strcmp(tCommand, "NAME") == 0) {
+    if (strlen(tText) < 2) clients.setName("Ned Flanders");
+    else 
+      clients.setName(tText);
+#ifdef DEBUG
+    printf("Client on socket %d is now named %s\n",sourceSocket,clients.getName());
+#endif
+    char toSend[40];
+    sprintf(toSend, "You are now named %s\n",clients.getName());
+    write(sourceSocket, toSend, (long) strlen(toSend));
+    return;
+    }
+
+  if (strcmp(tCommand, "QUIT") == 0) {
+    int i;
+    alive("Client quitting");
+    char toSend[40];
+    sprintf(toSend, "You are now quiting %s\n",clients.getName());
+    write(sourceSocket, toSend, (long) strlen(toSend));
+    i = closeClient(sourceSocket);
+    return;
+    }
+
+  if (strcmp(tCommand, "HELP") == 0) {
+    char toSend[255];
+    sprintf(toSend, "Known commands:\n/HELP -- this list\n/QUIT -- close the connection\n/WHO  -- list connected users\n/NAME [new name] -- change your nickname\n");
+    write(sourceSocket, toSend, (long) strlen(toSend));
+    return;
+    }
+
+  if (strcmp(tCommand, "FLANDERS") == 0) {
+    exit(255);
+    }
+
+  if (strcmp(tCommand, "WHO") == 0) {
+    bool flag = TRUE;
+    alive("WHO called");
+    clients.setBookmark();
+    clients.rewind();
+    do {
+        sprintf(text, "%s from %s\n", clients.getName(), clients.getSystem());
+        write(sourceSocket, text, (long) strlen(text));
+        if (clients.last()) flag=FALSE;
+        else clients.next();
+      } while(flag);      
+    clients.getBookmark();
+    return;
+    }
+
+// base case, object to the lack of a valid command
+  sprintf(tText, "%s is not a valid command.\n", tCommand);
+  write(sourceSocket, tText, (long) strlen(tText));
+  }
+
+int parseInput(int sourceSocket, char *text) {
+  char inBuffer[buffersize];
+  int i;
+
+// read one byte less than the buffer so we can always convert it to a string   
+  i = read(sourceSocket, inBuffer, buffersize-1);
+  if (i == -1) {
+    printf("Error reading socket %d: ",sourceSocket);
+    parserr(errno);
+    closeClient(sourceSocket);
+    return 0;
+    }
+  
+  if (i == 0) {
+#ifdef DEBUG
+    printf("Client dead on socket %d.\n", sourceSocket);
+#endif
+    closeClient(sourceSocket);
+    return 0;
+    }
+  
+  inBuffer[i]=0;  // terminate incoming text to make a string
+#ifdef DEBUG
+  printf("RECEIVED %d bytes:\n{%s}\n", i, inBuffer );
+#endif
+
+  if (inBuffer[0]=='/') {
+    parseCommand(sourceSocket, inBuffer);
+    return 0;
+    }
+
+  sprintf(text, "%s> %s\n", clients.getName(), inBuffer);
+  return strlen(text);    
+  }
+
+int closeClient(int sourceSocket) {
+  int i;
+  alive("Closing client.");
+  close(sourceSocket);
+  i = clients.findSocket(sourceSocket);
+  if (i < 0) { alive("Error seeking socket!"); return -1;}
+  if (i == 0) { alive("Error seeking socket: can't find it!"); return -2;}
+  if (i != sourceSocket) {alive("Internal error in list class!");return -3;};
+  clients.remove();
+  return 0;
+  }
+
+int openServer(int portNum) {
+  struct sockaddr_in serverSockaddr;
+  int masterSocket, i;
+
+#ifdef DEBUG
+  alive("Setting sockaddr record...");  
+#endif
+// get an "accept for any" IP address on our port #
+  getAddressForAnyHost( &serverSockaddr, portNum);
+  
+#ifdef DEBUG 
+  alive("Creating socket...");
+#endif
+  i = socket(PF_INET, SOCK_STREAM, 0);
+  if (i == -1) parserr(errno);
+  masterSocket = i;
+
+#ifdef DEBUG 
+  printf("Socket # is %d\n", masterSocket);
+  alive("Binding...");
+#endif
+
+  i = bind(masterSocket, (struct sockaddr*) &serverSockaddr, sizeof(serverSockaddr));
+  if (i == -1) parserr(errno);
+
+#ifdef DEBUG 
+  alive("Listening...");
+#endif
+
+  if (listen(masterSocket, 5) < 0) parserr(errno);
+
+  return masterSocket;
+  }
+
+void acceptClient(int sourceSocket) {
+    struct sockaddr_in clientSockaddr;
+    char *clientname, *scanChar, dnsname[48];
+    int i, j, clientSocket;
+    j = sizeof(struct sockaddr);
+    i = accept(sourceSocket, (struct sockaddr*) &clientSockaddr, &j);
+    if (i < 0) parserr(errno);    
+    clientSocket = i;
+    clientname = getHostnameFromAddress( &clientSockaddr);
+
+#ifdef DEBUG
+    printf("Incoming connection from: %s\n", clientname);
+#endif
+
+    strcpy(dnsname, clientname);
+    scanChar=clientname;
+    while (*scanChar) {
+      if (*scanChar == '.') {
+        *scanChar = 0;
+        break;
+        }
+      scanChar++;
+      }
+    clients.insert(clientSocket, clientname, dnsname);
+    }
+
+void parserr(int err) {
+  printf("ERROR: %s (code %d)\n", sys_errlist[err], err);
+  }
+
+void helpmessage(char **argv) {
+    printf("%s [serverport]\n", argv[0]);
+    printf("  serverport is optional, and defaults to 3210.\n");
+    exit(0);
+    }

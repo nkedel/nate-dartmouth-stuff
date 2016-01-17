@@ -1,0 +1,161 @@
+head	1.1;
+access;
+symbols;
+locks
+	nate:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	96.05.24.23.47.19;	author nate;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@#! /usr/local/bin/wish
+
+# buffer.tcl
+
+# This subsystem file creates the buffer manager array at startup with BMInit
+# and updates it with the commands: CreateBuffer and DeleteBuffer
+
+# $Header: /usr/tahoe1/davidk/KillerS/Integration/RCS/BM.tcl,v 1.2 1996/05/24 20:49:04 davidk Exp mihai $
+
+# Modification History:
+#      Created by David Kung on April 17, 1996
+#      Modified with extensions by Xiaohong Hu on April 17, 1996
+
+
+
+# ---- BM_BufferInit ----
+# Initializes for the Buffer Manager Array Structure
+# Initializes the counter for the Buffer Array and structure
+
+proc BM_BufferInit {} {
+    global BufferArray
+    global NumBuffers
+
+    # ArrayNum is a counter for the number of buffers and
+    # the array has space for without growing
+    # NumBuffers is the number of arrays currently
+    
+    # Created the User Clipboard in index 0 of the buffer array
+    # It is of special type "CLIPBOARD" and will be invisible to the user
+    set BufferArray(0,name) Clipboard  
+    # creates the text wid
+    edit_create 0 CLIPBOARD
+
+    # The clipboard is not counted as part of NumBuffers
+    set NumBuffers 0
+    return
+}
+
+# ---- BM_Find_Spot ----
+# This procedure returns the first empty spot in the buffer manager array
+proc BM_Find_Spot {} {
+    global NumBuffers
+
+    for {set i 1} {$i <= [expr $NumBuffers+1]} {incr i} {
+	if {[edit_isBuffer $i] == 0} {
+	    return $i
+	}
+    }
+}
+
+
+# ---- BM_CreateBuffer ----
+# Creates a new buffer and places its info into the buffer array
+# "\0" represents a dummy node and/or empty array location
+# types are "text", "pipe", or "RO". "CLIPBOARD" is a special buffer type
+# returns the number of the location you got!{
+proc BM_CreateBuffer {type filename windowname oldWindow} {
+    # BufferArray is the global Buffer Manager Data Structure
+    # BufferNum is a counter for the number of availiable buffers
+    global BufferArray
+    global array
+    global NumBuffers
+    
+    set arrayLocation [BM_Find_Spot]      
+    # the text widget buffer is born!!!!
+    # Calls edit_Create {bufferIndex, type}
+    # the text widget buffer is created by editCreate
+    # the type of teh buffer is set within edit_create as well
+
+    edit_create $arrayLocation $type
+    
+    if {$type == "pipe"} {
+	set BufferArray($arrayLocation,pipenum) -1
+    }
+   
+    # if the buffer is editable create undo
+    #undo array created
+    # if the buffer is editable text create undo array
+    if {$type == "text"} {
+	# undo array is globally accessible
+	global TextUndo
+	global NumUndo$arrayLocation
+	global SizeUndo$arrayLocation
+	set TextUndo($arrayLocation,0) "\0"
+	set NumUndo$arrayLocation 0
+	set SizeUndo$arrayLocation 0
+	text_Load $arrayLocation $filename
+    }
+    incr NumBuffers
+    # if you find the empty buffer spot
+    # creates the two identifying spots in the buffer array
+    # filename and type
+    
+    set BufferArray($arrayLocation,name) $filename
+    # The buffer that is displayed in the window to which the new buffer is now
+    # being open will no longer be displayed anywhere
+    if {$oldWindow == 1} {
+	set BufferArray($array($windowname,buf),window) NONE
+    }
+    set BufferArray($arrayLocation,window) $windowname
+    # The windowarray will now remember the name of the buffer 
+    # that is being displayed in the current window
+    if {$oldWindow == 0} {
+	MakeWindow $arrayLocation
+    }
+    return $arrayLocation
+}
+
+
+# ---- BM_DeleteBuffer ----
+# Deletes a buffer from the array and deallocates it
+
+proc BM_DeleteBuffer {number} {
+    # Needs the global stuff
+    global BufferArray
+    global NumBuffers
+    global ArrayNum
+    
+    # if the buffer was editable text, destroy undo array
+    if {$BufferArray($number,type) == "text"} {
+	global TextUndo
+	set TextUndo($number,0) "\0"
+	global NumUndo$number
+	global SizeUndo$number
+	set NumUndo$number 0
+	set SizeUndo$number 0
+    }
+    
+    # empty array location now
+    set BufferArray($number,type) "\0"
+    set BufferArray($number,name) "Nothing"
+    
+    # destroy the buffer
+    edit_close $number
+
+    # number of buffers decreased but number of array spots does not
+    incr NumBuffers -1;
+}@

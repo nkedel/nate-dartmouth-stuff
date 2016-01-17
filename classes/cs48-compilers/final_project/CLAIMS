@@ -1,0 +1,6 @@
+This handles multiple declarations and function prototypes quite
+nicely at the parse/type-check levels... it's also supposed to have
+break/continue, and the % operator, for which code generation routines
+are written, but like the rest of it, are broken.
+
+Nathan Edel

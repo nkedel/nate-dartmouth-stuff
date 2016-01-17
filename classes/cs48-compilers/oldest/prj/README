@@ -1,0 +1,15 @@
+Files:
+        lexer.l         flex definition for the lexer
+        tokens.h        list of token IDs for lexer.l
+        lexer.h         misc definitions used by the lexer 
+                        (especially the table of reserved words)
+        test-main.c     stub main function to test the lexer
+        test.c48        test file - simple c48 program, with one intentional
+                        invalid token to generate an "INVALID" from lexer
+        test.c48.out    output of "lexer test.c48 > test.c48.out"
+        Makefile        the makefile. Works on tahoe.
+        lexer           executable (not included in tar)
+        README          this file
+
+Project by:
+        Nate Edel

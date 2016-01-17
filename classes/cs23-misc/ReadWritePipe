@@ -1,0 +1,65 @@
+#!/usr/local/bin/wish
+
+# John M. Danskin
+#
+# This program starts a command in a pipe and reads from it and writes
+# to it.
+
+
+#
+# get the command. "sh -i" is a good one. So is "tcsh -i".
+# Prompts generally won't work. Don't worry about it.
+#
+puts "Enter Command"
+gets stdin command
+
+
+#
+# run the command and open the process for both reading and writing
+#
+# If it works, set up a fileevent to read from the process.
+# Fileevents are mostly useless for writing, so don't bother.
+#
+if [catch {open "|$command" r+} comm] {
+    puts "bad open"
+    exit
+} else {
+    fileevent $comm readable ReadIt
+}
+
+fileevent stdin readable ReadTerm
+
+
+#
+#
+# This routine reads a line from the process in $comm
+# and writes it to stdout. If the process terminates (pipe
+# closes) exit.
+#
+proc ReadIt {} {
+    global comm
+    if [eof $comm] {
+	catch "close $comm"
+	exit
+    }
+    set char [read $comm 1]
+    puts -nonewline $char
+}
+
+
+#
+#
+# this routine reads from stdin and writes to comm
+#
+proc ReadTerm {} {
+    global comm
+    if [eof stdin] {
+	exit
+    }
+    gets stdin line
+    puts $comm $line
+    flush $comm
+}
+
+
+

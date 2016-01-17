@@ -1,0 +1,79 @@
+Nate Edel
+CS 23 Homework 1
+Spring 1996
+
+README
+Files:
+  tester.cc                  Automated test program
+  Set.cc                     Set class implementation
+  Set.h (provided)           Set class interface/header 
+  README                     This file/Documentation
+
+Set Implementation:
+  The Set specifications as listed in Set.h were unclear on several points:
+  First, how the array was to be allocated; Second, whether the "Set" ADT is
+  a set of UNIQUE items or whether several items of duplicate value can be
+  contained by a set; Third, how to handle duplicate items; Fourth, how to
+  implement isElement. Finally, there was a possible error in the
+  specification of isElement that made the implementation of intersection
+  more difficult.
+
+  1) In my implementation, I chose to dynamically reallocate the array every
+  time it is modified; it was the only clear solution without changing the
+  specification. Using an array seems sub-optimal as compared to a linked
+  list or other fully dynamic implementation.  A slightly more efficient
+  array implementation could also have been made by adding a second variable
+  to keep track of the size of the array, which would have allowed the
+  removal of some of the allocation/deallocation of memory.
+
+  2) I chose to implement the Set as a set of unique items; this greatly
+  simplified implementation and allowed for a consistant handling of
+  duplicate items.
+
+  3) Because duplicate items were not to be entered into the set, the only
+  method which had to handle for them was Add. (were that not the case,
+  design decisions, which would have needed to be specified, would have to
+  have been made for Intersection and Rm at least)  Add was designed to
+  handle duplicate members in the simplest manner possible -- ignore them, 
+  and return normally.
+
+  4) isElement could have been implemented with several searching algoriths;
+  because of the simple array-based implementation of the data, the two most
+  obvious algorithms were linear and binary search; I initially implemented
+  binary search using the C library function bsearch, and then replaced it
+  with a linear search because of unnecesary complexity.  Linear search
+  would also work if this class were modified to allow for duplicate items,
+  while the C library function bsearch is written (according to its man
+  page) to search only lists of unique items.
+
+  5) Because of conflicts between isElement and the const parameters for 
+  Intersection, a slightly optimized form of the isElement code is inserted
+  directly into the code for Intersection.
+
+Testing Strategy:
+  The testing routines follow a simple, linear set of tests;  all class
+  methods are tested with fixed-size sets of random numbers, and the test
+  results are outputted to the screen.  The testing sequence is
+  non-interactive, but does require the user to confirm that output patterns
+  match.
+
+  The first set of tests confirm that the basic copy functions work, using a
+  three sets, and two arrays of random numbers. These tests also generate a
+  pattern showing the intersection of two sets without using the Intersection
+  function, allowing that to be double checked.
+
+  The second set of tests confirm the function of the Intersection fuction
+  on the Intersection of the two randomly generated sets, as well as on the
+  cases of a set's intersection with a partial subset of itself and with
+  itself.
+
+  The third set of tests confirm the function of a few miscellaneous methods
+  specifically the dynamic allocation of Sets, and the construction of sets
+  with a single integer as its starting member.
+
+  The fourth, and final set of tests confirms that very large sets will not
+  crash the class, by producing a 50,000 element Set and a 500 element set,
+  and then finding their intersection, and deleting them.
+
+Nate Edel
+10:15 pm, 5 April 1996

@@ -1,0 +1,191 @@
+* pipe_Init []
+  Preconditions: Pipeline module may not have been previously initialized.
+  Arguments: None.
+  Action: Sets up initial pipes for TCL/Tk, Scheme, and UNIX as pipes 0, 1,
+          and 2. Verifies them.
+  Returns: Error on failure.
+  Called by: Buffer Manager (?)
+  Calls: pipe_Open
+  Testing: 
+
+
+* pipe_Shutdown []
+  Preconditions: Some pipes must be open.
+  Arguments: None.
+  Action: Closes all pipes except for the Tcl pipe whice does not
+          open/close. Deletes temporary files used by pipes system.
+  Called by: Buffer Manager (?)
+  Calls: pipe_Close
+  Testing:
+
+* pipe_Create [buffer, type]
+  Preconditions: pipe_Init must have been called successfully to open the
+                 standard pipes 
+  Arguments: Must be provided a buffer, and a number 0, 1, or 2
+	     corresponding to the standard pipe (TCL, Scheme, or UNIX) to 
+             use.
+  Action: Creates a new interactive pipe in the buffer created.
+  Returns: Error on failure.
+  Called by: Buffer manager.
+  Derivable from: text_Create
+  Calls: edit_Create, pipe_setMark
+  Testing:
+
+* pipe_Copy [buffer]
+  Preconditions: buffer must be a valid buffer, and have selected text.
+  Arguments: buffer is the active buffer
+  Action: copies selected text from an interactive buffer to the user
+          clipboard.
+  Returns: error on failure
+  Called by: user interface (indirectly via managers?)
+  Derivable from: text_Copy (probably an exact copy?)
+  Calls: edit_Copy
+  Testing: 
+
+#     Copies selected text to user clipboard
+#     See also: text_Copy
+#
+* pipe_Paste [buffer]
+  Preconditions: buffer must be a valid buffer, the user clipboard must
+                 contain some text, the insertion point must be below the
+                 to be submitted mark (the latest text returned from the
+                 pipe.)
+  Arguments: buffer is the interactive buffer to paste to
+  Actions: copies the text from the selected text to the interactive
+             buffer, at the insertion point.
+  Called by:
+  Calls:
+  Testing:
+#     pastes text from user clipboard to insertion point.
+
+
+#   pipe_Paste [buffer]
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     pastes text from user clipboard to insertion point.
+#   pipe_Paste [buffer]
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     pastes text from user clipboard to insertion point.
+#   pipe_Paste [buffer]
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     pastes text from user clipboard to insertion point.
+#
+#   pipe_Submit [buffer]
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#
+# Related Functions
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#   text_toTCL [inbuffer, outbuffer]
+#   text_toSCHEME [inbuffer, outbuffer]
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     submits inbuffer to standard TCL/SCHEME interpreter and appends
+#     the output (if any) of the command to outbuffer
+#
+#   text_toUNIX [inbuffer, outbuffer]
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     submits inbuffer to a new/clean unix shell and appends the output
+#     (if any) of the command to outbuffer
+#
+# Internal Functions
+#   pipe_Write(pipe number, text)
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     Outputs ascii text from variable to pipe.
+#
+#   pipe_Read(pipe number)
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     Inputs a line from pipe #, returns ascii string 
+#
+#   pipe_Empty?(pipe number)
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     Returns TRUE if pipe has no output, FALSE otherwise
+#
+#   pipe_EOF? (pipe #)
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#
+#   pipe_Open(pipe type)
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#     where pipe type is a unix command. returns a pipe #
+#     (the internal TCL pipe is automatically #0)
+#
+#   pipe_Close(pipe)
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+#
+#   pipe_fromBuffer (buffer)
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:
+
+#   pipe_toBuffer (buffer)
+  Preconditions:
+  Arguments:
+  Action:
+  Called by:
+  Calls:
+  Testing:

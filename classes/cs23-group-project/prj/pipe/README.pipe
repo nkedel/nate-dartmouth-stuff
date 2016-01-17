@@ -1,0 +1,111 @@
+Files:
+------
+pipe.tcl, version 2.1 in pipe.tcl,v
+- Contains the functionality of the pipeline subsystem, simplified versions
+of some edit_ module functions, and a simple Tk visual framework emulating
+three buffer/windows.
+
+- The windows, from top to bottom are the standard TCL, Scheme, and UNIX
+(csh) pipes. The TCL pipe is not yet functional, and will return errors. The
+Unix and Scheme pipes are functional, will accept commands, and will
+automatically return on exit.
+
+- Sumbission is bound to Control-Enter, which will send all user typing
+since the last submission, or since the last output from the program.
+
+Written and Minimally Tested
+----------------------------
+proc edit_setPipe { buffer# pipe# }
+proc edit_getPipe { buffer# }
+- Gets/Sets the pipe associated with a specific buffer. Will be superceded
+by edit_ module versions on integration.
+
+proc pipe_nodeCreate { pipe# }
+- creates a list within the pipes array for a specific pipe #.
+
+proc pipe_setData { pipe# field# data }
+proc pipe_getData { pipe# field# }
+- gets/sets a data item within the pipes array. Must be called after
+pipe_nodeCreate has been called for that pipe #
+
+proc pipe_Open? { pipe# }
+- returns 1 if the pipe is open, 0 if closed.
+
+proc edit_Create { bname btype }
+- Creates a simple buffer/text widget. Will be superceded by a more complete
+version from the edit_ module on integration.
+
+proc edit_Extract { buffer# start_index end_index }
+- Extracts the text from a buffer between two indices (inclusive). Will be
+superceded by a new version from the edit_ module at integration.
+
+proc edit_Append { buffer# text }
+- Appends text to the end of the text stream in buffer. May be superceded by
+a new version from the edit_ module at integration, unless it needs to be
+inlined for performance reasons.
+
+proc pipe_Init { TCLBuffer# SchemeBuffer# cshBuffer# }
+- creates pipelines and buffers for the three standard buffers.
+
+proc pipe_Create { buffer# }
+- creates a pipeline buffer in buffer#
+
+proc pipe_Open { pipeType bufferName }
+- opens a pipeline of some type, and associates it with a pipeline
+(interactive) buffer
+
+proc pipe_reOpen { pipeNum } 
+- reopens a standard pipeline which has been closed.
+
+proc pipe_Read { pipenum }
+- called by a filevent; reads text (one character at a time, though I hope
+to improve on this) from a pipeline into the buffer
+
+proc pipe_Close { pipeNum }
+- closes a buffer
+
+proc pipe_Submit { bufNum }
+- Submits user input to the pipeline. Appears to work for external pipes,
+including the standard Scheme and csh pipes, but not with TCL pipes, as
+pipe_toTCL (via pipe_Write) is non-functional
+
+proc pipe_Write { pipeNum toWrite }
+- Writes to a pipe.
+
+proc pipe_toTCL { toEval }
+- Writes to TCL -- returns output or error, if any.
+
+proc pipe_Destroy { buffer# }
+- destroys a interactive/pipeline buffer, and closes its associated
+pipeline.
+
+proc pipe_Shutdown { }
+- Closes all pipelines.
+
+Written but not tested 
+(dependent on better test framework)
+------------------------------------
+
+proc pipe_submitSelected { buffer# }
+- Submits selected text to the pipeline associated with an interactive
+buffer
+
+proc text_toTCL { inBuffer }
+proc text_toSCHEME { inBuffer }
+proc text_toUNIX { inBuffer outBuffer }
+- submits all text from a regular text buffer (normally the system
+clipboard?) to a pipe -- in the case of TCL or Scheme, the standard one, a
+new one in the case of a UNIX pipe. In the case of a new unix pipe, create
+the new Interactive buffer "outBuffer" to receive output from the pipe text.
+
+pipe_fromBuffer {buffer# pipe#}
+- writes full contents of a buffer into a pipe.
+
+
+Not implemented 
+(Redundant or extraneous)
+-------------------------
+pipe_Copy { Buffer# }
+pipe_Paste { Buffer# }
+- Copies and pastes text in an interactive window.
+- superceded by more liberal definition of text_Copy/Paste

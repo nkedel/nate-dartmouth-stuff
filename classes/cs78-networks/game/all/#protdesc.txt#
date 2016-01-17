@@ -1,0 +1,160 @@
+Protocol Specification
+----------------------
+
+States
+  Waiting
+  Playing
+
+Waiting
+-------
+
+1) Wait for connections and accept them
+2) First player that submits a player "owns" the game and can 
+   start it with ready
+
+Client -> Server Commands:
+
+GPL
+   - Server returns information about all currently submitted players
+
+PLR <NAME> <CHARFILE> <PASSWORD>
+   - Submit player information
+   - Name is the name of the chacter (string)
+   - Charfile is the identifying file name or record number (to be decided)
+     containing the character's stats.
+   - Password is the password associated with loading this file / record to 
+     prevent unauthorized use.
+
+RDY
+   - Can only be used by the owner of the game, starts the game.
+   - All connected connected people who have not yet submitted characters are
+     disconnected
+   - Switches server from waiting to playing state
+
+BYE
+   - Person disconnects
+   - If the owner disconnects, then the next person to connect becomes the
+     owner.
+
+SAY <text>
+   - broadcasts text to all connected people
+
+
+Server -> Client Commands:
+
+MSG <text>
+   - text to be printed as a chat message
+
+INF <# connected players> <name> <machine> ...
+   - list of players connected
+
+BGN <params> (undecided)
+   - broadcast to notify all clients of the beginning of the game.
+
+POK
+   - player submit successful
+
+ERR <error info>
+   - an error occured while processing the request
+   - an invalid or unavailable command was sent 
+
+Playing
+-------
+Server:
+- Accept queries from any client at any time.
+- Accept modifications from client with token only.
+- Various auxilliary functions.
+- For now, give token on a at request, unqueued basis - once we write the
+  scheduler, this will be different
+
+Client -> Server commands:
+GET <db#> <rec# or '*'> <field# or '*'> 
+   - gets content of a field, record (if field # is * but record # is
+     specified), column (if field # is specified but record # is *), or
+     whole database (if rec # and field # are both *)
+   - replies from server with a NRF plus if the request is valid, one or
+     more FLD replies (if request is invalid, NRF of 0)
+
+PUT <token> <transaction#> <db#> <rec#> <field#> <data>
+   - client must have token, server will verify token to make sure 
+* (DO WE NEED THE TOKEN FIELD, OR SHOULD WE JUST VERIFY BY CONNECTION #?)
+* (DO WE WANT TO PUT SERIAL TRANSACTION #'s ON PUTS? SHOULD WE ON GETS?)
+   - server will verify receipt.  Client should NOT perform more than one
+     push until receipt of verification.
+
+IMT
+   - It's My Turn
+   - Requests token.
+   - Positively or negatively acknowledged by server.
+
+DUN 
+   - "Done." Releases token.
+   - all clients notified of free token.
+
+STA <client/player #> <message>
+   - client-to-client status message
+
+BRC <message>
+   - broadcast status message
+
+BND
+   - returns the number/name bindings for all databases and fields
+   - server replies with one MAP for each active database
+replaces:
+***********
+*DBN <name>
+*   - get database # associated with name
+*   - replies with DBM
+*
+*DBR <db#>
+*   - get database name of db #
+*   - replies with DBM
+* 
+*FLN <db#> <name>
+*   - get field # associated with name in a database
+*   - replies with DBM
+*
+*FLR <db#> <field#>
+*   - gets name for field # for database
+*   - replies with DBM
+*********
+
+DBS <db#>
+   - database stats... returns # records, # fields per record
+
+Server -> Client commands:
+ERR <explanation>
+   - error, other
+
+NYT
+   - error, PUT attempted without valid token.
+   - also the NAK for an IMT
+
+NRF <number of responses to expect>
+   - number of response fields
+
+FLD <response # for this request> <db#> <rec#> <field#> <data>
+   - the field data 
+
+MAP <db#> <db name> <number of fields> <field#> <field name> <data
+type> ... 
+   - response to a BND
+   - one MAP response per database
+   - MAP <db#> <db name> <number of fields> will be followed by
+<number of fields> tuples in the form <field#> <field name> <data type>
+   - for char * datatype = 0 for int datatype = 1
+
+AOK 
+   - generic acknowledgement to status broadcast or put command
+
+IYT <token>
+   - "It's your turn"
+   - acknowledges a succesful "It's my turn" (IMT) or can be pushed by the
+     scheduler...
+
+UFG
+   - "Up for grabs."
+   - Sent to all clients when the token is freed... 
+* (Client design note: update/get all on-screen coordinates before you
+IMT...)
+

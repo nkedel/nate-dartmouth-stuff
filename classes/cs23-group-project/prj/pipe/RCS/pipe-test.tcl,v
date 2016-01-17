@@ -1,0 +1,45 @@
+head	1.1;
+access;
+symbols;
+locks
+	nate:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	96.05.24.23.47.19;	author nate;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@#!/usr/local/bin/wish
+# internal module, include with "source pipe.tcl"
+#
+# $Header$
+# by Nate Edel
+#
+
+frame .d
+frame .d.c
+pack .d .d.c
+
+source "editfcn.tcl"
+source "pipe.tcl"
+source "BM.tcl"
+
+BM_BufferInit
+set NumBuffers 3
+pipe_Init 1 2 3
+pack .d.c.buffer1
+pack .d.c.buffer2
+pack .d.c.buffer3
+@

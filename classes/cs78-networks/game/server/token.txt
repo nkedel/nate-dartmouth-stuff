@@ -1,0 +1,29 @@
+Round Robin
+-----------
+
+1) Game starts
+2) Scheduler tells client "Its your turn"
+3) Client requests token
+4) Client updates screen
+5) Client waits for user input
+6) Client either times out waiting for input or gets a move
+7) Client modifies database if needed and sends status message as
+needed
+8) Client releases token and notifies scheduler that its done
+9) Scheduler increments "whose turn"
+10) goto 2
+
+
+On Demand
+---------
+
+1) Game starts
+2) Server announces "Up for grabs"
+3) All clients update screen and local character
+4) Clients wait for user input
+5) Clients request token
+6) Server grants token to first request (queue client requests? if
+not, ding client moves)
+7) client receives token, processes move, releases token (if queued,
+repeat for all in queue)
+8) goto 2

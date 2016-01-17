@@ -1,0 +1,76 @@
+File :
+	New:  This will create a new window with an Untitled file in it.  You cannot
+save this file without putting in a different name for it first.
+	Load:  This will open a dialog box to ask you which file you would like to
+open, and than proceed to open a randow file in a new window... Just kidding, it
+will open the file of your choice, really it will
+	Insert file: This will insert the file of your choice into the currently active
+window at the cursor
+	Write Region: This will save the currently selected text into a seperate file.
+	Save: This will save the current file under the current name.  Cannot be used
+on Untitled or on Read-Only files.
+	Save As: This extremely nice option will actually ask you the name of the file
+in which you want to save that which is in the currently active window
+	Delete Buffer: This is the only way to get rid of the an open file.  It deletes the
+buffer in the currently active window from memory.  You will be asked if you want
+to save any changed you may have made.
+	Quit: It'll quit, exit, close, destroy, die, what else do you need to know? 
+
+Edit:
+	Undo: This will take back any mistakes you may make, character by character
+painstaikingly undoing all you have types, pasted, or copied (see below)
+
+	Redo: This will take back any mistakes you made Undoing(above) you other
+mistakes.  It is limited in scope, but, hopefully, so are your mistakes.
+
+	Cut: This will remove the selected text from the curently active window, and
+leave it on the clipboard.  This text may later be retrieved by using Paste (below)
+
+	Copy Selection: This will move the selected text to the clipboard as per cut, but
+will not destroy it in the current buffer.
+
+NOTE: Both Cut and Copy will clear anything that may currently be on the
+Clipboard
+
+	Paste: This will retreive anyhing that may be on the Clipboard at the time,
+and insert it into the current buffer at the cursor
+
+	Clear Selection: This will very simply KILL the selected text.  There is no way
+to get it back except for UNDO (above)
+
+	Select All: This will automatically select all of the text in the currently active
+window.
+
+	Regexp Search: This allows you to search the current buffer for a regular
+expression string.  Or a normal string for that matter
+
+	Regexp Search and Replace: Same as search, except also allows you to replace
+the string when you find it.
+
+Tools:
+The Killer Editor offers tools to work with scheme, the Tcl scripting language,
+and with a csh UNIX shell.
+Under the tools menu are found three submenus, the TCL, Scheme, and Csh
+submenu.  In the submenus are the options Send buffer and Send selection.  In each
+case the buffer in the currently active window, or the selected text in the currently
+active window is piped via Nate's Big Pipe (TM) to the corresponding application.
+The pipes may be viewed in a window by using the buffers menu (see below)
+In the pipe windows the text before the selection may be piped to the correct application 
+by hitting <Ctrl-Return>, or sends the selected text to the application by <Alt-Return>
+
+Buffers: Under this menu is a list of the buffers currently stored in memory.
+Selecting an item from the menu will cause the buffer to instantaneously, and as if
+by magic, to be displayed in the currently active window
+
+Windows: Under this menu is a list of the currently active windows.  Choosing an 
+item from this menu will cause the corresponding window to be brought to the
+front of the canvas, and be made the currently active window.
+
+Help:    Under this menu is the selection of all the wonderfully informative
+and useful files that you can choose from. They are a great read in your
+spare time, "Captivating and Intense" - says the New York Times Book
+Review.  "It is a blasphemy against art to close one of the Killer Editor’s
+help windows" - says Boston Globe's Edam Pu.  Read the help files, and
+enjoy them time and time again.
+
+Return to the main menu

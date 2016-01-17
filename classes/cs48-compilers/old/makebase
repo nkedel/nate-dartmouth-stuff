@@ -1,0 +1,6 @@
+cp -f TreeNode.1.h TreeNode.h
+cp -f TreeNode.1.cc TreeNode.cc
+cp -f tree.1.l tree.l
+cp -f tree.1.y tree.y
+make clean
+make

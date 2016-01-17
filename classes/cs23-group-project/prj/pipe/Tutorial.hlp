@@ -1,0 +1,54 @@
+Welcome to the Killer Editor.  Here's a quick run though to aid you in
+familiarizing yourself with the extensive and wondrous functionality
+of the Killer Editor.
+
+Let's start by opening a window -- choose New from under the File
+Menu, and watch a window appear. The randomly chosen color is the work
+of Mihai's twisted mind, if that is cause for complaint -- well, that
+has been addressed to our satisfaction....
+
+This first window is called Untitled1, that is also the name of the buffer
+that is currently stored in it.  The buffer starts out empty -- a
+clean slate, if you will.  Type in the Untitled buffer a little bit,
+drag it around the screen by the top bar, maximize it by using the X
+button (a remainder of previous experience by some of the Killer
+Software team), and resize it by dragging the lower left corner, or
+typing in new entries in the Height and Width fields.
+
+You've played?
+Ready to go on?
+Let's load a file now.  Choose the load file option from the File
+menu, or hit <Alt-L> on your little keyboard.  The file selection
+dialog box will come up, and you may use that to select the file you
+wish to load into the new window.
+
+There are now two windows on the canvas.  You may use the Window menu
+to switch between them, or simply click on the windows.  Now, after
+typing something, test save os save as in the file menu on one of your
+two files.
+
+Now let's work with some pipes.  Nate's pipes to be exact.  Choose one
+of TCL, Scheme, or Csh from the Buffer Menu.  The corresponding pipe
+will appear in the currently active window.  Pipe away to your heart's
+consent, by sending enteries to the pipe with <Ctrl-Return>.
+
+You might try to close the pipe, simply to see it reopen again by the
+arcane powers of Killer Software -- none of the three initial pipes
+may be closed without having them automatically reopen themselves.
+
+If you happen to have some scheme code handy (that's Computer
+Scientese for "a program") -- you can go ahead and load that into a
+file, and parse it using parse line or parse whole buffer.  Tab is a
+shortcut for Parse Line.
+
+Try undoing some of your errors (text buffers only), and then redoing
+your undos. All of that is in the Edit menu.  also use cut, copy
+paste, select all and clear selection.  Remember to try undo on all of
+these.  Note to those who wish to yet be wise: undo also works on
+scheme parsing.
+
+You can also go ahead and use search and search and search and search
+and replace -- that's the lovechild of Gondek.  It is deadly, indeed.
+
+Then test the most important function of all -- Quit.
+

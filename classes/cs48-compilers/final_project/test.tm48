@@ -1,0 +1,283 @@
+* test.c48
+*
+* Global
+* (start)
+0: LDC 6,16(0)
+1: LDC 5,0(0)
+2: LDA 4,4(7)
+3: ST 4,0(6)
+4: ST 5,4(6)
+5: LDA 6,8(6)
+6: LDC 7,8(0) * (main)
+7: HALT 0,0,0
+* FN_DEF
+* main
+* Here's a NO-OP to fit our label on...
+* (main)
+8: LDA 1,0(1)
+* entering CSTMT
+* level=2
+9: ST 5,4(6)
+10: LDA 6,8(6)
+11: LDA 5,0(6)
+* Allocate space for local variables
+12: LDA 6,8(6)
+* Here's the code inside the CSTMT
+* IF-ELSE: eval condtion
+* BINARY OP
+* BINOP: get left value
+* CONSTANT
+* INT Const: 1
+13: LDC 1,1(0)
+* BINOP: store left value on stack
+14: ST 1,0(6)
+15: LDA 6,8(6)
+* BINOP: get right value
+* CONSTANT
+* INT Const: 1
+16: LDC 1,1(0)
+* BINOP: pop left value from stack to r2
+17: LDA 6,-8(6)
+18: LD 2,0(6)
+*  == 
+19: SUB 1,2,1
+20: JNE 1,2(7)
+21: LDC 1,0(0)
+22: LDA 7,1(7)
+23: LDC 1,1(0)
+24: JNE 1,1(7)
+25: LDC 7,29(0) * (_$000001)
+* IF-ELSE: do IF action
+* WRITE
+* Getting value:
+* CONSTANT
+* INT Const: 121
+26: LDC 1,121(0)
+* Writing
+27: OUTB 1,0,0
+28: LDC 7,32(0) * (_$000000)
+* (_$000001)
+29: LDA 1,0(1)
+* IF-ELSE: do ELSE action
+* WRITE
+* Getting value:
+* CONSTANT
+* INT Const: 110
+30: LDC 1,110(0)
+* Writing
+31: OUTB 1,0,0
+* (_$000000)
+32: LDA 1,0(1)
+* Here's the code inside the CSTMT
+* WRITE
+* Getting value:
+* CONSTANT
+* INT Const: 10
+33: LDC 1,10(0)
+* Writing
+34: OUTB 1,0,0
+* Here's the code inside the CSTMT
+* READ
+* Finding var addr to read to
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 2, o 0
+35: LDA 4,0(5)
+* Reading into reg 1
+36: IN 1,0,0
+* copying result to address in reg 4
+37: ST 1,0(4)
+* Here's the code inside the CSTMT
+* WRITE
+* Getting value:
+* CALL
+* function
+* Create Stack frame
+38: LDA 6,8(6)
+39: ST 5,-4(6)
+40: LDA 5,0(6)
+* Allocate space for parameters
+41: LDA 6,8(6)
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 2, o 0
+42: LDA 4,0(5)
+* flag
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 2, o 0
+43: LDA 4,0(5)
+44: LD 1,0(4)
+* Storing Parameters
+45: ST 1,0(5)
+* Store return address
+46: LDA 4,2(7)
+47: ST 4,-8(5)
+* make the jump
+48: LDC 7,59(0) * (function)
+* recover stack frame
+49: LDA 6,0(5)
+50: LD 5,-4(6)
+51: LDA 6,-8(6)
+* Writing
+52: OUT 1,0,0
+* Clean up stack frame
+53: LDA 6,0(5)
+54: LDA 6,-8(6)
+55: LD 5,4(6)
+* Leave some junk in reg1 to catch missing return stmts
+56: LDC 1,-1(0)
+57: LDFC 1,-1(0)
+* And jump out.
+58: LD 7,-8(5)
+* FN_DEF
+* function
+* Here's a NO-OP to fit our label on...
+* (function)
+59: LDA 1,0(1)
+* entering CSTMT
+* level=2
+60: ST 5,4(6)
+61: LDA 6,8(6)
+62: LDA 5,0(6)
+* Allocate space for local variables
+63: LDA 6,8(6)
+* Here's the code inside the CSTMT
+* ASSIGNMENT
+* x
+* Grab recipient address
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 2, o 0
+64: LDA 4,0(5)
+* Push address to stack
+65: ST 4,0(6)
+66: LDA 6,8(6)
+* Get right value to assign
+* BINARY OP
+* BINOP: get left value
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 1, o 0
+67: LDA 3,0(5)
+* Backing up to l 2
+68: LD 3,-4(3)
+69: LDA 4,0(3)
+* to_return
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 1, o 0
+70: LDA 3,0(5)
+* Backing up to l 2
+71: LD 3,-4(3)
+72: LDA 4,0(3)
+73: LD 1,0(4)
+* BINOP: store left value on stack
+74: ST 1,0(6)
+75: LDA 6,8(6)
+* BINOP: get right value
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 1, o 0
+76: LDA 3,0(5)
+* Backing up to l 2
+77: LD 3,-4(3)
+78: LDA 4,0(3)
+* to_return
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 1, o 0
+79: LDA 3,0(5)
+* Backing up to l 2
+80: LD 3,-4(3)
+81: LDA 4,0(3)
+82: LD 1,0(4)
+* BINOP: pop left value from stack to r2
+83: LDA 6,-8(6)
+84: LD 2,0(6)
+*  + 
+85: ADD 1,2,1
+* Coercing output.
+86: CVTIF 1,1,0
+* pop recipient address from stack
+87: LDA 6,-8(6)
+88: LD 4,0(6)
+89: ST 1,0(4)
+* Here's the code inside the CSTMT
+* RETURN
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 2, o 0
+90: LDA 4,0(5)
+* x
+* CGen_LVADR: Load Variable ADDR into REG 4
+* LVADR: l 2, o 0
+91: LDA 4,0(5)
+92: LD 1,0(4)
+* Our return value is now in reg 1
+* return
+93: LD 7,-8(5)
+* Clean up stack frame
+94: LDA 6,0(5)
+95: LDA 6,-8(6)
+96: LD 5,4(6)
+* Leave some junk in reg1 to catch missing return stmts
+97: LDC 1,-1(0)
+98: LDFC 1,-1(0)
+* And jump out.
+99: LD 7,-8(5)
+100: HALT 0,0,0
+* idTable:
+* h6 i1: function
+* h6 i4: flag
+* h7 i0: global_int
+* h13 i3: main
+* h20 i2: to_return
+* h24 i5: x
+
+* Label Table:
+* h1 i1: main ln:8
+* h4 i2: _$000001 ln:29
+* h4 i3: _$000000 ln:32
+* h20 i0: start ln:0
+* h21 i4: function ln:59
+
+* VOID 			(L#: 6 N#: 0 RT: INT OT: INT )
+*   NUM (global_int)		(L#: 6 N#: 1 RT: INT OT: INT OF: 0 LV: 0 )
+
+* CSTMT (function)		(L#: 9 N#: 3 RT: INT OT: INT )
+*   VOID 			(L#: 9 N#: 2 )
+*   VOID 			(L#: 9 N#: 4 RT: INT OT: INT )
+*     NUM (to_return)		(L#: 9 N#: 5 )
+
+* FN_DECL (main)		(L#: 12 N#: 7 RT: VOID OT: VOID OF: 0 )
+*   DOUBLE 			(L#: 12 N#: 6 )
+*   DOUBLE 			(L#: 12 N#: 8 )
+*    			(L#: 19 N#: 26 OF: 8 )
+*     VOID 			(L#: 13 N#: 9 RT: INT OT: INT )
+*       NUM (flag)		(L#: 13 N#: 10 RT: INT OT: INT OF: 0 LV: 2 )
+*     FOR 			(L#: 15 N#: 18 )
+*       LTE 			(L#: 14 N#: 13 RT: INT OT: INT )
+*         FNUM (1)		(L#: 14 N#: 11 RT: INT OT: INT )
+*         FNUM (1)		(L#: 14 N#: 12 RT: INT OT: INT )
+*       BREAK 			(L#: 14 N#: 15 RT: CHAR OT: CHAR )
+*         IF (L#: 14 N#: 14 RT: CHAR )
+*       BREAK 			(L#: 15 N#: 17 RT: CHAR OT: CHAR )
+*         IF (L#: 15 N#: 16 RT: CHAR )
+
+*     BREAK 			(L#: 16 N#: 20 RT: CHAR OT: CHAR )
+*       IF (L#: 16 N#: 19 RT: CHAR )
+
+*     WRITE 			(L#: 17 N#: 22 RT: INT OT: INT )
+*       NUM (flag)		(L#: 17 N#: 21 RT: INT OF: 0 LV: 2 )
+
+*     BREAK 			(L#: 18 N#: 25 RT: INT OT: INT )
+*       FN_DEF (function)		(L#: 18 N#: 23 RT: INT OF: 8 )
+*         NUM (flag)		(L#: 18 N#: 24 RT: INT OT: INT OF: 0 LV: 2 )
+
+* FN_DECL (function)		(L#: 22 N#: 28 OF: 8 )
+*   VOID 			(L#: 22 N#: 27 )
+*   VOID 			(L#: 22 N#: 29 RT: INT OT: INT )
+*     NUM (to_return)		(L#: 22 N#: 30 RT: INT OT: INT OF: 0 )
+*    			(L#: 26 N#: 40 OF: 8 )
+*     CHAR 			(L#: 23 N#: 31 RT: DOUBLE OT: DOUBLE )
+*       NUM (x)		(L#: 23 N#: 32 RT: DOUBLE OT: DOUBLE OF: 0 LV: 2 )
+*     '='		(L#: 24 N#: 37 RT: DOUBLE OT: DOUBLE )
+*       NUM (x)		(L#: 24 N#: 33 RT: DOUBLE OT: DOUBLE OF: 0 LV: 2 )
+*       '+'		(L#: 24 N#: 36 RT: INT OT: DOUBLE )
+*         NUM (to_return)		(L#: 24 N#: 34 RT: INT OT: INT OF: 0 LV: 1 )
+*         FNUM (1)		(L#: 24 N#: 35 RT: INT OT: INT )
+
+*     READ 			(L#: 25 N#: 39 OT: INT )
+*       NUM (x)		(L#: 25 N#: 38 RT: DOUBLE OT: INT OF: 0 LV: 2 )

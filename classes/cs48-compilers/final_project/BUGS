@@ -1,0 +1,5 @@
+Showstopper:
+   Code generation is pretty much 100% broken, in that it generates code
+which does not run correctly, and will usually just crash.
+
+Nathan Edel

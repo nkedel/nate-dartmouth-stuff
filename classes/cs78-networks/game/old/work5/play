@@ -1,0 +1,20 @@
+void show_players(void) {
+  int i, x, y;
+  for (i=0;i<n_players;i++)
+    if (players[i].getlive()) {
+      mvaddch(y=players[i].getY(),x=players[i].getX(),'@');
+      ply_x[i]=x; ply_y[i]=y;
+      }
+  }
+
+void update_players(void) {
+  int i, x, y;
+  for (i=0;i<n_players;i++) {
+    y = players[i].getY(); x = players[i].getX();
+    if (y != ply_y[i] || x != ply_x[i]) {
+      mvaddch(ply_y[i], ply_x[i], map[ply_y[i]][ply_x[i]]);
+      if (players[i].getlive()) mvaddch(y,x,'@'); 
+      ply_y[i] = y; ply_x[i] = x;
+      }
+    }
+  }

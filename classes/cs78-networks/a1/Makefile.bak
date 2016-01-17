@@ -1,0 +1,64 @@
+CXXFLAGS =	-g -gstabs -Wall 
+# -O2
+#DEFINES =	-DPROFILE
+#DEFINES =	-DDEBUG -DPROFILE
+DEFINES =	
+CC =	g++
+LD =	g++
+RM =	rm -f
+CP =	cp
+INSTALL =	install
+PREFIX =	
+BINDIR =	
+MANDIR =	
+MANEXT =	.1
+INFODIR =	$(PREFIX)/info
+#XINCDIR =	-I/usr/include/tcl
+XINCDIR =
+XLIBDIR =	
+THREADLIBS =	
+XLIBS =	
+# -ltk -ltcl -lm -lX11
+
+# Files ------------------------
+
+SRCSCLI = chatclient.cc sockaddr.cc
+SRCSSER = chatserver.cc sockaddr.cc
+
+OBJSCLI =	$(SRCSCLI:.cc=.o)
+OBJSSER =	$(SRCSSER:.cc=.o)
+
+# Build Targets ----------------
+
+PROGRAMS =	chatclient chatserver
+
+all:	$(PROGRAMS)
+
+%.o:	%.cc
+	$(CC) -c $(CXXFLAGS) $(DEFINES) %.cc $(XINCDIR)
+
+chatclient: $(OBJSCLI)
+	$(RM) $@
+	$(LD) $(CFLAGS) -o $@ $(OBJSCLI) $(THREADLIBS) $(XLIBDIR) $(XLIBS)
+
+chatserver: $(OBJSSER)
+	$(RM) $@
+	$(LD) $(CFLAGS) -o $@ $(OBJSSER) $(THREADLIBS) $(XLIBDIR) $(XLIBS)
+
+
+# Install Targets --------------
+
+# Utility Targets --------------
+
+clean:
+	$(RM) $(PROGRAMS)
+	$(RM) *.o
+	$(RM) core
+	$(RM) *~
+
+depend:
+
+	makedepend -s "# DO NOT DELETE" -- $(SRCS)
+
+# Dependencies -----------------
+# DO NOT DELETE

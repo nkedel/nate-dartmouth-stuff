@@ -1,0 +1,42 @@
+README
+
+Thunderdome Game Client/Server
+Nate Edel, Dave Marmaros, Peter Horowitz, and Jeff Steeves
+CS 78 - Networks
+Final Project
+
+Directions for compiling the client and server:
+-----------------------------------------------
+
+NOTE: You must compile the client and server separately!
+
+Client Directory: ~nate/game/client/
+1) run make
+2) this will create the executable "game"
+
+Server Directory: ~nate/game/server/
+1) run "make clean"
+2) run make
+3) this will create the executable "gameserv"
+
+
+Directions for running the client and server:
+---------------------------------------------
+
+1) Goto the server directory
+2) run the server: gameserv [port]
+3) up to 4 clients can connect to this server
+4) to run a client go to the client directory
+5) run the client: game [servername] [port] [player # 0-3]
+	Note: player # 0 must be the last to connect. This starts the game.   
+
+Directions for gameplay:
+------------------------
+Your character is the highlighted '@'. The goal of the game is to kill the 
+other player(s). Use the keypad or arrow keys to move around the map. A '#'
+is a wall which you may not walk through. A '~' represents water and is 
+another obstacle.
+Critical player data including your hit-points, kills, experience, armor 
+class, weapons, etc can be seen in the status bar on the right.
+
+

@@ -1,0 +1,240 @@
+* pipe_Init [TCLBuffer SCHEMEBuffer UNIXBuffer]
+  Preconditions: dunno
+  Arguments: 3 Buffer names, which must be empty buffer records for the 3
+             standard interactive buffers.
+  Action: Sets up initial pipes for TCL/Tk, Scheme, and UNIX as pipes 0, 1,
+          and 2. Creates the buffers for TCL
+  Returns: Error on failure.
+  Called by: Buffer Manager
+  Calls: pipe_Open
+  Testing: Try calling with existing buffers, or with buffer records instead
+           of global names of buffer records.
+           Try calling twice.
+
+* pipe_Shutdown []
+  Preconditions: Some pipes should be open. Sort of pointless otherwise.
+  Arguments: None.
+  Action: Closes all pipes except for the Tcl pipe whice does not
+          open/close. Deletes temporary files used by pipes system.
+  Called by: Buffer Manager (?)
+  Calls: pipe_Close
+  Testing: Try calling with before pipe_Init, or a second time. Try
+           accessing one of the standard pipes after use.
+
+pipe_Destroy [buffer]
+  Preconditions: buffer must be a valid interactive buffer
+  Arguments: buffer
+  Action: disassociates pipe from buffer, then calls edit_Destroy to close
+          the buffer for reuse
+  Returns: Error on failure.
+  Called by: Buffer manager.
+  Derivable from: text_Destroy
+  Calls: edit_Destroy, pipe_Close
+  Testing: Try calling on a nonexistant buffer.
+	Try calling on a non-interactive buffer.
+	Try accessing a pipe after it is destroyed.
+
+// not sure this is really necesary... we could just let text_Copy work on
+// this, ditto for text_Paste, though that would add a few complications.
+* pipe_Copy [buffer]
+  Preconditions: dunno
+  Arguments: buffer is the active buffer
+  Action: copies selected text from an interactive buffer to the user
+          clipboard.
+  Returns: error on failure
+  Called by: user interface (indirectly via managers?)
+  Derivable from: text_Copy (probably an exact copy?)
+  Calls: edit_Copy
+  Testing: Try calling with no selected text.
+	   Try calling with an invalid buffer.
+	   Try calling with an noninteractive buffer
+
+#     Copies selected text to user clipboard
+#     See also: text_Copy
+#
+* pipe_Paste [buffer]
+  Preconditions: buffer must be a valid buffer, the user clipboard must
+                 contain some text, the insertion point must be below the
+                 to be submitted mark (the latest text returned from the
+                 pipe.)
+  Arguments: buffer is the interactive buffer to paste to
+  Actions: copies the text from the selected text to the interactive
+             buffer, at the insertion point.
+  Called by: user interface (indirectly?)
+  Calls: edit_Copy
+  Testing: Try calling with an empty user clipboard.
+	Try calling with the insertion point somewhere invalid.
+	Try calling on an invalid or noninteractive buffer.
+
+* pipe_submitSelected [buffer pipe#]
+  Preconditions: dunno 
+  Requirements:  buffer must be a valid interactive buffer, and the buffer
+                 must have a valid text selection.
+  Arguments: buffer
+  Action: submits the selected text to the pipe associated with the buffer
+          via the system clipboard
+  Called by: user interface (indirectly?)
+  Calls: pipe_fromBuffer, edit_Copy
+  Testing: Try calling with no selected text (should do nothing)
+           Try calling on a bad, or noninteractive buffer
+	   Try calling with a bad pipe# or without one, or on a pipe which
+           is closed.
+
+* pipe_Submit [buffer pipe#]
+  Preconditions:
+  Requirements:  buffer must be a valid interactive buffer, and the buffer
+                 must have a valid "to be submitted mark"
+  Arguments: buffer
+  Action: passes all text after the "to be submitted mark" to the pipe
+          associated with buffer 
+  Called by: user interface (indirectly?)
+  Calls: edit_ExtractText, pipe_Write, pipe_setMark
+  Testing: Try calling with on a noninteractive buffer.
+	   Try calling on an "interactive" buffer without a mark.
+	   Try calling on a pipe which has been closed, or with an invalid
+	   pipe #, or without one.
+
+# Related Functions
+* text_toTCL [inbuffer]
+* text_toSCHEME [inbuffer]
+  Preconditions: 
+  Requirements: inbuffer is a valid (text?) buffer, pipe_Init has been
+	called.
+  Arguments: inbuffer and outbuffer -- two buffers
+  Action: pipes the complete text of buffer "inbuffer" to the standard TCL
+          or Scheme pipes. Usually used system clipboard as the input buffer
+  Called by: user interface (indirectly?)
+  Calls: pipe_fromBuffer
+  Testing: Call without pipe_Init having been called first.
+	   Call without a valid inBuffer.
+	   Call after pipe_Shutdown has been called.	   
+
+* text_toUNIX [inbuffer, outbuffer]
+  Preconditions:
+  Requitements:  inbuffer is a valid (text?) buffer, outbuffer is a valid
+                 but uncreated buffer 
+  Arguments: inbuffer and outbuffer -- two buffers
+  Action: creates a new UNIX pipe in buffer "outbuffer", pipes the complete text of buffer
+          "inbuffer" to it, leaving us with a new interactive unix buffer
+  Called by: user interface (indirectly?) 
+  Calls: pipe_Open, pipe_fromBuffer
+  Testing: see above (text_toTCL)
+
+// *** For whoever does the buffer manager  ***
+* edit_WhichPipe? (buffer)
+  Preconditions: 
+  Requirements: buffer is a valid interactive buffer
+  Arguments: buffer
+  Action: returns the pipe number associated with a buffer
+  Called by: various pipe internal
+  Calls: none
+  Testing:
+
+* edit_isBuffer? (buffer)
+  - determins if Buffer is in fact a valid buffer.
+
+* edit_bufferType? (buffer)
+  - returns the type of the buffer, "help" "text" "pipe" or "invalid"
+
+* edit_setPipe (buffer, pipe #)
+  - sets the pipe associated with buffer # to pipe #
+
+# Internal Functions
+* pipe_toTCL [text]
+  Preconditions: 
+  requirements:  text is a valid null terminated text string. Can be
+                 multi-line (include carriage returns)
+  Arguments: text (a valid text string)
+  Action: passes text to the TCL interpreter. Catches errors (if any). 
+          Returns output of the TCL interpreter, in a text block, and a 
+          report of caught errors (if any) by appending them to the buffer
+          associated with the TCL pipe.
+  Called by: text_toTCL via pipe_fromBuffer, pipe_fromBuffer, pipe_Write
+	     edit_append
+  Calls: nothing?
+  Testing: try calling with an invalid TCL command/expression.
+           try calling with nothing.
+
+* pipe_Write(pipe number, text)
+  Preconditions: 
+  Requirements: pipe number is a valid, open pipe; text is valid 
+                terminated text.
+  Arguments: pipe #, text string
+  Action: sends text to a selected pipe
+  Called by: pipe_Submit
+  Calls: none
+  Testing: call with an invalid or closed pipe #.
+	   call with an invalid text block.
+
+* pipe_Read(pipe number)
+  Preconditions: 
+  Requirements: pipe number is a valid, open pipe other than the TCL pipe.
+  Arguments: pipe #
+  Action: appends  any data from  a selected pipe which is available to the
+          buffer associated with that pipe.
+  Called by: file event, automatically. File event set by pipe_Open
+  Calls: edit_Append
+  Testing: call with an invalid or closed pipe #.
+	   call with an invalid text block.
+	   call on a tcl pipe.
+
+* pipe_Open(pipe command)
+  Preconditions: 
+  Requirements: command is a valid unix command or shell name or a special
+                pipe name "scheme" (for /usr/local/bin/scheme) or "csh" for
+		"/usr/ucb/csh -i" (our standard shell)
+  * NOTE: LIMIT OF 1 internal TCL shell. 
+  Arguments: text string containing the name of the command to run
+  Action: starts up command, opening temporary input and output files to run
+  Returns: pipe # of the new pipe
+  Called by: various
+  Calls: none
+  Testing: call with invalid command. call with "tcl".
+	call before pipe_Init.
+
+* pipe_Close(pipe #)
+  Preconditions: 
+  Requirements: pipe # is a valid, open pipe.
+  Arguments: pipe #
+  Action: closes pipe, kills child program if necesary. Then reopens standard
+	  scheme and unix pipes _if necesary_, otherwise sets pipe to closed
+	  and sets the buffer associated with that pipe to _no pipe_
+  Called by: various
+  Calls: edit_setPipe
+  Testing: call on tcl pipe. call on standard pipe. try calling pipe_Write
+	   on a closed pipe. check ps listing after calling.
+
+* pipe_fromBuffer [pipe num, buffer]
+  Preconditions:
+  Requirements:  pipe # is the name of a valid, open pipe, 
+                 buffer is a valid buffer (any type?)
+  Arguments: buffer, pipe #
+  Action: sends the complete contents of the buffer to the pipe
+  Called by: various
+  Calls: nothing?
+  Testing: call with pipe# as invalid or closed pipe.
+           call with buffer# as empty or invalid buffer
+
+* pipe_setMark [buffer]
+  Preconditions: 
+  Requirements: buffer must be a valid interactive pipe buffer.
+  Arguments: buffer
+  Action: moves the "to be submitted mark" and insertion point to the end of the text in
+          the buffer.
+  Called by: various.
+  Calls: nothing? (edit_setMark [mark type?] ???)
+  Testing: try calling on text buffer? 
+
+* pipe_findMark [buffer]
+  - returns coordinates of the "to be submitted mark", as per edit_Locate
+
+// probably unnecesary. Consider deleted for now
+//#   pipe_EOF? (pipe #)
+//  Preconditions: pipe # is a valid pipe #. Returns true if end of pipe has
+//                 been reached on read.
+//  Arguments: a valid pipe #
+//  Action: checks if pipe output file is being written/is read to end
+//  Called by: various pipe internal
+//  Calls: none
+//  Testing:
+

@@ -1,0 +1,31 @@
+/* test.c48
+** Nate Edel 14 Apr 99
+**
+** test file for C48 Lexer
+*/
+
+/* example function */
+/* fib(to_fib) - calculated fibonacci numbers iteratively */
+int fib(int to_fib) {
+    int i, fibbed, last, penult;   /* loop, total, previous 2 numbers */
+    if (fib < 1) { return(0); }
+    penult = 0; fibbed = 0; last = 1;
+    for (i=1; i <= fib;++i) {
+        fibbed = last + penult; penult = last; last = fibbed;
+	}
+    return(fibbed);
+    }
+
+/* example main function */
+void main(void) { 
+    int flag, int_in;
+    flag = 0;
+    while (flag != 1) {
+	int_in=get_int(); /* bogus input function; no scanf since no strings */
+        if (int_in >= 0 && int_in < 10000) {  /* limit our max value */
+             int_in = fib(int_in);
+             print_int(int_in); newline();    /* bogus output functions */
+             }
+        else if ((int_in % 1000) == -999) flag = 1; /* % included to
+                                                     * generate invalid */
+	}

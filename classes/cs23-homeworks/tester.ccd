@@ -1,0 +1,99 @@
+// tester.cc
+// Nate Edel
+// CS 23 Spring 96
+
+#include <iostream.h>
+#include <stdlib.h>
+#include <time.h>
+#include "Set.h"
+
+const int Ints = 25;  														// Nice round # and an average printout will fit on 1 line 
+
+void CPair(Set& tSet, int *intArray, int numInts);
+void TPair(Set& tSet, int *intArray, int numInts);
+
+// Test our Set class 
+int main() {
+  
+  int anArray[Ints];                            // create an array of Ints integers
+  Set Test1;                                    // create an empty set
+
+  int tv;
+  time(&tv);           													// gets the timer value in seconds to...
+  srand((unsigned) tv);		 											// seed the random number generator
+
+  CPair(Test1, anArray, Ints);                  // call CPair to create a set and a corresponding array
+  TPair(Test1, anArray, Ints );                 // and call TPair to test that all elements in the array are in the set
+  cout  << "You should see a row of *s just under the .s" << endl;
+
+  cout << "Now we test the copy constructor by trying to create a copy of Test1" << endl;
+  cout << "First, print a copy of the old set..." << endl;
+  Test1.print(cout);
+  Set Test2 = Test1;                            // create a copy of Test1
+	cout << "Now, print a copy of the new set..." << endl;
+  Test2.print(cout);
+  
+  cout << "And we test the new set against our array... (*s means it worked)" << endl;
+  TPair(Test2, anArray, Ints);									// Test the validity of the copy
+  
+  cout << "Now, let's try out the = operator by copying the new over the old, & vice versa" << endl;
+  Test1 = Test2;
+  Test2 = Test1;
+  
+  cout << "And print the hopefully still identical sets..." << endl;
+  Test1.print(cout);
+  Test2.print(cout);
+  
+  Set Test3;																		// create a NEW empty set
+  int moreInts[Ints];			  										// and a NEW empty array
+	cout << "We create a new random set of 25 and print it..." << endl;
+  CPair(Test3, moreInts, Ints);
+  Test3.print(cout);
+  cout << "And test it agains its own array, which should match..." << endl;
+  TPair(Test3, moreInts, Ints);
+  
+  cout << "And against the old array, which should produce a random-like" << endl;
+  cout << "pattern of *s and -s." << endl; 
+  TPair(Test3, anArray, Ints);
+  
+  cout << "And for good measure, we'll test the old sets against the new array" << endl;
+  TPair(Test1, moreInts, Ints);
+  TPair(Test2, moreInts, Ints);
+
+	cout << "And now we try the intersection of the old sets and the new sets" << endl
+	Set Test4 = Intersection((const) Test1, (const) Test3);
+	Test4.print(cout);
+	TPair(Test4, anArray, Ints);
+	TPair(Test4, moreInts, Ints);
+  }  
+
+void CPair(Set& tSet, int *intArray, int numInts) {
+// create a set of numInts UNIQUE random integers in the range 0-99
+// also fill the provided array so the user can test this...
+  int i;
+  cout << "Adding " << numInts;                 // Tell viewer how many ints we're going to see 
+  cout << " Random Integers to set."; 
+  cout << endl;
+  for (i = 0; i < numInts ; i++) {              // Generate the numbers...
+    int myInt;
+    bool element = TRUE;
+    while (element) {                           // Wait for a UNIQUE number, so the size of our set
+      myInt = (rand() % 100);                   // is known...
+      element = tSet.isElement(myInt); 
+      }         
+    intArray[i]=myInt;                          // once we have it, save it in the array and the set
+    tSet.Add(intArray[i]);
+    cout << ".";                                // and output a period so we know it's running
+    }
+  cout << endl;
+  }
+
+void TPair(Set& tSet, int *intArray, int numInts) {
+  for (int i = 0; i < numInts ; i++) {                // scan through the array
+    if (tSet.isElement(intArray[i]))            // making sure all the numbers are also in the set
+      cout << "*";                              // and output *s if they're there
+    else 
+      cout << "-";                              // and dashes if they aren't
+    }
+  cout << endl;
+  }

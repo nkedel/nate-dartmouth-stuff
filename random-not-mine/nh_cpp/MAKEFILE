@@ -1,0 +1,96 @@
+LIBS= -lgpp -liostr
+
+OBJ_H=objects.h potion.h armor.h weapon.h scroll.h objlist.h
+MON_H=monst.h hero.h
+LEV_H=level.h lelement.h dungeon.h
+DRAW_H=ansi.h display.h
+GLOBAL_H=event.h global.h random.h color.h
+
+ALL_H=$(OBJ_H) $(LEV_H) $(MON_H) $(GLOBAL_H)
+
+#Hack and similiar "high level" files.
+OBJLIST1=hack.o
+
+#levels and dungeon related stuff
+OBJLIST2=level.o lelement.o dungeon.o
+
+#objects
+OBJLIST3=objects.o potion.o scroll.o objlist.o
+
+#monsters
+OBJLIST4=mondraw.o monst.o hero.o
+
+#misc
+OBJLIST5=random.o event.o
+
+#drawing routings.
+OBJLIST6=levdraw.o ansi.o display.o objdraw.o
+
+ALLOBJ=$(OBJLIST1) $(OBJLIST2) $(OBJLIST3) $(OBJLIST4) $(OBJLIST5) $(OBJLIST6)
+
+all: nhpp.res
+    gcc @nhpp.res $(LIBS)
+
+
+nhpp.res: $(ALLOBJ)
+    @echo $(OBJLIST1) >nhpp.res
+    @echo $(OBJLIST2) >>nhpp.res
+    @echo $(OBJLIST3) >>nhpp.res
+    @echo $(OBJLIST4) >>nhpp.res
+    @echo $(OBJLIST5) >>nhpp.res
+    @echo $(OBJLIST6) >>nhpp.res
+    
+hack.o: hack.cpp  $(ALL_H)
+    gcc -c hack.cpp -ohack.o 
+
+level.o: level.cpp $(LEV_H)  $(OBJ_H) $(GLOBAL_H)
+    gcc -c level.cpp  -olevel.o
+
+lelement.o: lelement.cpp lelement.h $(OBJ_H) $(GLOBAL_H)
+    gcc -c lelement.cpp -olelement.o
+
+ansi.o: ansi.cpp $(DRAW_H) $(GLOBAL_H)
+    gcc -c ansi.cpp -oansi.o
+
+mondraw.o: mondraw.cpp $(DRAW_H) $(MON_H) $(GLOBAL_H)
+    gcc -c mondraw.cpp -omondraw.o
+
+objdraw.o: objdraw.cpp $(OBJ_H) $(DRAW_H) $(GLOBAL_H)
+    gcc -c objdraw.cpp -oobjdraw.o
+
+levdraw.o: levdraw.cpp $(LEV_H) $(DRAW_H) $(OBJ_H) $(GLOBAL_H)
+    gcc -c levdraw.cpp -olevdraw.o
+
+monst.o: monst.cpp $(MON_H) $(OBJ_H) $(GLOBAL_H)
+    gcc -c monst.cpp -o monst.o
+
+hero.o: hero.cpp $(MON_H) $(OBJ_H) $(GLOBAL_H)
+    gcc -c hero.cpp -o hero.o
+
+objlist.o: objlist.cpp $(OBJ_H) $(GLOBAL_H)
+    gcc -c objlist.cpp -oobjlist.o
+
+objects.o: objects.cpp $(OBJ_H) $(GLOBAL_H)
+    gcc -c objects.cpp -oobjects.o
+
+potion.o: potion.cpp $(OBJ_H) $(GLOBAL_H)
+    gcc -c potion.cpp -opotion.o
+
+scroll.o: scroll.cpp $(OBJ_H) $(GLOBAL_H)
+    gcc -c scroll.cpp -oscroll.o
+
+random.o: random.cpp $(GLOBAL_H)
+    gcc -c random.cpp -orandom.o
+
+dungeon.o: dungeon.cpp $(LEV_H) $(MON_H) $(GLOBAL_H)
+    gcc -c dungeon.cpp -odungeon.o
+
+display.o: display.cpp $(DRAW_H) $(GLOBAL_H)
+    gcc -c display.cpp -odisplay.o
+
+event.o: event.cpp $(GLOBAL_H)
+    gcc -c event.cpp -oevent.o
+
+#---------------------------------------------------------------------
+clean:
+    del *.o

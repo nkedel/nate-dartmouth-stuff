@@ -1,0 +1,42 @@
+CXXFLAGS =	-g -ggdb -Wall 
+DEFINES  = 
+CC =	gcc
+LD =	ld
+RM =	rm -f
+CP =	cp
+LIBS =	-lcurses
+
+# Files ------------------------
+
+SRCS = game.cc player.cc db.cc die.cc
+OBJS = $(SRCS:.cc=.o)
+
+# Build Targets ----------------
+
+PROGRAMS = game
+
+all:	$(PROGRAMS)
+
+%.o:	%.cc
+	$(CC) -c $(CXXFLAGS) $(DEFINES) $@
+
+game: $(OBJS)
+	$(RM) $@
+	$(LD) $(CFLAGS) -o $@ $(OBJSCLI) $(THREADLIBS) $(XLIBDIR) $(XLIBS)
+
+# Install Targets --------------
+
+# Utility Targets --------------
+
+clean:
+	$(RM) $(PROGRAMS)
+	$(RM) *.o
+	$(RM) core
+	$(RM) *~
+
+depend:
+
+	makedepend -s "# DO NOT DELETE" -- $(SRCS)
+
+# Dependencies -----------------
+# DO NOT DELETE
